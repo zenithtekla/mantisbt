@@ -13,6 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with MantisBT.  If not, see <http://www.gnu.org/licenses/>.
+# Bug Tracking system developed by Phuc Tran
 
 /**
  * @copyright Copyright (C) 2000 - 2002  Kenzaburo Ito - kenito@300baud.org
@@ -267,13 +268,13 @@ $box_title = lang_get( 'my_view_title_' . $t_box_title );
 # -- ====================== BUG LIST ========================= --
 ?>
 
-<table class="width100" cellspacing="1">
+<table class="width100" cellspacing="1" >
 <?php
 # -- Navigation header row --?>
-<tr>
+<tr class="nopad">
 <?php
 # -- Viewing range info --?>
-	<td class="form-title" colspan="2">
+	<td class="form-title pad1" colspan="20">
 <?php
 print_link( html_entity_decode( config_get( 'bug_count_hyperlink_prefix' ) ).'&' . $url_link_parameters[$t_box_title], $box_title, false, 'subtle' );
 echo '&#160;';
@@ -298,7 +299,9 @@ echo "($v_start - $v_end / $t_bug_count)";
 	for( $i = 0;$i < $t_count; $i++ ) {
 		$t_bug = $rows[$i];
 
+	# issue name
 	$t_summary = string_display_line_links( $t_bug->summary );
+
 	$t_last_updated = date( config_get( 'normal_date_format' ), $t_bug->last_updated );
 
 	# choose color based on status
@@ -316,20 +319,23 @@ echo "($v_start - $v_end / $t_bug_count)";
 	$project_name = project_get_field( $t_bug->project_id, 'name' );
 	?>
 
-<tr bgcolor="<?php echo $status_color?>">
+<tr bgcolor="<?php echo $status_color?>" class="nopad">
 	<?php
 	# -- Bug ID and details link + Pencil shortcut --?>
-	<td class="center" valign="top" width ="0" nowrap="nowrap">
-		<span class="small">
+	<td class="center nopad" valign="top" width ="0" nowrap="nowrap" rowspan="3">
+	<div style="padding:4px !important;">
+		<span class="small" style="font-size:9pt !important;">
 		<?php
 			print_bug_link( $t_bug->id );
 
-	echo '<br />';
+	echo '<br /></div><div style="padding:4px !important;">';
 
+	# update button
 	if( !bug_is_readonly( $t_bug->id ) && access_has_bug_level( $t_update_bug_threshold, $t_bug->id ) ) {
-		echo '<a href="' . string_get_bug_update_url( $t_bug->id ) . '"><img border="0" src="' . $t_icon_path . 'update.png' . '" alt="' . lang_get( 'update_bug_button' ) . '" /></a>';
+		echo '<a href="' . string_get_bug_update_url( $t_bug->id ) . '"><img border="0" src="' . $t_icon_path . 'update.png' . '" alt="' . lang_get( 'update_bug_button' ) . '" /></a>&#160;&#160;';
 	}
 
+	# priority text
 	if( ON == config_get( 'show_priority_text' ) ) {
 		print_formatted_priority_string( $t_bug );
 	} else {
@@ -347,32 +353,69 @@ echo "($v_start - $v_end / $t_bug_count)";
 		echo '<img src="' . $t_icon_path . 'protected.gif" width="8" height="15" alt="' . lang_get( 'private' ) . '" />';
 	}
 	?>
-		</span>
+		</span></div>
 	</td>
+	<td colspan="20">
+		<div style="text-align: center; padding:0px !important;">
+			<div class="center inline-block nopad"><?php
+				# -- Summary --<td class="left" valign="top" width="100%">
+					if( ON == config_get( 'show_bug_project_links' ) && helper_get_current_project() != $t_bug->project_id ) {
+						echo '[', string_display_line( project_get_name( $t_bug->project_id ) ), '] ';
+					}
+					echo $t_summary;
+				?>
+			</div>
 
+			<div class="floatright right italic-small gray inline-block nopad"><?php
+
+				# type project name if viewing 'all projects' or bug is in subproject
+				echo string_display_line( category_full_name( $t_bug->category_id, true, $t_bug->project_id ) );
+
+				if( $t_bug->last_updated > strtotime( '-' . $t_filter[FILTER_PROPERTY_HIGHLIGHT_CHANGED] . ' hours' ) ) {
+					echo ' - <b>' . $t_last_updated . '</b>';
+				} else {
+					echo ' - ' . $t_last_updated;
+				}
+
+			?></div>
+		</div>
+	</td><tr bgcolor="<?php echo $status_color?>" class="nopad">
 	<?php
-	# -- Summary --?>
-	<td class="left" valign="top" width="100%">
-		<span class="small">
-		<?php
-		 	if( ON == config_get( 'show_bug_project_links' ) && helper_get_current_project() != $t_bug->project_id ) {
-				echo '[', string_display_line( project_get_name( $t_bug->project_id ) ), '] ';
-			}
-			echo $t_summary;
-	?>
-		<br />
-		<?php
-	# type project name if viewing 'all projects' or bug is in subproject
-	echo string_display_line( category_full_name( $t_bug->category_id, true, $t_bug->project_id ) );
+	#*********  custom field value
+	# Custom Fields
+	$t_custom_fields_found = false;
+	$t_related_custom_field_ids = custom_field_get_linked_ids( $t_bug->project_id );
+	foreach( $t_related_custom_field_ids as $t_id ) {
+		if ( !custom_field_has_read_access( $t_id, $t_bug->id ) ) {
+			continue;
+		} # has read access
 
-	if( $t_bug->last_updated > strtotime( '-' . $t_filter[FILTER_PROPERTY_HIGHLIGHT_CHANGED] . ' hours' ) ) {
-		echo ' - <b>' . $t_last_updated . '</b>';
-	} else {
-		echo ' - ' . $t_last_updated;
+		$t_custom_fields_found = true;
+		$t_def = custom_field_get_definition( $t_id );
+
+		echo '<td class="custom_category pad1 center">', string_display( lang_get_defaulted( $t_def['name'] ) ), '</td>';
 	}
+	?></tr><tr bgcolor="<?php echo $status_color?>" class="nopad">
+	<?php
+	foreach( $t_related_custom_field_ids as $t_id ) {
+		if ( !custom_field_has_read_access( $t_id, $t_bug->id ) ) {
+			continue;
+		} # has read access #d8d8d8
+
+		$t_custom_fields_found = true;
+		$t_def = custom_field_get_definition( $t_id );
+
+		echo '<td class="custom_field pad1 center">', print_custom_field_value( $t_def, $t_id, $t_bug->id ), '</td>';
+	}
+	echo '</tr>';
+
+	if ( $t_custom_fields_found ) {
+		# spacer
+		echo '<tr class="custom_spacer"><td colspan="20"></td></tr>';
+	} # custom fields found
+
+									#*********
 	?>
-		</span>
-	</td>
 </tr>
 <?php
 	# -- end of Repeating bug row --

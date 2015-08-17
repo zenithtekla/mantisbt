@@ -13,6 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with MantisBT.  If not, see <http://www.gnu.org/licenses/>.
+# Bug Tracking system developed by Phuc Tran
 
 	/**
 	 * This file POSTs data to report_bug.php
@@ -35,6 +36,7 @@
 	require_once( 'last_visited_api.php' );
 	require_once( 'projax_api.php' );
 	require_once( 'collapse_api.php' );
+	require_once( 'bug_api.php' );
 
 	$f_master_bug_id = gpc_get_int( 'm_id', 0 );
 
@@ -156,6 +158,8 @@
 	$tpl_show_resolution = in_array('resolution', $t_fields);
 	$tpl_show_status = in_array('status', $t_fields);
 
+	$tpl_show_monitor_box = !$tpl_force_readonly;
+
 	$tpl_show_versions = version_should_show_product_version( $t_project_id );
 	$tpl_show_product_version = $tpl_show_versions && in_array( 'product_version', $t_fields );
 	$tpl_show_product_build = $tpl_show_versions && in_array( 'product_build', $t_fields ) && config_get( 'enable_product_build' ) == ON;
@@ -267,6 +271,27 @@
 	</tr>
 <?php
 	}
+
+
+	$t_custom_fields_found = false;
+	$t_related_custom_field_ids = custom_field_get_linked_ids( $t_project_id );
+
+	foreach( $t_related_custom_field_ids as $t_id ) {
+		$t_def = custom_field_get_definition( $t_id );
+		if( ( $t_def['display_report'] || $t_def['require_report']) && custom_field_has_write_access_to_project( $t_id, $t_project_id ) ) {
+			$t_custom_fields_found = true;
+?>
+	<tr <?php echo helper_alternate_class() ?>>
+		<td class="category">
+			<?php if($t_def['require_report']) {?><span class="required">*</span><?php } echo string_display( lang_get_defaulted( $t_def['name'] ) ) ?>
+		</td>
+		<td>
+			<?php print_custom_field_input( $t_def, ( $f_master_bug_id === 0 ) ? null : $f_master_bug_id ) ?>
+		</td>
+	</tr>
+<?php
+		}
+	} # foreach( $t_related_custom_field_ids as $t_id )
 
 	if ( $tpl_show_due_date ) {
 		$t_date_to_display = '';
@@ -414,6 +439,32 @@
 			</select>
 		</td>
 	</tr>
+	<?php if ( $tpl_show_monitor_box ) {?>
+	<tr <?php echo helper_alternate_class() ?>>
+		<td class="category">
+			<?php echo 'add Monitors' ?>
+			<?php // print_documentation_link( 'monitors' ) ?>
+		</td>
+		<td>
+			<?php /*
+					if (count($a_monitors) > 0){
+						for ( $i = 0; $i < count($a_monitors); $i++ ) {
+							echo ($i > 0) ? ', ' : '';
+							echo print_user( $a_monitors[$i] );
+							echo ' [<a class="small" href="' . helper_mantis_url( 'bug_monitor_delete.php' ) . '?bug_id=' . $t_bug . '&user_id=' . $a_monitors[$i] . form_security_param( 'bug_monitor_delete' ) . '">' . lang_get( 'delete_link' ) . '</a>]';
+						}
+							echo '<br /><br />', lang_get( 'username' );
+					}
+			*/ ?>
+			<form method="get" action="bug_api.php">
+			<?php echo form_security_field( 'bug_monitor_ajax_add' ) ?>
+				<input type="hidden" name="bug_id" value="<?php echo (integer)$t_bug; ?>" />
+				<input <?php echo helper_get_tab_index() ?> type="text" name="monitors_names" />
+				<input type="submit" class="button" value="<?php echo lang_get( 'add_user_to_monitor' ) ?>" />
+			</form>
+			<?php # include( $tpl_mantis_dir . 'bug_monitor_custom_adding.php' );?>
+		</td>
+	</tr><?php } ?>
 <?php } ?>
 
 <?php if ( $tpl_show_status ) { ?>
@@ -504,30 +555,10 @@
 			<textarea <?php echo helper_get_tab_index() ?> name="additional_info" cols="80" rows="10"><?php echo string_textarea( $f_additional_info ) ?></textarea>
 		</td>
 	</tr>
+
 <?php
 	}
 
-	$t_custom_fields_found = false;
-	$t_related_custom_field_ids = custom_field_get_linked_ids( $t_project_id );
-
-	foreach( $t_related_custom_field_ids as $t_id ) {
-		$t_def = custom_field_get_definition( $t_id );
-		if( ( $t_def['display_report'] || $t_def['require_report']) && custom_field_has_write_access_to_project( $t_id, $t_project_id ) ) {
-			$t_custom_fields_found = true;
-?>
-	<tr <?php echo helper_alternate_class() ?>>
-		<td class="category">
-			<?php if($t_def['require_report']) {?><span class="required">*</span><?php } echo string_display( lang_get_defaulted( $t_def['name'] ) ) ?>
-		</td>
-		<td>
-			<?php print_custom_field_input( $t_def, ( $f_master_bug_id === 0 ) ? null : $f_master_bug_id ) ?>
-		</td>
-	</tr>
-<?php
-		}
-	} # foreach( $t_related_custom_field_ids as $t_id )
-?>
-<?php
 	// File Upload (if enabled)
 	if ( $tpl_show_attachments ) {
 		$t_max_file_size = (int)min( ini_get_number( 'upload_max_filesize' ), ini_get_number( 'post_max_size' ), config_get( 'max_file_size' ) );
