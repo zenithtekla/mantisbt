@@ -36,7 +36,6 @@
 	require_once( 'last_visited_api.php' );
 	require_once( 'projax_api.php' );
 	require_once( 'collapse_api.php' );
-	require_once( 'bug_api.php' );
 
 	$f_master_bug_id = gpc_get_int( 'm_id', 0 );
 
@@ -439,32 +438,11 @@
 			</select>
 		</td>
 	</tr>
-	<?php if ( $tpl_show_monitor_box ) {?>
 	<tr <?php echo helper_alternate_class() ?>>
-		<td class="category">
-			<?php echo 'add Monitors' ?>
-			<?php // print_documentation_link( 'monitors' ) ?>
-		</td>
-		<td>
-			<?php /*
-					if (count($a_monitors) > 0){
-						for ( $i = 0; $i < count($a_monitors); $i++ ) {
-							echo ($i > 0) ? ', ' : '';
-							echo print_user( $a_monitors[$i] );
-							echo ' [<a class="small" href="' . helper_mantis_url( 'bug_monitor_delete.php' ) . '?bug_id=' . $t_bug . '&user_id=' . $a_monitors[$i] . form_security_param( 'bug_monitor_delete' ) . '">' . lang_get( 'delete_link' ) . '</a>]';
-						}
-							echo '<br /><br />', lang_get( 'username' );
-					}
-			*/ ?>
-			<form method="get" action="bug_api.php">
-			<?php echo form_security_field( 'bug_monitor_ajax_add' ) ?>
-				<input type="hidden" name="bug_id" value="<?php echo (integer)$t_bug; ?>" />
-				<input <?php echo helper_get_tab_index() ?> type="text" name="monitors_names" />
-				<input type="submit" class="button" value="<?php echo lang_get( 'add_user_to_monitor' ) ?>" />
-			</form>
-			<?php # include( $tpl_mantis_dir . 'bug_monitor_custom_adding.php' );?>
-		</td>
-	</tr><?php } ?>
+		<?php if ( $tpl_show_monitor_box ) {?>
+		<?php require_once( $tpl_mantis_dir . 'bug_monitor_adding.php' ); ?>
+		<?php } ?>
+	</tr>
 <?php } ?>
 
 <?php if ( $tpl_show_status ) { ?>

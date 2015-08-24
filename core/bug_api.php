@@ -22,7 +22,7 @@
  * @package CoreAPI
  * @subpackage BugAPI
  */
-
+require_once('PhpConsole.phar'); // autoload will be initialized automatically
 /**
  * requires history_api
  */
@@ -64,6 +64,7 @@ require_once( 'relationship_api.php' );
  */
 require_once( 'bug_revision_api.php' );
 
+// require_once( $tpl_mantis_dir . 'bug_monitor_ajax_add.php' );
 /**
  * Bug Data Structure Definition
  * @package MantisBT
@@ -216,6 +217,7 @@ class BugData {
 			$t_text = bug_text_cache_row($this->id);
 
 			$this->description = $t_text['description'];
+			$this->monitors_names = $t_text['monitors_names'];
 			$this->steps_to_reproduce = $t_text['steps_to_reproduce'];
 			$this->additional_information = $t_text['additional_information'];
 		}
@@ -228,6 +230,7 @@ class BugData {
 	private function is_extended_field( $p_field_name ) {
 		switch( $p_field_name ) {
 			case 'description':
+			case 'monitors_names':
 			case 'steps_to_reproduce':
 			case 'additional_information':
 				return true;
@@ -304,10 +307,12 @@ class BugData {
 		if( is_blank( $this->due_date ) ) {
 			$this_due_date = date_get_null();
 		}
-
+		$f_monitors_ids = explode(",",gpc_get_string( 'monitors_names', '' ));
 		$t_bug_table = db_get_table( 'mantis_bug_table' );
+
 		$t_bug_text_table = db_get_table( 'mantis_bug_text_table' );
 		$t_category_table = db_get_table( 'mantis_category_table' );
+		$t_bug_monitor_table = db_get_table( 'mantis_bug_monitor_table' );
 
 		# Insert text information
 		$query = "INSERT INTO $t_bug_text_table
@@ -372,6 +377,17 @@ class BugData {
 
 		# log new bug
 		history_log_event_special( $this->id, NEW_BUG );
+
+		 # Insert bug monitors information
+		$query = "INSERT INTO $t_bug_monitor_table
+					    ( user_id, bug_id )
+					  VALUES
+					    ( " . db_param() . ',' . db_param() . ')';
+		if ($f_monitors_ids)			    
+		for ($i = 0; $i < count($f_monitors_ids); $i++) {
+			$monitors_id = mysql_real_escape_string($f_monitors_ids[$i]);
+			db_query_bound( $query, Array( $monitors_id, $t_text_id ) );
+		}
 
 		# log changes, if any (compare happens in history_log_event_direct)
 		history_log_event_direct( $this->id, 'status', $t_original_status, $t_status );
