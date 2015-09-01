@@ -290,7 +290,7 @@
 	</tr>
 <?php
 		}
-	} # foreach( $t_related_custom_field_ids as $t_id )
+	}
 
 	if ( $tpl_show_due_date ) {
 		$t_date_to_display = '';

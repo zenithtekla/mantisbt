@@ -42,7 +42,9 @@ define( 'NOTICE', E_USER_NOTICE );
 define( 'ANYBODY', 0 );
 define( 'VIEWER', 10 );
 define( 'REPORTER', 25 );
+define( 'PRODUCTION', 36 );
 define( 'UPDATER', 40 );
+define( 'PROGRAM_MANAGER', 48 );
 define( 'DEVELOPER', 55 );
 define( 'MANAGER', 70 );
 define( 'ADMINISTRATOR', 90 );
@@ -509,6 +511,7 @@ define( 'COLUMNS_TARGET_VIEW_PAGE', 1 );
 define( 'COLUMNS_TARGET_PRINT_PAGE', 2 );
 define( 'COLUMNS_TARGET_CSV_PAGE', 3 );
 define( 'COLUMNS_TARGET_EXCEL_PAGE', 4 );
+define( 'COLUMNS_TARGET_HOME_VIEW_PAGE', 5 );
 
 # sponsorship "paid" values
 define( 'SPONSORSHIP_UNPAID', 0 );

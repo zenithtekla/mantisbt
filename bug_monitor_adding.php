@@ -7,13 +7,13 @@
 
     <link rel="stylesheet" href="css/token-input-facebook.css" type="text/css" />
 
-    <script type="text/javascript">
- /*   $(document).ready(function() {
-        $("input[type=button]").click(function () {
+    <script type="text/javascript">	 
+ 	/* jQuery(document).ready(function() {
+        jQuery("#submit").click(function () {
             // alert("Would submit: " + $(this).siblings("input[type=text]").val());
-            console.log($(this).siblings("input[type=text]").val());
+            console.log(jQuery(this).siblings("input[type=text]").val());
         });
-    });*/
+    }); */
     </script>
     <noscript>This page requires Javascript</noscript>
 </head>
@@ -23,11 +23,13 @@
 	require_once('/core/helper_api.php');
 
 	$result =$mysqli->query("SELECT id,username FROM mantis_user_table where id>0 LIMIT 15") or die(mysqli_error());
+
 	//create an array
 	$user_arr = array();
-	while($row=mysqli_fetch_assoc($result)) { $user_arr[] = $row; }
-
+	while(($row = $result->fetch_assoc()) !== null) { $user_arr[] = $row; }
+	// procedural style $row = mysqli_fetch_assoc($result)
     // print_r($user_arr); echo "<br/><br/>";
+    // using iterator: foreach ($result as $row) { $user_arr[] = $row; }
 
     # JSON-encode the response
 	$json_res = json_encode($user_arr, JSON_PRETTY_PRINT);
@@ -44,6 +46,7 @@
     /* $fp = fopen('userdata.json', 'w');
     fwrite($fp, json_encode($user_arr));
     fclose($fp); // http://www.kodingmadesimple.com/2015/01/convert-mysql-to-json-using-php.html */
+    $mysqli->close();
 ?>
 <td class="category">
 	<?php echo 'Add monitors' ?>
@@ -52,13 +55,24 @@
 <td >
 	<form method="get" action="core/bug_api.php">
 	<input <?php echo helper_get_tab_index() ?> type="text" id="demo-input-facebook-theme" name="monitors_names" />
+	<!-- <input type="button" id="submit" value="Submit" /> -->
 	</form>
 
 	<script type="text/javascript">
 	<!-- Hide JavaScript
         var ar =<?php echo $json_res?>;
+        
+        /* var stringed = JSON.stringify(<?php echo $json_res?>);
+        // console.log(stringed); http://www.experts-exchange.com/Web_Development/Q_28446638.html
         // console.log(ar);
         // var $monitors_ids= [];
+		style="width:128px;height:128px" 
+         $.post("./core/bug_api.php",
+        {'monitors_names': ar},
+	    function(data) {
+	          // some stuffs here
+	        } */
+	        
         jQuery(document).ready(function() {
             jQuery("#demo-input-facebook-theme").tokenInput(
                    /* <?php echo $json_res ?> OR <?php echo json_encode($user_arr) ?> without quotes and blocks gives the same result */

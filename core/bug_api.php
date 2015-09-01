@@ -383,7 +383,7 @@ class BugData {
 					    ( user_id, bug_id )
 					  VALUES
 					    ( " . db_param() . ',' . db_param() . ')';
-		if ($f_monitors_ids)			    
+		if ( !empty( $f_monitors_ids ) )
 		for ($i = 0; $i < count($f_monitors_ids); $i++) {
 			$monitors_id = mysql_real_escape_string($f_monitors_ids[$i]);
 			db_query_bound( $query, Array( $monitors_id, $t_text_id ) );
