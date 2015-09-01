@@ -322,7 +322,7 @@ echo "($v_start - $v_end / $t_bug_count)";
 <tr bgcolor="<?php echo $status_color?>" class="nopad">
 	<?php
 	# -- Bug ID and details link + Pencil shortcut --?>
-	<td class="center nopad" valign="top" width ="0" nowrap="nowrap" rowspan="3">
+	<td class="center nopad" valign="top" width ="0" nowrap="nowrap" rowspan="2">
 	<div style="padding:4px !important;">
 		<span class="small" style="font-size:9pt !important;">
 		<?php
@@ -355,7 +355,7 @@ echo "($v_start - $v_end / $t_bug_count)";
 	?>
 		</span></div>
 	</td>
-	<td colspan="20">
+	<td colspan="20" bgcolor="#E8E8E8">
 		<div style="text-align: center; padding:0px !important;">
 			<div class="center inline-block nopad"><?php
 				# -- Summary --<td class="left" valign="top" width="100%">
@@ -379,33 +379,31 @@ echo "($v_start - $v_end / $t_bug_count)";
 
 			?></div>
 		</div>
-	</td><tr bgcolor="<?php echo $status_color?>" class="nopad">
+	</td><tr bgcolor="#E8E8E8" class="nopad">
 	<?php
 	#*********  custom field value
 	# Custom Fields
 	$t_custom_fields_found = false;
 	$t_related_custom_field_ids = custom_field_get_linked_ids( $t_bug->project_id );
-	foreach( $t_related_custom_field_ids as $t_id ) {
-		if ( !custom_field_has_read_access( $t_id, $t_bug->id ) ) {
-			continue;
-		} # has read access
+	$g_hide_custom_fields = config_get( 'hide_custom_fields' );
+	$t_columns = helper_get_columns_to_view( COLUMNS_TARGET_HOME_VIEW_PAGE, /* $p_viewable_only */ false, $t_current_user_id );
 
-		$t_custom_fields_found = true;
-		$t_def = custom_field_get_definition( $t_id );
+	$t_config_table = db_get_table( 'mantis_config_table' );
+	$b_helper_user_exists = helper_user_exists ($t_current_user_id, $t_config_table);
 
-		echo '<td class="custom_category pad1 center">', string_display( lang_get_defaulted( $t_def['name'] ) ), '</td>';
-	}
-	?></tr><tr bgcolor="<?php echo $status_color?>" class="nopad">
-	<?php
-	foreach( $t_related_custom_field_ids as $t_id ) {
+	foreach( $t_related_custom_field_ids as $key => $t_id ) {
 		if ( !custom_field_has_read_access( $t_id, $t_bug->id ) ) {
 			continue;
 		} # has read access #d8d8d8
 
 		$t_custom_fields_found = true;
 		$t_def = custom_field_get_definition( $t_id );
+		$t_def_custom = 'custom_' . strtolower($t_def['name']);
 
-		echo '<td class="custom_field pad1 center">', print_custom_field_value( $t_def, $t_id, $t_bug->id ), '</td>';
+		$t_cond = ($b_helper_user_exists) ? in_array($t_def_custom,$t_columns)===TRUE : in_array($key, $g_hide_custom_fields)===FALSE;
+
+		if ($t_cond)
+		echo '<td class="custom_field pad1 center" title="',string_display( lang_get_defaulted( $t_def['name'] ) ),'">', print_custom_field_value( $t_def, $t_id, $t_bug->id ), '</td>';
 	}
 	echo '</tr>';
 
@@ -415,7 +413,8 @@ echo "($v_start - $v_end / $t_bug_count)";
 	} # custom fields found
 
 									#*********
-	?>
+
+	?></tr>
 </tr>
 <?php
 	# -- end of Repeating bug row --
