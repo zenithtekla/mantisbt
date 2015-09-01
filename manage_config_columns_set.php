@@ -33,6 +33,7 @@
 	# @@@ access_ensure_project_level( config_get( 'manage_project_threshold' ) );
 
 	$f_project_id = gpc_get_int( 'project_id' );
+	$f_home_view_columns = gpc_get_string( 'home_view_columns' );
 	$f_view_issues_columns = gpc_get_string( 'view_issues_columns' );
 	$f_print_issues_columns = gpc_get_string( 'print_issues_columns' );
 	$f_csv_columns = gpc_get_string( 'csv_columns' );
@@ -73,6 +74,9 @@
 
 	$t_all_columns = columns_get_all();
 
+	$t_home_view_columns = columns_string_to_array( $f_home_view_columns );
+	columns_ensure_valid( 'home_view', $t_home_view_columns, $t_all_columns );
+
 	$t_view_issues_columns = columns_string_to_array( $f_view_issues_columns );
 	columns_ensure_valid( 'view_issues', $t_view_issues_columns, $t_all_columns );
 
@@ -84,6 +88,10 @@
 
 	$t_excel_columns = columns_string_to_array( $f_excel_columns );
 	columns_ensure_valid( 'excel', $t_excel_columns, $t_all_columns );
+
+	if ( serialize( config_get( 'home_view_columns', '', $t_user_id, $t_project_id ) ) !== serialize( $t_home_view_columns ) ) {
+		config_set( 'home_view_columns', $t_home_view_columns, $t_user_id, $t_project_id );
+	}
 
 	if ( serialize( config_get( 'view_issues_page_columns', '', $t_user_id, $t_project_id ) ) !== serialize( $t_view_issues_columns ) ) {
 		config_set( 'view_issues_page_columns', $t_view_issues_columns, $t_user_id, $t_project_id );

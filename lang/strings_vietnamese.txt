@@ -26,6 +26,7 @@
  * @file
  *
  * @author 9pagod
+ * @author Phuc Tran zephyrtekla@mail.com
  * @author Baonguyen21022003
  * @author Duongnvm
  * @author Minh Nguyen
@@ -293,12 +294,12 @@ $s_administrator = 'người quản trị';
 $s_myself = 'Bản thân mình';
 $s_default_access_level = 'Mức độ truy cập mặc định';
 $s_issue_status_percentage = 'Tỷ lệ trạng thái issue';
-$s_access_levels_enum_string = '10:người xem, 25:người báo cáo, 40:người cập nhật, 55:người phát triển, 70:người quản lý, 90:người quản trị';
+$s_access_levels_enum_string = '10:người xem, 25:người báo cáo, 36: lao động, 40:người cập nhật, 48:quản lý sản xuất, 55:người phát triển, 70:người quản lý, 90:người quản trị';
 $s_project_status_enum_string = '10: phát triển, 30: phát hành, 50: ổn định, 70: lỗi thời';
 $s_project_view_state_enum_string = '10: công cộng, 50: riêng tư';
 $s_view_state_enum_string = '10: công cộng, 50: riêng tư';
 $s_priority_enum_string = '10:không có, 20:thấp, 30:bình thường, 40:cao, 50:khẩn cấp, 60:ngay lập tức';
-$s_severity_enum_string = '10:tính năng, 20:tầm thường, 30:văn bản, 40:tinh chỉnh, 50:không quan trọng, 60:nghiêm trọng, 70:đổ vở, 80:khóa';
+$s_severity_enum_string = '10:tính năng, 20:tầm thường, 30:văn bản, 40:tinh chỉnh, 50:không quan trọng, 60:nghiêm trọng, 70:đổ vỡ, 80:khóa';
 $s_reproducibility_enum_string = '10: luôn luôn, 30: đôi khi, 50: ngẫu nhiên, 70: đã không cố gắng, 90: không thể tái sản xuất, 100: N / A';
 $s_status_enum_string = '10: mới, 20: phản hồi, 30: tiếp nhận, 40: xác nhận, 50: chỉ định, 80: giải quyết, 90: đóng';
 $s_resolution_enum_string = '10: mở, 20: cố định, 30: mở trở lại, 40: không thể tái sản xuất, 50: không thể sửa chữa, 60: trùng, 70: không có thay đổi yêu cầu, 80: đình chỉ 90,: không sửa chữa';
@@ -371,7 +372,7 @@ $s_account_removed_msg = 'Tài khoản của bạn đã được gỡ bỏ...';
 $s_confirm_delete_msg = 'Bạn có chắc chắn xóa tài khoản của bạn?';
 $s_delete_account_button = 'Xóa tài khoản';
 $s_manage_profiles_link = 'Hồ sơ';
-$s_change_preferences_link = 'Tham khảo';
+$s_change_preferences_link = 'Ưa chuộng';
 $s_edit_account_title = 'Chỉnh sửa tài khoản';
 $s_username = 'Tên người dùng';
 $s_realname = 'Tên thật';
@@ -1202,6 +1203,7 @@ $s_development_team = 'Nhóm phát triển';
 $s_manage_columns_config = 'Quản lý cột';
 $s_all_columns_title = 'Tất cả các cột có sẵn';
 $s_csv_columns_title = 'Cột CSV';
+$s_home_view_columns_title = 'Các cột thêm vào ở trang chủ';
 $s_view_issues_columns_title = 'Xem cột Vấn Đề';
 $s_print_issues_columns_title = 'In cột Vấn Đề';
 $s_excel_columns_title = 'Cột Excel';

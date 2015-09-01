@@ -167,16 +167,12 @@ function columns_plugin_cache_issue_data( $p_bugs ) {
 }
 
 /**
- * Get all accessible columns for the current project / current user..
+ * Get all custom_field columns for the current project / current user..
  * @param int $p_project_id project id
  * @return array array of columns
  * @access public
  */
-function columns_get_all( $p_project_id = null ) {
-	$t_columns = columns_get_standard();
-
-	# add plugin columns
-	$t_columns = array_merge( $t_columns, array_keys( columns_get_plugin_columns() ) );
+function columns_get_custom_fields( $p_project_id = null ) {
 
 	# Add project custom fields to the array.  Only add the ones for which the current user has at least read access.
 	if( $p_project_id === null ) {
@@ -192,8 +188,25 @@ function columns_get_all( $p_project_id = null ) {
 		}
 
 		$t_def = custom_field_get_definition( $t_id );
-		$t_columns[] = 'custom_' . $t_def['name'];
+		$t_columns[] = 'custom_' . strtolower($t_def['name']);
 	}
+
+	return $t_columns;
+}
+
+/**
+ * Get all accessible columns for the current project / current user..
+ * @param int $p_project_id project id
+ * @return array array of columns
+ * @access public
+ */
+function columns_get_all( $p_project_id = null ) {
+	$t_columns = columns_get_standard();
+
+	# add plugin columns
+	$t_columns = array_merge( $t_columns, array_keys( columns_get_plugin_columns() ) );
+
+	$t_columns = array_merge($t_columns, columns_get_custom_fields($p_project_id));
 
 	return $t_columns;
 }

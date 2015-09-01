@@ -3215,6 +3215,12 @@
 	 */
 	$g_custom_field_edit_after_create = ON;
 
+	/**
+	 * Hide custom fields by their field id. However, it can be overriden by users' preferences.
+	 * sample use of $g_hide_custom_fields = [2,3] to hide fields 2 and 3
+	 */
+	$g_hide_custom_fields = [];
+
 	/****************
 	 * Custom Menus *
 	 ****************/

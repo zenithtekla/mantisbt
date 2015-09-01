@@ -323,7 +323,7 @@ $s_default_access_level = 'Default access level';
 $s_issue_status_percentage = 'Issue Status Percentage';
 
 # Enum Strings
-$s_access_levels_enum_string = '10:viewer,25:reporter,40:updater,55:developer,70:manager,90:administrator';
+$s_access_levels_enum_string = '10:viewer,25:reporter,36:production,40:updater,48:program manager,55:developer,70:manager,90:administrator';
 $s_project_status_enum_string = '10:development,30:release,50:stable,70:obsolete';
 $s_project_view_state_enum_string = '10:public,50:private';
 $s_view_state_enum_string = '10:public,50:private';
@@ -1549,6 +1549,7 @@ $s_development_team = 'Development Team';
 $s_manage_columns_config = 'Manage Columns';
 $s_all_columns_title = 'All Available Columns';
 $s_csv_columns_title = 'CSV Columns';
+$s_home_view_columns_title = 'Home View Columns';
 $s_view_issues_columns_title = 'View Issues Columns';
 $s_print_issues_columns_title = 'Print Issues Columns';
 $s_excel_columns_title = 'Excel Columns';

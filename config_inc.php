@@ -1,96 +1,60 @@
 <?php
 $g_hostname = 'localhost';
 $g_db_type = 'mysql';
-$g_database_name = 'mantis-zetek';
+$g_database_name = 'mantisbt';
 $g_db_username = 'root';
-$g_db_password = 'HRLserver8579';
+$g_db_password = 'triet2d';
 
-$g_allow_no_category = ON;
-	/*************************
+/*************************
 	 * MantisBT Enum Strings *
 	 *************************/
 
-	/**
-	 * status from $g_status_index-1 to 79 are used for the onboard customization (if enabled)
-	 * directly use MantisBT to edit them.
-	 * @global string $g_access_levels_enum_string
-	 */
-#	$g_access_levels_enum_string		= '10:viewer,25:reporter,40:updater,55:developer,70:manager,90:administrator';
-	$g_access_levels_enum_string		= '10:viewer,25:reporter,40:updater,55:support_engineer,60:senior_engineer,70:manager,90:administrator';
-	/**
-	 *
-	 * @global string $g_project_status_enum_string
-	 */
-#	$g_project_status_enum_string		= '10:development,30:release,50:stable,70:obsolete';
+$g_access_levels_enum_string		= '10:viewer, 25:reporter, 36:production, 40:updater, 48:program_manager, 55:developer, 70:manager, 90:administrator';
 
-	/**
-	 *
-	 * @global string $g_project_view_state_enum_string
-	 */
-#	$g_project_view_state_enum_string	= '10:public,50:private';
+$g_show_avatar = ON;
+$g_hide_custom_fields = [1];
 
-	/**
-	 *
-	 * @global string $g_view_state_enum_string
-	 */
-#	$g_view_state_enum_string			= '10:public,50:private';
+// TODO
+$g_default_project_for_users = ["REPORTER"=> 1, "DEVELOPER" => 2, "PROGRAM_MANAGER" => 1];
 
-	/**
-	 *
-	 * @global string $g_priority_enum_string
-	 */
-#	$g_priority_enum_string				= '10:none,20:low,30:normal,40:high,50:urgent,60:immediate';
-	$g_priority_enum_string				= '10:5_days,20:3_days,30:2_days,40:24_hrs,50:same_day,60:immediate';	
-	/**
-	 *
-	 * @global string $g_severity_enum_string
-	 */
-#	$g_severity_enum_string				= '10:feature,20:trivial,30:text,40:tweak,50:minor,60:major,70:crash,80:block';
-	$g_severity_enum_string				= '10:non_issue,20:trivial,50:minor,60:major,80:stop_production';
-	/**
-	 *
-	 * @global string $g_reproducibility_enum_string
-	 */
-#	$g_reproducibility_enum_string		= '10:always,30:sometimes,50:random,70:have not tried,90:unable to duplicate,100:N/A';
+/* function Set_default_project_for_usergroup (USERGROUP, $g_default_project_id){
+	// login_select_proj_page.php
+} */
 
-	/**
-	 *
-	 * @global string $g_status_enum_string
-	 */
-#	$g_status_enum_string				= '10:new,20:feedback,30:acknowledged,40:confirmed,50:assigned,80:resolved,90:closed';
 
-	/**
-	 * @@@ for documentation, the values in this list are also used to define variables in the language files
-	 *  (e.g., $s_new_bug_title referenced in bug_change_status_page.php )
-	 * Embedded spaces are converted to underscores (e.g., "working on" references $s_working_on_bug_title).
-	 * they are also expected to be english names for the states
-	 * @global string $g_resolution_enum_string
-	 */
-	$g_resolution_enum_string			= '10:open,20:fixed,30:reopened,40:unable to determine,50:not fixable,60:duplicate,70:not an issue,80:suspended,90:wont fix';
+/*************************
+	* USER CLASSES' priveledges *
+	*****************************
 
-	/**
-	 *
-	 * @global string $g_projection_enum_string
-	 */
-#	$g_projection_enum_string			= '10:none,30:tweak,50:minor fix,70:major rework,90:redesign';
+$g_update_bug_threshold			= UPDATER;
+$g_change_view_status_threshold = UPDATER;
+$g_update_bug_threshold			= UPDATER;
 
-	/**
-	 *
-	 * @global string $g_eta_enum_string
-	 */
-	$g_eta_enum_string					= '10:none,20:immediate,30:same day,40:next day,50:2 days,60:3 days,70:5 days';
+$g_show_avatar_threshold = DEVELOPER;
+$g_private_news_threshold	= DEVELOPER;
+$g_reminder_receive_threshold = DEVELOPER;
+$g_handle_sponsored_bugs_threshold = DEVELOPER;
+$g_delete_attachments_threshold	= DEVELOPER;
+$g_monitor_add_others_bug_threshold = DEVELOPER;
+$g_monitor_delete_others_bug_threshold = DEVELOPER;
+$g_private_bug_threshold		= DEVELOPER;
+$g_handle_bug_threshold			= DEVELOPER;
+$g_private_bugnote_threshold	= DEVELOPER;
+$g_bug_reminder_threshold		= DEVELOPER;
+$g_update_bugnote_threshold = DEVELOPER;
+$g_delete_bug_threshold = DEVELOPER;
+$g_move_bug_threshold = DEVELOPER;
+$g_show_monitor_list_threshold = DEVELOPER;
+$g_stored_query_create_threshold = DEVELOPER;
+$g_roadmap_update_threshold = DEVELOPER;
+$g_update_bug_status_threshold = DEVELOPER;
+$g_reopen_bug_threshold			= DEVELOPER;
+$g_report_issues_for_unreleased_versions_threshold = DEVELOPER;
+$g_development_team_threshold = DEVELOPER;
+$g_create_permalink_threshold = DEVELOPER;
+$g_tag_detach_threshold = DEVELOPER;
+$g_tag_edit_threshold = DEVELOPER;
+$g_time_tracking_view_threshold = DEVELOPER;
+$g_time_tracking_edit_threshold = DEVELOPER;
 
-	/**
-	 *
-	 * @global string $g_sponsorship_enum_string
-	 */
-#	$g_sponsorship_enum_string          = '0:Unpaid,1:Requested,2:Paid';
-
-	/**
-	 *
-	 * @global string $g_custom_field_type_enum_string
-	 */
-	$g_custom_field_type_enum_string    = '0:string,1:numeric,2:float,3:enum,4:email,5:checkbox,6:list,7:multiselection list,8:date,9:radio';
-	
-	$g_default_bug_eta = 50;
-	$g_enable_email_notification	= OFF;
+*/

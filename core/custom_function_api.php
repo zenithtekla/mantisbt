@@ -25,6 +25,7 @@
 /**
  * requires prepare_api
  */
+// require_once ('../mantisbt/dbi_con.php');
 require_once( 'prepare_api.php' );
 /**
  * requires columns_api
@@ -216,6 +217,8 @@ function custom_function_default_auth_can_change_password() {
 # $p_user_id: The user id or null for current logged in user.
 function custom_function_default_get_columns_to_view( $p_columns_target = COLUMNS_TARGET_VIEW_PAGE, $p_user_id = null ) {
 	$t_project_id = helper_get_current_project();
+	$t_boo = true;
+	$t_config_table = db_get_table('mantis_config_table');
 
 	if( $p_columns_target == COLUMNS_TARGET_CSV_PAGE ) {
 		$t_columns = config_get( 'csv_columns', '', $p_user_id, $t_project_id );
@@ -223,11 +226,14 @@ function custom_function_default_get_columns_to_view( $p_columns_target = COLUMN
 		$t_columns = config_get( 'excel_columns', '', $p_user_id, $t_project_id );
 	} else if( $p_columns_target == COLUMNS_TARGET_VIEW_PAGE ) {
 		$t_columns = config_get( 'view_issues_page_columns', '', $p_user_id, $t_project_id );
-	} else {
+	} else if( $p_columns_target == COLUMNS_TARGET_PRINT_PAGE ) {
 		$t_columns = config_get( 'print_issues_page_columns', '', $p_user_id, $t_project_id );
+	} else {
+		$t_columns = (helper_user_exists ($p_user_id, $t_config_table)) ? config_get( 'home_view_columns', '', $p_user_id, $t_project_id ) : columns_get_custom_fields( $t_project_id );
+		$t_boo=false;
 	}
-
-	$t_columns = columns_remove_invalid( $t_columns, columns_get_all( $t_project_id ) );
+	$t_columns_get = ($t_boo) ? columns_get_all( $t_project_id ) : columns_get_custom_fields( $t_project_id );
+	$t_columns = columns_remove_invalid( $t_columns, $t_columns_get );
 
 	return $t_columns;
 }

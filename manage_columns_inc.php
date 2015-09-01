@@ -48,8 +48,41 @@
 	$t_columns = columns_get_all( $t_project_id );
 	$t_all = implode( ', ', $t_columns );
 
+	$t_config_table = db_get_table( 'mantis_config_table' );
+
+	$t_related_custom_field_ids = custom_field_get_linked_ids( $t_project_id );
+	$g_hide_custom_fields = config_get( 'hide_custom_fields' );
+
+	foreach( $t_related_custom_field_ids as $key => $t_id ) {
+		$t_custom_fields_found = true;
+		$t_def = custom_field_get_definition( $t_id );
+		if (in_array($key, $g_hide_custom_fields)===FALSE)
+			$t_valid_columns[]= 'custom_' . strtolower($t_def['name']);
+	}
+
+	//  $t_columns = columns_get_custom_fields( $t_project_id );
+	/* TODO: sneaky here if user has messed with custom_fields for their references and turn everything back on full cfs, let them see all.
+	If user has never touched the custom_fields, the field only shows the valid fields. There could be a better way but config_key $g_hide_custom_fields is an independent value data and may override the config data for fields display. */
+	$t_columns = (helper_user_exists ($t_user_id, $t_config_table)) ? helper_get_columns_to_view( COLUMNS_TARGET_HOME_VIEW_PAGE, /* $p_viewable_only */ false, $t_user_id ) : $t_valid_columns; 
+
+	$t_home_view_columns = implode( ', ', $t_columns );
+
 	$t_columns = helper_get_columns_to_view( COLUMNS_TARGET_CSV_PAGE, /* $p_viewable_only */ false, $t_user_id );
 	$t_csv = implode( ', ', $t_columns );
+
+	/* $t_related_custom_field_ids = custom_field_get_linked_ids( 0 );
+
+	// preparing data
+	$cf_data = [];
+	foreach( $t_related_custom_field_ids as $key => $t_id ) {
+		$t_def = custom_field_get_definition( $t_id );
+		// array_push($cf_data, array("id" => $key, "field_name" => lang_get_defaulted( $t_def['name'] ) ));
+		$cf_data[$key]='custom_' . $t_def['name'];
+	}
+	echo '<br/> $cf_data : ';
+	print_r($cf_data).'<br/>';
+	$t_json_home_view = json_encode($cf_data, JSON_PRETTY_PRINT);
+	// $t_home_view_columns = implode( ', ', $cf_data ); */
 
 	$t_columns = helper_get_columns_to_view( COLUMNS_TARGET_VIEW_PAGE, /* $p_viewable_only */ false, $t_user_id );
 	$t_view_issues = implode( ', ', $t_columns );
@@ -62,7 +95,10 @@
 
 	echo '<br />';
 ?>
-
+<!-- <script type="text/javascript">
+	var $t_home_view = JSON.stringify(<?php echo $t_json_home_view; ?>);
+	console.log($t_home_view );
+</script> //-->
 <div align="center">
 <form name="manage-columns-form" method="post" action="manage_config_columns_set.php">
 <?php echo form_security_field( 'manage_config_columns_set' ) ?>
@@ -84,13 +120,23 @@
 	</td>
 </tr>
 
-<!-- view issues columns -->
+<!-- all available columns -->
 <tr <?php echo helper_alternate_class() ?>>
 	<td class="category">
 		<?php echo lang_get( 'all_columns_title' )?>
 	</td>
 	<td>
 		<textarea <?php echo helper_get_tab_index() ?> name="all_columns" readonly="readonly" cols="80" rows="5"><?php echo $t_all ?></textarea>
+	</td>
+</tr>
+
+<!-- home view columns -->
+<tr <?php echo helper_alternate_class() ?>>
+	<td class="category">
+		<?php echo !empty(lang_get( 'home_view_columns_title' )) ? lang_get( 'home_view_columns_title' ) : 'Home View Columns', '<span class="required">*</span>' ?>
+	</td>
+	<td>
+		<textarea <?php echo helper_get_tab_index() ?> name="home_view_columns" cols="80" rows="2"><?php echo $t_home_view_columns ?></textarea>
 	</td>
 </tr>
 

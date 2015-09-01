@@ -424,6 +424,11 @@ function helper_get_columns_to_view( $p_columns_target = COLUMNS_TARGET_VIEW_PAG
 
 	$t_keys_to_remove = array();
 
+	/* if($p_columns_target == COLUMNS_TARGET_HOME_VIEW_PAGE){
+		$t_keys_to_remove[] = columns_get_custom_fields ($t_current_project_id);
+		print_r($t_keys_to_remove);
+	}*/
+
 	if( $p_columns_target == COLUMNS_TARGET_CSV_PAGE || $p_columns_target == COLUMNS_TARGET_EXCEL_PAGE ) {
 		$t_keys_to_remove[] = 'selection';
 		$t_keys_to_remove[] = 'edit';
@@ -580,4 +585,14 @@ function helper_duration_to_minutes( $p_hhmm ) {
 	}
 
 	return (int) $t_min;
+}
+
+function helper_user_exists ($p_user_id, $p_table){
+	$query = "SELECT user_id
+						  FROM $p_table
+						  WHERE user_id=" . db_param();
+						  // WHERE config_id=" . db_param() . " AND user_id=" . db_param(); db_query_bound( $query, array( $p_option, $p_user_id ) );
+	$result = db_query_bound( $query, array( $p_user_id ) );
+	if (db_num_rows( $result ) > 0) return true;
+	else return false;
 }

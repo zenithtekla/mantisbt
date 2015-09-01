@@ -30,7 +30,7 @@
 	form_security_validate( 'manage_config_columns_reset' );
 
 	$t_user_id = auth_get_current_user_id();
-
+	config_delete_for_user( 'home_view_columns', $t_user_id );
 	config_delete_for_user( 'view_issues_page_columns', $t_user_id );
 	config_delete_for_user( 'print_issues_page_columns', $t_user_id );
 	config_delete_for_user( 'csv_columns', $t_user_id );

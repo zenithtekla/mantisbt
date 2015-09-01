@@ -2047,9 +2047,7 @@ function filter_get_bug_rows( &$p_page_number, &$p_per_page, &$p_page_count, &$p
 	# assigning to $p_* for this function writes the values back in case the caller wants to know
 	# Get the total number of bugs that meet the criteria.
 	$p_bug_count = filter_get_bug_count( $t_query_clauses );
-	if( 0 == $p_bug_count ) {
-		return array();
-	}
+	if( 0 == $p_bug_count ) {		return array();	}
 	$p_per_page = filter_per_page( $t_filter, $p_bug_count, $p_per_page );
 	$p_page_count = filter_page_count( $p_bug_count, $p_per_page );
 	$p_page_number = filter_valid_page_number( $p_page_number, $p_page_count );
