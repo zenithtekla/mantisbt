@@ -12,7 +12,7 @@ $g_db_password = 'triet2d';
 $g_access_levels_enum_string		= '10:viewer, 25:reporter, 36:production, 40:updater, 48:program_manager, 55:developer, 70:manager, 90:administrator';
 
 $g_show_avatar = ON;
-$g_hide_custom_fields = [1];
+$g_show_only_custom_fields = [3,1];
 
 // TODO
 $g_default_project_for_users = ["REPORTER"=> 1, "DEVELOPER" => 2, "PROGRAM_MANAGER" => 1];
@@ -20,7 +20,6 @@ $g_default_project_for_users = ["REPORTER"=> 1, "DEVELOPER" => 2, "PROGRAM_MANAG
 /* function Set_default_project_for_usergroup (USERGROUP, $g_default_project_id){
 	// login_select_proj_page.php
 } */
-
 
 /*************************
 	* USER CLASSES' priveledges *

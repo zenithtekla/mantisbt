@@ -3217,7 +3217,7 @@
 
 	/**
 	 * Show only custom fields by their field id. However, it can be overriden by users' preferences.
-	 * sample use of $g_show_only_custom_fields = [1,3] to hide fields 1 and 3
+	 * sample use of $g_show_only_custom_fields = [3,1] to display only fields 3 and 1 in this specific order
 	 */
 	$g_show_only_custom_fields = [];
 
