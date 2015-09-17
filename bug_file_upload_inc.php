@@ -62,7 +62,8 @@
 	// Display multiple file upload fields
 	for( $i = 0; $i < $t_file_upload_max_num; $i++ ) {
 ?>
-		<input id="ufile[]" name="ufile[]" type="file" size="50" />
+		<input id="ufile[]" name="ufile[]" type="file" size="50" multiple class="file_input" onchange="javascript:updateList()"/>
+		<div id="fileList" class="italic-small inline-block"></div>
 <?php
 		if( $t_file_upload_max_num > 1 ) {
 			echo '<br />';
@@ -70,12 +71,26 @@
 	}
 ?>
 		<input type="submit" class="button"
-			value="<?php echo lang_get( $t_file_upload_max_num == 1 ? 'upload_file_button' : 'upload_files_button' ) ?>"
+			value="<?php echo lang_get( 'upload_files_button' ) ?>"
 		/>
 	</td>
 </tr>
 </table>
 </form>
+
+<script>
+	updateList = function() {
+		var input = document.getElementById('ufile[]');
+		var output = document.getElementById('fileList');
+
+		output.innerHTML = '<ul>';
+		for (var i = 0; i < input.files.length; ++i) {
+			output.innerHTML += '<li>' + input.files.item(i).name + '</li>';
+		}
+		output.innerHTML += '</ul>';
+	}
+</script>
+
 <?php
 	collapse_closed( 'upload_form' );
 ?>

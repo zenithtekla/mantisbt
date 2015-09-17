@@ -11,8 +11,25 @@ $g_db_password = 'triet2d';
 
 $g_access_levels_enum_string		= '10:viewer, 25:reporter, 36:production, 40:updater, 48:program_manager, 55:developer, 70:manager, 90:administrator';
 
-$g_show_avatar = ON;
+// $g_show_avatar = ON;
 $g_show_only_custom_fields = [3,1];
+/* $g_monitor_group[1]=[
+						["id" => 1, "username" => administrator],
+						["id" => 2, "username" => strator],
+						["id" => 3, "username" => admini]
+					];
+$g_monitor_groups = [ $g_monitor_group[1], $g_monitor_group[2], $g_monitor_group[3] ] ;*/
+ 
+
+// [99] => Array( Array ( [id] => 1, [username] => administrator ), Array ( [id] => 1, [username] => administrator ), Array ( [id] => 1, [username] => administrator ) );
+
+# Mandatory
+$g_preview_attachments_inline_max_size = 1024 * 1024;
+$g_preview_max_width = 150;
+$g_preview_max_height = 150;
+
+// TODO: preview of doc, docx, xls, rtf
+$g_preview_text_extensions = array( '', 'txt', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf', 'md', 'md5', 'csv', 'diff', 'patch', 'rtf' ); 
 
 // TODO
 $g_default_project_for_users = ["REPORTER"=> 1, "DEVELOPER" => 2, "PROGRAM_MANAGER" => 1];

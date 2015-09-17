@@ -452,9 +452,9 @@
 		</td>
 		<td>
 			<select <?php echo helper_get_tab_index() ?> name="status">
-			<?php 
-			$resolution_options = get_status_option_list(access_get_project_level( $t_project_id), 
-					config_get('bug_submit_status'), true, 
+			<?php
+			$resolution_options = get_status_option_list(access_get_project_level( $t_project_id),
+					config_get('bug_submit_status'), true,
 					ON == config_get( 'allow_reporter_close' ), $t_project_id );
 			foreach ( $resolution_options as $key => $value ) {
 			?>
@@ -474,7 +474,7 @@
 		</td>
 		<td>
 			<select <?php echo helper_get_tab_index() ?> name="resolution">
-				<?php 
+				<?php
 				print_enum_string_option_list('resolution', config_get('default_bug_resolution'));
 				?>
 			</select>
@@ -553,7 +553,98 @@
 		// Display multiple file upload fields
 		for( $i = 0; $i < $t_file_upload_max_num; $i++ ) {
 ?>
-			<input <?php echo helper_get_tab_index() ?> id="ufile[]" name="ufile[]" type="file" size="50" />
+			<input <?php echo helper_get_tab_index() ?> id="files" name="ufile[]" type="file" size="50" multiple class="file_input" onchange="javascript:updateList()"/>
+			<div id="selectedFiles" class="italic-small inline-block"></div>
+			<script>function toArray(o) { return [].slice.call(o) }</script>
+			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+			<script>
+				var selDiv = "";
+				var storedFiles = [];
+
+				$(document).ready(function() {
+					$("#files").on("change", handleFileSelect);
+
+					selDiv = $("#selectedFiles");
+					$("#myForm").on("submit", handleForm);
+
+					$("body").on("click", ".selFile", removeFile);
+				});
+
+				function handleFileSelect(e) {
+					var files = e.target.files;
+					selDiv.empty();
+					var filesArr = Array.prototype.slice.call(files);
+					filesArr.forEach(function(f) {
+
+						if(!f.type.match("image.*")) {
+							return;
+						}
+						storedFiles.push(f);
+
+						var reader = new FileReader();
+						reader.onload = function (e) {
+							var html = "<div><img src=\"" + e.target.result + "\" data-file='"+f.name+"' class='selFile' title='Click to remove'>" + f.name + "<br clear=\"left\"/></div>";
+							selDiv.append(html);
+
+						}
+						reader.readAsDataURL(f);
+					});
+
+				}
+
+				function handleForm(e) {
+					e.preventDefault();
+					var data = new FormData();
+
+					for(var i=0, len=storedFiles.length; i<len; i++) {
+						data.append('files', storedFiles[i]);
+					}
+
+					var xhr = new XMLHttpRequest();
+					xhr.open('POST', 'handler.cfm', true);
+
+					xhr.onload = function(e) {
+						if(this.status == 200) {
+							console.log(e.currentTarget.responseText);
+							alert(e.currentTarget.responseText + ' items uploaded.');
+						}
+					}
+
+					xhr.send(data);
+				}
+
+				function removeFile(e) {
+					var file = $(this).data("file");
+					for(var i=0;i<storedFiles.length;i++) {
+						if(storedFiles[i].name === file) {
+							storedFiles.splice(i,1);
+							break;
+						}
+					}
+					$(this).parent().remove();
+				}/*
+
+
+
+				var selDiv = document.querySelector('#selectedFiles');
+
+				document.querySelector('#files').addEventListener('change', function handleFileSelect(e) {
+				    if (!e.target.files || !window.FileReader) return;
+
+				    selDiv.innerHTML = '';
+
+				    toArray(e.target.files).forEach(function (f) {
+				        if (!f.type.match("image.*")) return;
+
+				        var reader = new FileReader();
+				        reader.onload = function (e) {
+				            var html = '<img src="' + e.target.result + '">' + f.name + '<br clear="left">';
+				            selDiv.innerHTML += html;
+				        }
+				        reader.readAsDataURL(f);
+				    });
+				}, false);*/
+			</script>
 <?php
 			if( $t_file_upload_max_num > 1 ) {
 				echo '<br />';

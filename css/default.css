@@ -26,6 +26,21 @@ input				{}
 input.button			{}
 input.button-small		{ font-size: 8pt; }
 
+.file_input {
+  overflow: hidden; width: 35%; height: 30px;background: #C2DFFF;
+}
+.file_input input {
+  font-size: 100px; opacity: 0;
+  float: right; filter: alpha(opacity=80); /*IE*/
+}
+
+#selectedFiles img {
+		max-width: 125px;
+		max-height: 125px;
+		float: left;
+		margin-bottom:10px;
+	}
+
 textarea			{}
 select				{}
 
