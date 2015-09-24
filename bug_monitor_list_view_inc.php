@@ -1,3 +1,4 @@
+
 <?php
 # MantisBT - a php based bugtracking system
 
@@ -25,7 +26,7 @@
  */
 
 if ( access_has_bug_level( config_get( 'show_monitor_list_threshold' ), $f_bug_id ) ) {
-	
+
 	$t_users = bug_get_monitors( $f_bug_id );
 	$num_users = sizeof ( $t_users );
 
@@ -51,7 +52,7 @@ if ( access_has_bug_level( config_get( 'show_monitor_list_threshold' ), $f_bug_i
 		if ( 0 == $num_users ) {
 			echo lang_get( 'no_users_monitoring_bug' );
 		} else {
-			$t_can_delete_others = access_has_bug_level( config_get( 'monitor_delete_others_bug_threshold' ), $f_bug_id ); 
+			$t_can_delete_others = access_has_bug_level( config_get( 'monitor_delete_others_bug_threshold' ), $f_bug_id );
 	 		for ( $i = 0; $i < $num_users; $i++ ) {
 				echo ($i > 0) ? ', ' : '';
 				echo print_user( $t_users[$i] );
@@ -64,10 +65,11 @@ if ( access_has_bug_level( config_get( 'show_monitor_list_threshold' ), $f_bug_i
 		if ( access_has_bug_level( config_get( 'monitor_add_others_bug_threshold' ), $f_bug_id ) ) {
 			echo '<br /><br />', lang_get( 'username' );
 ?>
-		<form method="get" action="bug_monitor_add.php">
+		<?php require_once( $tpl_mantis_dir . 'bug_monitor_view_issue_add.php' );?>
+		<form name="my_form" id="my_form" method="get" action="bug_monitor_add.php">
 		<?php echo form_security_field( 'bug_monitor_add' ) ?>
 			<input type="hidden" name="bug_id" value="<?php echo (integer)$f_bug_id; ?>" />
-			<input type="text" name="username" />
+			<input type="text" id="demo-input-facebook-theme" name="user_id" />
 			<input type="submit" class="button" value="<?php echo lang_get( 'add_user_to_monitor' ) ?>" />
 		</form>
 		<?php } ?>
@@ -88,6 +90,6 @@ if ( access_has_bug_level( config_get( 'show_monitor_list_threshold' ), $f_bug_i
 	collapse_end( 'monitoring' );
 ?>
 
-<?php 
+<?php
 } # show monitor list
 

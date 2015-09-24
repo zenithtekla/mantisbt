@@ -33,23 +33,11 @@
 
 	$f_bug_id = gpc_get_int( 'bug_id' );
 	$t_bug = bug_get( $f_bug_id, true );
-	$f_username = gpc_get_string( 'username', '' );
+	$t_user_id = gpc_get_string( 'user_id', '' );
+	$f_monitors_ids = explode(",",$t_user_id);
+	$t_bug_monitor_table = db_get_table( 'mantis_bug_monitor_table' );
 
 	$t_logged_in_user_id = auth_get_current_user_id();
-
-	if ( is_blank( $f_username ) ) {
-		$t_user_id = $t_logged_in_user_id;
-	} else {
-		$t_user_id = user_get_id_by_name( $f_username );
-		if ( $t_user_id === false ) {
-			$t_user_id = user_get_id_by_realname( $f_username );
-
-			if ( $t_user_id === false ) {
-				error_parameters( $f_username );
-				trigger_error( ERROR_USER_BY_NAME_NOT_FOUND, E_USER_ERROR );
-			}
-		}
-	}
 
 	if ( user_is_anonymous( $t_user_id ) ) {
 		trigger_error( ERROR_PROTECTED_ACCOUNT, E_USER_ERROR );
@@ -69,7 +57,17 @@
 		access_ensure_bug_level( config_get( 'monitor_add_others_bug_threshold' ), $f_bug_id );
 	}
 
-	bug_monitor( $f_bug_id, $t_user_id );
+	# Insert bug monitors information
+	$query = "INSERT INTO $t_bug_monitor_table
+					    ( user_id, bug_id )
+					  VALUES
+					    ( " . db_param() . ',' . db_param() . ')';
+	if ( !empty( $f_monitors_ids ) )
+	for ($i = 0; $i < count($f_monitors_ids); $i++) {
+		$monitors_id = mysql_real_escape_string($f_monitors_ids[$i]);
+		db_query_bound( $query, Array( $monitors_id, $f_bug_id ) );
+	}
+	// bug_monitor( $f_bug_id, $t_user_id );
 
 	form_security_purge( 'bug_monitor_add' );
 
