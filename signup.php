@@ -30,6 +30,7 @@
 	form_security_validate( 'signup' );
 
 	$f_username		= strip_tags( gpc_get_string( 'username' ) );
+	$f_realname		= strip_tags( gpc_get_string( 'realname' ) );
 	$f_email		= strip_tags( gpc_get_string( 'email' ) );
 	$f_captcha		= gpc_get_string( 'captcha', '' );
 
@@ -67,7 +68,7 @@
 	email_ensure_not_disposable( $f_email );
 
 	# notify the selected group a new user has signed-up
-	if( user_signup( $f_username, $f_email ) ) {
+	if( user_signup( $f_username, $f_email, $f_realname ) ) {
 		email_notify_new_account( $f_username, $f_email );
 	}
 
@@ -83,7 +84,7 @@
 <tr>
 	<td class="center">
 		<b><?php echo lang_get( 'signup_done_title' ) ?></b><br />
-		<?php echo "[$f_username - $f_email] " ?>
+		<?php echo "[$f_realname - $f_username - $f_email] " ?>
 	</td>
 </tr>
 <tr>

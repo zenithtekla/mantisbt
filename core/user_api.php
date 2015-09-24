@@ -498,7 +498,7 @@ function user_create( $p_username, $p_password, $p_email = '',
 # If the use_ldap_email config option is on then tries to find email using
 # ldap. $p_email may be empty, but the user wont get any emails.
 # returns false if error, the generated cookie string if ok
-function user_signup( $p_username, $p_email = null ) {
+function user_signup( $p_username, $p_email, $p_realname = null ) {
 	if( null === $p_email ) {
 		$p_email = '';
 
@@ -531,7 +531,8 @@ function user_signup( $p_username, $p_email = null ) {
 	# Create random password
 	$t_password = auth_generate_random_password( $t_seed );
 
-	return user_create( $p_username, $t_password, $p_email );
+	$p_access_level = null; $p_protected = false; $p_enabled = true;
+	return user_create( $p_username, $t_password, $p_email, $p_access_level, $p_protected, $p_enabled, $p_realname );
 }
 
 # --------------------

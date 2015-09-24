@@ -52,7 +52,16 @@
 		<?php echo lang_get( 'username' ) ?>:
 	</td>
 	<td width="70%" colspan="2">
-		<input type="text" name="username" size="32" maxlength="<?php echo DB_FIELD_SIZE_USERNAME;?>" />
+		<input type="text" name="username" size="32" maxlength="<?php echo DB_FIELD_SIZE_USERNAME;?>" required/>
+	</td>
+</tr>
+<tr class="row-1">
+	<td class="category" width="30%">
+		<?php echo lang_get( 'realname' ) ?>:
+	</td>
+	<td width="70%" colspan="2">
+		<input type="text" name="realname" size="32" maxlength="<?php echo DB_FIELD_SIZE_REALNAME
+		;?>" required/>
 	</td>
 </tr>
 <tr class="row-2">
