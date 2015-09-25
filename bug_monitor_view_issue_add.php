@@ -16,7 +16,7 @@
 
 	//create an array
 	$user_arr = array();
-	$t_users_by_names = [];
+	// $t_users_by_names = [];
 
 	while(($row = $result->fetch_assoc()) !== null ) {
 		if (!in_array($row['id'], $t_users))
@@ -38,7 +38,7 @@
 	<script type="text/javascript">
 	<!-- Hide JavaScript
         var ar =<?php echo $json_res?>;
-        var pre =<?php echo $json_pre?>;
+        // var pre =<?php echo $json_pre?>;
         jQuery(document).ready(function() {
             jQuery("#demo-input-facebook-theme").tokenInput(
                     ar
@@ -48,7 +48,7 @@
 					theme: "facebook",
 
 					excludeCurrent: true,
-					preventDuplicates: true,
+					preventDuplicates: true, // prePopulate: pre,
 					onAdd: function (item) {
 	                    jQuery('#my_form').submit();
 	                }
