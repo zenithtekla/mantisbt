@@ -11,19 +11,22 @@
 <body>
 <?php
 	require_once('dbi_con.php');
-	// $t_users = gpc_get_string( 'bug_monitor_user', '' );
 
 	$result =$mysqli->query("SELECT id,username FROM mantis_user_table where id>0 LIMIT 15") or die(mysqli_error());
 
 	//create an array
 	$user_arr = array();
+	$t_users_by_names = [];
+
 	while(($row = $result->fetch_assoc()) !== null ) {
 		if (!in_array($row['id'], $t_users))
 			$user_arr[] = $row;
+		// else $t_users_by_names[] = $row;
 	}
 
     # JSON-encode the response
 	$json_res = json_encode($user_arr, JSON_PRETTY_PRINT);
+	// $json_pre = json_encode($t_users_by_names, JSON_PRETTY_PRINT);
 
 	# Optionally: Wrap the response in a callback function for JSONP cross-domain support
 	if(isset($_GET["callback"])) {
@@ -35,6 +38,7 @@
 	<script type="text/javascript">
 	<!-- Hide JavaScript
         var ar =<?php echo $json_res?>;
+        var pre =<?php echo $json_pre?>;
         jQuery(document).ready(function() {
             jQuery("#demo-input-facebook-theme").tokenInput(
                     ar
@@ -44,8 +48,10 @@
 					theme: "facebook",
 
 					excludeCurrent: true,
-					preventDuplicates: true
-
+					preventDuplicates: true,
+					onAdd: function (item) {
+	                    jQuery('#my_form').submit();
+	                }
 				}
 			);
 		});

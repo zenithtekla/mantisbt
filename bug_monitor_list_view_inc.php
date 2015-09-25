@@ -1,4 +1,22 @@
-
+<script type="text/javascript">
+<!-- Hide JavaScript
+	function detectScrollbar()
+	{
+	    if (navigator.appName == "Microsoft Internet Explorer")
+	    {
+	        window.name=document.body.scrollTop;
+	    }
+	    else
+	    {
+	        window.name=window.pageYOffset;
+	    }
+	}
+	function doScroll()
+	{
+	  if (window.name) window.scrollTo(0, window.name);
+	}
+-->
+</script>
 <?php
 # MantisBT - a php based bugtracking system
 
@@ -34,6 +52,7 @@ if ( access_has_bug_level( config_get( 'show_monitor_list_threshold' ), $f_bug_i
 
 	collapse_open( 'monitoring' );
 ?>
+<body onload="doScroll()" onunload="window.name=document.body.scrollTop">
 <table class="width100" cellspacing="1">
 <tr>
 	<td class="form-title" colspan="2">
@@ -65,13 +84,13 @@ if ( access_has_bug_level( config_get( 'show_monitor_list_threshold' ), $f_bug_i
 		if ( access_has_bug_level( config_get( 'monitor_add_others_bug_threshold' ), $f_bug_id ) ) {
 			echo '<br /><br />', lang_get( 'username' );
 ?>
-		<?php require_once( $tpl_mantis_dir . 'bug_monitor_view_issue_add.php' );?>
 		<form name="my_form" id="my_form" method="get" action="bug_monitor_add.php">
 		<?php echo form_security_field( 'bug_monitor_add' ) ?>
 			<input type="hidden" name="bug_id" value="<?php echo (integer)$f_bug_id; ?>" />
 			<input type="text" id="demo-input-facebook-theme" name="user_id" />
-			<input type="submit" class="button" value="<?php echo lang_get( 'add_user_to_monitor' ) ?>" />
+			<!--<input type="submit" class="button" value="<?php echo lang_get( 'add_user_to_monitor' ) ?>" />-->
 		</form>
+		<?php require_once( $tpl_mantis_dir . 'bug_monitor_view_issue_add.php' );?>
 		<?php } ?>
 	</td>
 </tr>
@@ -85,7 +104,7 @@ if ( access_has_bug_level( config_get( 'show_monitor_list_threshold' ), $f_bug_i
 		<?php echo lang_get( 'users_monitoring_bug' ); ?>
 	</td>
 </tr>
-</table>
+</table></body>
 <?php
 	collapse_end( 'monitoring' );
 ?>

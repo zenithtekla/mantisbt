@@ -119,8 +119,8 @@ function print_header_redirect_view( $p_bug_id ) {
 # --------------------
 # Get a view URL for the bug id based on the user's preference and
 #  call print_successful_redirect() with that URL
-function print_successful_redirect_to_bug( $p_bug_id ) {
-	$t_url = string_get_bug_view_url( $p_bug_id, auth_get_current_user_id() );
+function print_successful_redirect_to_bug( $p_bug_id, $p_anchor ='' ) {
+	$t_url = string_get_bug_view_url( $p_bug_id, $p_anchor, auth_get_current_user_id() );
 
 	print_successful_redirect( $t_url );
 }

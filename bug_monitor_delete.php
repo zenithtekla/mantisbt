@@ -66,4 +66,5 @@
 
 	form_security_purge( 'bug_monitor_delete' );
 
+	// $f_anchor = '#monitoring_open';
 	print_successful_redirect_to_bug( $f_bug_id );
