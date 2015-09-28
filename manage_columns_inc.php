@@ -61,11 +61,13 @@
 				$t_valid_columns[]= 'custom_' . strtolower($t_def['name']);
 		}
 	}
+
 	//  $t_columns = columns_get_custom_fields( $t_project_id );
 	/* TODO: sneaky here if user has messed with custom_fields for their references and turn everything back on full cfs, let them see all.
 	If user has never touched the custom_fields, the field only shows the valid fields. There could be a better way but config_key $g_show_only_custom_fields is an independent value data and may override the config data for fields display. */
-	$t_columns = (helper_user_exists ($t_user_id, $t_config_table)) ? helper_get_columns_to_view( COLUMNS_TARGET_HOME_VIEW_PAGE, /* $p_viewable_only */ false, $t_user_id ) : $t_valid_columns; 
+	$t_columns = (helper_user_exists ($t_user_id, $t_config_table)) ? helper_get_columns_to_view( COLUMNS_TARGET_HOME_VIEW_PAGE, /* $p_viewable_only */ false, $t_user_id ) : $t_valid_columns;
 
+	if (!empty($t_columns))
 	$t_home_view_columns = implode( ', ', $t_columns );
 
 	$t_columns = helper_get_columns_to_view( COLUMNS_TARGET_CSV_PAGE, /* $p_viewable_only */ false, $t_user_id );
