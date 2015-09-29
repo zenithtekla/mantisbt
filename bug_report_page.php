@@ -117,7 +117,7 @@
 		$f_profile_id			= gpc_get_int( 'profile_id', 0 );
 		$f_handler_id			= gpc_get_int( 'handler_id', 0 );
 
-		$f_category_id			= gpc_get_int( 'category_id', 0 );
+		$f_category_id			= gpc_get_int( 'category_id', 1 );
 		$f_reproducibility		= gpc_get_int( 'reproducibility', config_get( 'default_bug_reproducibility' ) );
 		$f_eta					= gpc_get_int( 'eta', config_get( 'default_bug_eta' ) );
 		$f_severity				= gpc_get_int( 'severity', config_get( 'default_bug_severity' ) );
@@ -290,7 +290,7 @@
 	</tr>
 <?php
 		}
-	}
+	} # foreach( $t_related_custom_field_ids as $t_id )
 
 	if ( $tpl_show_due_date ) {
 		$t_date_to_display = '';
@@ -474,7 +474,7 @@
 		</td>
 		<td>
 			<select <?php echo helper_get_tab_index() ?> name="resolution">
-				<?php
+				<?php 
 				print_enum_string_option_list('resolution', config_get('default_bug_resolution'));
 				?>
 			</select>
