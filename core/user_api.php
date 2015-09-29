@@ -531,7 +531,11 @@ function user_signup( $p_username, $p_email, $p_realname = null ) {
 	# Create random password
 	$t_password = auth_generate_random_password( $t_seed );
 
-	$p_access_level = null; $p_protected = false; $p_enabled = true;
+	if( null === $p_access_level ) {
+		$p_access_level = config_get( 'default_new_account_access_level' );
+	}
+	$p_protected = db_prepare_bool( $p_protected );
+	$p_enabled = db_prepare_bool( $p_enabled );
 	return user_create( $p_username, $t_password, $p_email, $p_access_level, $p_protected, $p_enabled, $p_realname );
 }
 
