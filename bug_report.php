@@ -146,12 +146,23 @@
 	}
 
 	# Create the bug
-	$t_bug_id = $t_bug_data->create();
+	$t_max_file_size = (int) min( ini_get_number( 'upload_max_filesize' ), ini_get_number( 'post_max_size' ), config_get( 'max_file_size' ) );
+	if( !is_null( $f_files ) ) {
+		$t_files = helper_array_transpose( $f_files );
+		foreach( $t_files as $t_file ) {
+			// $t_file_size = filesize( $t_file );
+			if( $t_file['size'] <= $t_max_file_size ) {
+				$t_bug_id = $t_bug_data->create();
+			}
+		}
+	}
 
 	# Mark the added issue as visited so that it appears on the last visited list.
 	last_visited_issue( $t_bug_id );
 
 	# Handle the file upload
+	$t_file_attach_failure = 0;
+
 	if( !is_null( $f_files ) ) {
 		$t_files = helper_array_transpose( $f_files );
 		foreach( $t_files as $t_file ) {
@@ -160,6 +171,22 @@
 			}
 		}
 	}
+
+/*	$t_bug_table = db_get_table( 'mantis_bug_table' );
+
+	$t_bug_text_table = db_get_table( 'mantis_bug_text_table' );
+	$t_category_table = db_get_table( 'mantis_category_table' );
+	$t_bug_monitor_table = db_get_table( 'mantis_bug_monitor_table' );
+
+	if ($t_file_attach_failure >0) {
+		$query = "DELETE FROM $t_bug_text_table WHERE id=".db_param();
+		db_query_bound( $query, Array($t_bug_id) );
+		$query = "DELETE FROM $t_bug_table WHERE bug_text_id=".db_param();
+		db_query_bound( $query, Array($t_bug_id) );
+		$query = "DELETE FROM $t_bug_monitor_table WHERE bug_id=".db_param();
+		db_query_bound( $query, Array($t_bug_id) );
+		return;
+	} */
 
 	# Handle custom field submission
 	foreach( $t_related_custom_field_ids as $t_id ) {

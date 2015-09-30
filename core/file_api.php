@@ -628,6 +628,78 @@ function file_is_name_unique( $p_name, $p_bug_id, $p_table  = 'bug' ) {
 }
 
 /**
+ * Creates function imagecreatefrombmp, since PHP doesn't have one
+ * @return resource An image identifier, similar to imagecreatefrompng
+ * @param string $filename Path to the BMP image
+ * @see imagecreatefrompng
+ * @author Glen Solsberry <glens@networldalliance.com>
+ */
+if (!function_exists("imagecreatefrombmp")) {
+	function imagecreatefrombmp( $filename ) {
+		$file = fopen( $filename, "rb" );
+		$read = fread( $file, 10 );
+		while( !feof( $file ) && $read != "" )
+		{
+			$read .= fread( $file, 1024 );
+		}
+		$temp = unpack( "H*", $read );
+		$hex = $temp[1];
+		$header = substr( $hex, 0, 104 );
+		$body = str_split( substr( $hex, 108 ), 6 );
+		if( substr( $header, 0, 4 ) == "424d" )
+		{
+			$header = substr( $header, 4 );
+			// Remove some stuff?
+			$header = substr( $header, 32 );
+			// Get the width
+			$width = hexdec( substr( $header, 0, 2 ) );
+			// Remove some stuff?
+			$header = substr( $header, 8 );
+			// Get the height
+			$height = hexdec( substr( $header, 0, 2 ) );
+			unset( $header );
+		}
+		$x = 0;
+		$y = 1;
+		$image = imagecreatetruecolor( $width, $height );
+		foreach( $body as $rgb )
+		{
+			$r = hexdec( substr( $rgb, 4, 2 ) );
+			$g = hexdec( substr( $rgb, 2, 2 ) );
+			$b = hexdec( substr( $rgb, 0, 2 ) );
+			$color = imagecolorallocate( $image, $r, $g, $b );
+			imagesetpixel( $image, $x, $height-$y, $color );
+			$x++;
+			if( $x >= $width )
+			{
+				$x = 0;
+				$y++;
+			}
+		}
+		return $image;
+	}
+}
+
+/**
+ * Image file compression
+ * supports JPG, JPEG
+ *
+ * @param string $source_url
+ * @param string 
+ * @param string $p_table 'bug' or 'project' depending on attachment type
+ * @param string $p_title file title
+ */
+function compress_image($source_url, $destination_url, $quality) {
+	$info = getimagesize($source_url);
+	if ($info['mime'] == 'image/jpeg') $image = imagecreatefromjpeg($source_url);
+	elseif ($info['mime'] == 'image/gif') $image = imagecreatefromgif($source_url);
+	elseif ($info['mime'] == 'image/png') $image = imagecreatefrompng($source_url);
+	elseif ($info['mime'] == 'image/bmp') $image = imagecreatefrombmp($source_url);
+	imagejpeg($image, $destination_url, $quality);
+	return $destination_url;
+}
+
+/**
  * Add a file to the system using the configured storage method
  *
  * @param integer $p_bug_id the bug id (should be 0 when adding project doc)
@@ -642,23 +714,29 @@ function file_is_name_unique( $p_name, $p_bug_id, $p_table  = 'bug' ) {
 function file_add( $p_bug_id, $p_file, $p_table = 'bug', $p_title = '', $p_desc = '', $p_user_id = null, $p_date_added = 0, $p_skip_bug_update = false ) {
 
 	file_ensure_uploaded( $p_file );
-	$t_file_name = $p_file['name'];
+	$t_file_upfront_name = $p_file['name'];
+	$t_file_name = strtolower($p_file['name']);
+
 	$t_tmp_file = $p_file['tmp_name'];
 
 	if( !file_type_check( $t_file_name ) ) {
+		$t_file_attach_failure++;
 		trigger_error( ERROR_FILE_NOT_ALLOWED, ERROR );
 	}
 
 	if( !file_is_name_unique( $t_file_name, $p_bug_id ) ) {
+		$t_file_attach_failure++;
 		trigger_error( ERROR_FILE_DUPLICATE, ERROR );
 	}
 
 	$t_file_size = filesize( $t_tmp_file );
 	if( 0 == $t_file_size ) {
+		$t_file_attach_failure++;
 		trigger_error( ERROR_FILE_NO_UPLOAD_FAILURE, ERROR );
 	}
 	$t_max_file_size = (int) min( ini_get_number( 'upload_max_filesize' ), ini_get_number( 'post_max_size' ), config_get( 'max_file_size' ) );
 	if( $t_file_size > $t_max_file_size ) {
+		$t_file_attach_failure++;
 		trigger_error( ERROR_FILE_TOO_BIG, ERROR );
 	}
 
@@ -688,12 +766,13 @@ function file_add( $p_bug_id, $p_file, $p_table = 'bug', $p_title = '', $p_desc 
 			$t_file_path = config_get( 'absolute_path_default_upload_folder' );
 		}
 	}
-
+	$t_file_upfront_path = $t_file_path;
 	$t_file_hash = ( 'bug' == $p_table ) ? $t_bug_id : config_get( 'document_files_prefix' ) . '-' . $t_project_id;
 	$t_unique_name = file_generate_unique_name( $t_file_hash . '-' . $t_file_name, $t_file_path );
 	$t_disk_file_name = $t_file_path . $t_unique_name;
 
 	$t_method = config_get( 'file_upload_method' );
+	// compress_image($t_file_upfront_path . $t_file_upfront_name, $t_disk_file_name, 65);
 
 	switch( $t_method ) {
 		case FTP:
@@ -756,7 +835,7 @@ function file_add( $p_bug_id, $p_file, $p_table = 'bug', $p_title = '', $p_desc 
 		}
 
 		# add history entry
-		history_log_event_special( $p_bug_id, FILE_ADDED, $t_file_name );
+		history_log_event_special( $p_bug_id, FILE_ADDED, $t_file_name . ' t_file_upfront_path ' . $t_file_upfront_path . ' file_path ' . $t_file_path );
 	}
 }
 
