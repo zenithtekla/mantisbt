@@ -681,14 +681,14 @@ if (!function_exists("imagecreatefrombmp")) {
 }
 
 /**
- * Image file compression
- * supports JPG, JPEG
- *
- * @param string $source_url
- * @param string 
- * @param string $p_table 'bug' or 'project' depending on attachment type
- * @param string $p_title file title
+ * Image file Processing (!= Image Processing (ImageMagick))
+ * supports JPG, JPEG, GIF, PNG, BMP (untested)
+ * compress_image (main), compress_image_case (re-written,not fully tested), compress_image_with_size_ratio (working, tested once)
+ * @param string $source_url..path\to\the\source.jpg
+ * @param string $destination_url..path\to\the\result.jpg
+ * @param int $quality..reduction rate
  */
+
 function compress_image($source_url, $destination_url, $quality) {
 	$info = getimagesize($source_url);
 	if ($info['mime'] == 'image/jpeg') $image = imagecreatefromjpeg($source_url);
@@ -699,6 +699,84 @@ function compress_image($source_url, $destination_url, $quality) {
 	return $destination_url;
 }
 
+function compress_image_case($source_url, $destination_url, $newWidth = 0) {
+	$info = getimagesize($source_url);
+
+	// Resample
+    $mime = $info['mime'];
+
+    switch ($mime) {
+            case 'image/jpeg':
+                    $image_create_func = 'imagecreatefromjpeg';
+                    $image_save_func = 'imagejpeg';
+                    $new_image_ext = 'jpg';
+                    $quality = 65;
+                    break;
+
+            case 'image/png':
+                    $image_create_func = 'imagecreatefrompng';
+                    $image_save_func = 'imagepng';
+                    $new_image_ext = 'png';
+                    $quality = 7;
+                    break;
+
+            case 'image/gif':
+                    $image_create_func = 'imagecreatefromgif';
+                    $image_save_func = 'imagegif';
+                    $new_image_ext = 'gif';
+                    $quality = 65;
+                    break;
+
+            case 'image/bmp':
+                    $image_create_func = 'imagecreatefrombmp';
+                    $image_save_func = 'imagejpg';
+                    $new_image_ext = 'bmp';
+                    $quality = 65;
+                    break;
+
+            default:
+                    throw Exception('Unknown image type.');
+    }
+
+    $img = $image_create_func($source_url);
+
+    if ($newWidth !=0){
+	    list($width_orig, $height_orig) = getimagesize($source_url);
+
+	    $newHeight = ($height_orig / $width_orig) * $newWidth;
+	    $tmp = imagecreatetruecolor($newWidth, $newHeight);
+	    imagecopyresampled($tmp, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width_orig, $height_orig);
+	}
+
+    if (file_exists($destination_url)) unlink($destination_url);
+    $image_save_func($tmp, $destination_url, $quality);
+}
+
+function compress_image_with_size_ratio($target, $newcopy, $w, $h, $quality = 65) {
+	$info = getimagesize($target);
+    list($w_orig, $h_orig) = $info;
+    $scale_ratio = $w_orig / $h_orig;
+    if (($w / $h) > $scale_ratio) {
+           $w = $h * $scale_ratio;
+    } else {
+           $h = $w / $scale_ratio;
+    }
+    if ($w_orig <301) $w=$w_orig;
+    if ($h_orig<301) $h=$h_orig;
+
+    $ext = $info['mime'];
+    if ($ext == 'image/gif'){
+      $img = imagecreatefromgif($target);
+    } else if($ext =='image/png'){
+      $img = imagecreatefrompng($target);
+    } else if($ext =='image/jpeg'){
+      $img = imagecreatefromjpeg($target);
+    } else if($ext == 'image/bmp') $img = imagecreatefrombmp($target);
+    $tci = imagecreatetruecolor($w, $h);
+    // imagecopyresampled(dst_img, src_img, dst_x, dst_y, src_x, src_y, dst_w, dst_h, src_w, src_h)
+    imagecopyresampled($tci, $img, 0, 0, 0, 0, $w, $h, $w_orig, $h_orig);
+    imagejpeg($tci, $newcopy, $quality);
+}
 /**
  * Add a file to the system using the configured storage method
  *
@@ -714,29 +792,46 @@ function compress_image($source_url, $destination_url, $quality) {
 function file_add( $p_bug_id, $p_file, $p_table = 'bug', $p_title = '', $p_desc = '', $p_user_id = null, $p_date_added = 0, $p_skip_bug_update = false ) {
 
 	file_ensure_uploaded( $p_file );
-	$t_file_upfront_name = $p_file['name'];
 	$t_file_name = strtolower($p_file['name']);
-
 	$t_tmp_file = $p_file['tmp_name'];
 
+	// sys_get_temp_dir() yields some other result # dirname.
+	$t_dest_file = dirname($t_tmp_file). DIRECTORY_SEPARATOR . 'resized_' . basename($t_tmp_file);
+	compress_image($t_tmp_file, $t_dest_file, 65);
+
+	/* Example use of compress_image_with_size_ratio
+	$wmax = 800;
+	$hmax = 600;
+	compress_image_with_size_ratio( $t_tmp_file, $t_dest_file, $wmax, $hmax, 65);*/
+
+	// debugging
+	?>
+	<script>
+  			alert("</script><?php echo '<br/> tmp_file ' . $t_tmp_file;?><script>")
+  			alert("</script><?php echo '<br/> filesize ' . filesize($t_tmp_file). '<br/>';?><script>")
+  			alert("</script><?php echo '<br/> dest_file (resized) ' . $t_dest_file;?><script>")
+  			alert("</script><?php echo '<br/> filesize ' . filesize($t_dest_file);?><script>")
+	</script>
+	<?php
+
+	// re-assign and clean-up
+	if ( filesize($t_dest_file) > filesize($t_tmp_file) ) file_delete_local($t_dest_file);
+	else {file_delete_local($t_tmp_file); $t_tmp_file = $t_dest_file;}
+
 	if( !file_type_check( $t_file_name ) ) {
-		$t_file_attach_failure++;
 		trigger_error( ERROR_FILE_NOT_ALLOWED, ERROR );
 	}
 
 	if( !file_is_name_unique( $t_file_name, $p_bug_id ) ) {
-		$t_file_attach_failure++;
 		trigger_error( ERROR_FILE_DUPLICATE, ERROR );
 	}
 
 	$t_file_size = filesize( $t_tmp_file );
 	if( 0 == $t_file_size ) {
-		$t_file_attach_failure++;
 		trigger_error( ERROR_FILE_NO_UPLOAD_FAILURE, ERROR );
 	}
 	$t_max_file_size = (int) min( ini_get_number( 'upload_max_filesize' ), ini_get_number( 'post_max_size' ), config_get( 'max_file_size' ) );
 	if( $t_file_size > $t_max_file_size ) {
-		$t_file_attach_failure++;
 		trigger_error( ERROR_FILE_TOO_BIG, ERROR );
 	}
 
@@ -766,13 +861,11 @@ function file_add( $p_bug_id, $p_file, $p_table = 'bug', $p_title = '', $p_desc 
 			$t_file_path = config_get( 'absolute_path_default_upload_folder' );
 		}
 	}
-	$t_file_upfront_path = $t_file_path;
 	$t_file_hash = ( 'bug' == $p_table ) ? $t_bug_id : config_get( 'document_files_prefix' ) . '-' . $t_project_id;
 	$t_unique_name = file_generate_unique_name( $t_file_hash . '-' . $t_file_name, $t_file_path );
 	$t_disk_file_name = $t_file_path . $t_unique_name;
 
 	$t_method = config_get( 'file_upload_method' );
-	// compress_image($t_file_upfront_path . $t_file_upfront_name, $t_disk_file_name, 65);
 
 	switch( $t_method ) {
 		case FTP:
@@ -835,7 +928,7 @@ function file_add( $p_bug_id, $p_file, $p_table = 'bug', $p_title = '', $p_desc 
 		}
 
 		# add history entry
-		history_log_event_special( $p_bug_id, FILE_ADDED, $t_file_name . ' t_file_upfront_path ' . $t_file_upfront_path . ' file_path ' . $t_file_path );
+		history_log_event_special( $p_bug_id, FILE_ADDED, $t_file_name );
 	}
 }
 
