@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="css/token-input-facebook.css" type="text/css" />
 
-    <script type="text/javascript">	 
+    <script type="text/javascript">
  	/* jQuery(document).ready(function() {
         jQuery("#submit").click(function () {
             // alert("Would submit: " + $(this).siblings("input[type=text]").val());
@@ -21,8 +21,9 @@
 <?php
 	require_once('dbi_con.php');
 	require_once('/core/helper_api.php');
+	$t_user_table = "mantis_user_table";
 
-	$result =$mysqli->query("SELECT id,username FROM mantis_user_table where id>0 LIMIT 15") or die(mysqli_error());
+	$result =$mysqli->query("SELECT id,username FROM $t_user_table where id>0 LIMIT 15") or die(mysqli_error());
 
 	//create an array
 	$user_arr = array();
@@ -30,6 +31,45 @@
 	// procedural style $row = mysqli_fetch_assoc($result)
     // print_r($user_arr); echo "<br/><br/>";
     // using iterator: foreach ($result as $row) { $user_arr[] = $row; }
+
+	/*
+    function startsWith($haystack, $needles)
+	{
+		foreach ((array) $needles as $needle)
+		{
+			if ($needle != '' && strpos($haystack, $needle) === 0) return true;
+		}
+		return false;
+	}
+
+	function endsWith($haystack, $needles)
+	{
+		foreach ((array) $needles as $needle)
+		{
+			if ((string) $needle === substr($haystack, -strlen($needle))) return true;
+		}
+		return false;
+	}
+
+	$file = fopen("json/monitor_group.json","r");
+	$string ="";
+	while(! feof($file))
+	{
+		$line = fgets($file);
+	 	$li=trim($line);
+	 	if (!startsWith($li, "//"))
+			$string .=$li;
+	}
+	fclose($file);
+	echo $string;
+	*/
+
+	# JSON import for groups
+	$json_file = file_get_contents("json/monitor_group.json");
+	$json_string = preg_split("/\/\//", $json_file)[0];
+	$json_arr = json_decode($json_string);
+
+	$user_arr = array_merge($user_arr, $json_arr);
 
     # JSON-encode the response
 	$json_res = json_encode($user_arr, JSON_PRETTY_PRINT);
@@ -40,7 +80,7 @@
 	}
 
 	# Return the response
-	// echo $json_res;
+	// echo $json_res . '<br/><br/>';
 
     # write to JSON file
     /* $fp = fopen('userdata.json', 'w');
@@ -61,18 +101,17 @@
 	<script type="text/javascript">
 	<!-- Hide JavaScript
         var ar =<?php echo $json_res?>;
-        
+        /* var idStrSet = JSON.stringify(<?php echo $json_file?>, ['id']); // using replacerMethod or array https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify */
         /* var stringed = JSON.stringify(<?php echo $json_res?>);
         // console.log(stringed); http://www.experts-exchange.com/Web_Development/Q_28446638.html
-        // console.log(ar);
         // var $monitors_ids= [];
-		style="width:128px;height:128px" 
+		style="width:128px;height:128px"
          $.post("./core/bug_api.php",
         {'monitors_names': ar},
 	    function(data) {
 	          // some stuffs here
 	        } */
-	        
+
         jQuery(document).ready(function() {
             jQuery("#demo-input-facebook-theme").tokenInput(
                    /* <?php echo $json_res ?> OR <?php echo json_encode($user_arr) ?> without quotes and blocks gives the same result */
@@ -85,33 +124,30 @@
 
 					excludeCurrent: true,
 					preventDuplicates: true,
+					animateDropdown: false,
 
 	                onAdd: function (item) {
+	                	/* console.log(" string to send: "+ jQuery(this).val() + " duplicates removed in the back-end");
+	                	var myStr = jQuery(this).val();
+	                	var myArr = myStr.split(',');
+	                	myArr = jQuery.unique(myArr);
+	                	myStr = myArr.join(", ");
+	                	console.log(" string without duplication: "+ myStr);*/
 
 	                    // alert("Added " + item.id + " " + item.username);
 	                    // var j = ($monitors_ids==="") ? "" : ";";
 	                    // $monitors_ids += j + item.id;
 	                    // $monitors_ids = $monitors_ids.concat(item.id);
 
-	                    // console.log($monitors_ids);
+	                    // console.log($monitors_ids); console.log($monitors_ids.join(" "));
 	                    // $(this).siblings("input[name=monitors_names[]").val().html($monitors_ids);
 	                    // $.(siblings("input[name=monitors_names[]").val()).html($monitors_ids);
-	                    // $.(siblings("input[name=monitors_names[]").val()).html($monitors_ids);
-	                    // console.log($monitors_ids.join(" "));
-
-	                    /*
-						if (item.id=="group1"){
-
-						}
-
-						if (item.id=="group2"){
-
-						}
-	                    */
 	                },
 					onDelete: function (item) {
+						// console.log(jQuery(this).val());
 						// if ($monitors_ids.exec()==
 						//return window.confirm( "Are you sure you want to delete?" );
+						// jQuery("#demo-input-facebook-theme").tokenInput("remove", {name: 'Engineers'});
 	                }
 				}
 			);

@@ -307,7 +307,10 @@ class BugData {
 		if( is_blank( $this->due_date ) ) {
 			$this_due_date = date_get_null();
 		}
-		$f_monitors_ids = explode(",",gpc_get_string( 'monitors_names', '' ));
+
+		$t_monitors_ids = explode(",", gpc_get_string( 'monitors_names' ));
+		$f_monitors_ids = array_unique($t_monitors_ids);
+
 		$t_bug_table = db_get_table( 'mantis_bug_table' );
 
 		$t_bug_text_table = db_get_table( 'mantis_bug_text_table' );
@@ -383,11 +386,18 @@ class BugData {
 					    ( user_id, bug_id )
 					  VALUES
 					    ( " . db_param() . ',' . db_param() . ')';
-		if ( !empty( $f_monitors_ids ) )
+
+		if ( !empty( $f_monitors_ids ) ){
+			foreach ($f_monitors_ids as $key => $value) {
+					db_query_bound( $query, Array( (string)$value, $t_text_id ) );
+			}
+		}
+
+		/* if ( !empty( $f_monitors_ids ) )
 		for ($i = 0; $i < count($f_monitors_ids); $i++) {
 			$monitors_id = mysql_real_escape_string($f_monitors_ids[$i]);
 			db_query_bound( $query, Array( $monitors_id, $t_text_id ) );
-		}
+		} */
 
 		# log changes, if any (compare happens in history_log_event_direct)
 		history_log_event_direct( $this->id, 'status', $t_original_status, $t_status );

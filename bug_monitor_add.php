@@ -34,7 +34,8 @@
 	$f_bug_id = gpc_get_int( 'bug_id' );
 	$t_bug = bug_get( $f_bug_id, true );
 	$t_user_id = gpc_get_string( 'user_id', '' );
-	$f_monitors_ids = explode(",",$t_user_id);
+	$t_monitors_ids = explode(",",$t_user_id);
+	$f_monitors_ids = array_unique($t_monitors_ids);
 	$t_bug_monitor_table = db_get_table( 'mantis_bug_monitor_table' );
 
 	$t_logged_in_user_id = auth_get_current_user_id();
@@ -67,6 +68,8 @@
 		$monitors_id = mysql_real_escape_string($f_monitors_ids[$i]);
 		db_query_bound( $query, Array( $monitors_id, $f_bug_id ) );
 	}
+	// bug_api employs foreach loop instead in order to avoid error_duplicate on new bug creation. Use that foreach loop to fix if similar issue occurs here.
+
 	// bug_monitor( $f_bug_id, $t_user_id );
 
 	form_security_purge( 'bug_monitor_add' );

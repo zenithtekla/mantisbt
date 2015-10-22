@@ -44,7 +44,6 @@
  */
 
 if ( access_has_bug_level( config_get( 'show_monitor_list_threshold' ), $f_bug_id ) ) {
-
 	$t_users = bug_get_monitors( $f_bug_id );
 	$num_users = sizeof ( $t_users );
 
