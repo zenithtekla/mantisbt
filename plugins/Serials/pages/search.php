@@ -22,14 +22,16 @@
 				);
 			$andcount = count(array_filter($cat_count));			
             global $g_mantis_serials_serial;
+			
 			$t_scan_input         = $_POST['scan_input'];
-            $t_sales_order    	= $_POST['sales_order'];
+      $t_sales_order    		= $_POST['sales_order'];
 			$t_assembly_number    = $_POST['assembly_number'];
-            $t_assembly_id      = $_POST['assembly_id'];
-            $t_customer_id      = $_POST['customer_id'];
-            $t_user_id 			= auth_get_current_user_id();
+      $t_assembly_id      	= $_POST['assembly_id'];
+      $t_customer_id    	 	= $_POST['customer_id'];
+      $t_user_id 			= auth_get_current_user_id();
+			
 			if($t_sales_order!=""){
-				$where_search .= $g_mantis_serials_serial . ".sales_order = " . '"' . $t_sales_order . '"';
+				$where_search .= $g_mantis_serials_serial . ".sales_order = '$t_sales_order'";
 				$andcount = $andcount - 1;
 				if ($andcount > 0){
 					$where_search .= " AND ";

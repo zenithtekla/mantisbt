@@ -16,6 +16,7 @@ html_page_top2();
 </script>
 <link rel="stylesheet" href="plugins/Serials/pages/typeahead/typeahead.css">
 <link rel="stylesheet" href="plugins/Serials/pages/bootstrap/css/bootstrap.css">
+<script src="plugins/Serials/pages/js/ui_data.js" type="text/javascript"></script>
 <div>
 <?php
 if ( access_has_project_level( plugin_config_get('format_threshold') ) ) {
@@ -24,9 +25,9 @@ if ( access_has_project_level( plugin_config_get('format_threshold') ) ) {
 }
 ?>
 </div>
-<section id="myData"></section>
+<section id="ui_data"></section>
 
-<script type="text/template" id="url-template">
+<script type="text/template" id="ui-template">
 <form >
 <div class="container col-sm-12">
 		<div id="top-function-wrapper" class="col-sm-2 no-print">
@@ -78,7 +79,7 @@ if ( access_has_project_level( plugin_config_get('format_threshold') ) ) {
 	<input type="hidden" name="assembly_id" id="assembly_id">
 	<input type="hidden" name="customer_id" id="customer_id">
 	<input type="hidden" name="list_count" id="list_count">
-	<div class="hidden no-print" id="log-verify"></div>
+	<div class="no-print" id="log-verify"></div>
 	<div id="konsoli_loki">
 		<div id="virhe" class="col-md-12 alert"></div>
 		<div id="virhe_kuvaus" class="alert"></div>
@@ -91,6 +92,7 @@ if ( access_has_project_level( plugin_config_get('format_threshold') ) ) {
 <script src="plugins/Serials/pages/handlebars/handlebars-v4.0.4.js"></script>
 <script src="plugins/Serials/pages/typeahead/typeahead.bundle.js"></script>
 <script src="plugins/Serials/pages/bootstrap/plugins/jQuery-Plugin-Js/jQuery.print.js"></script>
+<script src="plugins/Serials/pages/js/process_api.js" type="text/javascript"></script>
 <script src="plugins/Serials/pages/js/front.js" type="text/javascript"></script>
 <?php
 
