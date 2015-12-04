@@ -118,7 +118,7 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
 
   console.log('Selection: ' + JSON.stringify(suggestion));
   var myData = JSON.stringify({"customer_id": suggestion.eg});
-  $("#result").append(myData + "<br/>");
+  $("#log-verify").append(myData + "<br/>");
   console.log('myData output :' + myData );
   $('input[name="customer_id"]').val(suggestion.eg);
 
@@ -185,7 +185,7 @@ $('#assembly .typeahead').bind('typeahead:select', function(ev, suggestion) {
 
   console.log('Selection: ' + JSON.stringify(suggestion));
   var myData = JSON.stringify({"assembly_number": suggestion.value});
-  $("#result").append(myData + "<br/>");
+  $("#log-verify").append(myData + "<br/>");
 
   var jqDeferred = $.ajax({
     type:"POST",
@@ -250,7 +250,7 @@ $('#revision .typeahead').bind('typeahead:select', function(ev, suggestion) {
   $('input[name="assembly_id"]').val(suggestion.eg);
   console.log('Selection: ' + JSON.stringify(suggestion));
   var myData = JSON.stringify({"assembly_id": suggestion.eg});
-  $("#result").append(myData + "<br/>");
+  $("#log-verify").append(myData + "<br/>");
   var jqDeferred = $.ajax({
     type:"POST",
     url: "plugin.php?page=Serials/json/format.php",
@@ -273,12 +273,13 @@ $('#revision .typeahead').bind('typeahead:select', function(ev, suggestion) {
 })();
 
 $(document).ready(function() {
-/*     $("#tulostaa-painike").on('click', function() {
+     $("#tulostaa-painike").on('click', function() {
       $("#printable").print({
+        globalStyles : false,
         deferred: $.Deferred(),
         timeout: 250
       });
-    }); */
+    });
 /* 	$("#reset").on('click', function() {
 		location.reload();
     }); */
@@ -339,10 +340,10 @@ $(document).ready(function() {
       } else {
         $("#virhe") .removeClass("alert-danger")
                     .addClass("alert-success");
-				var newcount = $('input[name="list_count"]').val() + 1;
+				var newcount = Number($('input[name="list_count"]').val()) + 1;
 				$('input[name="list_count"]').val(newcount);
 				document.getElementById('scan_result').select();
-        $("#virhe").empty().append("last scan: " + data);
+        $("#virhe").empty().append("<div class='col-md-4'>last scan: </div>" + data);
         $("#log-wrapper")  .append( data )
                             .addClass("bg-success")
                             .css({  "max-height":"300px",

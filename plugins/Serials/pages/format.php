@@ -1,6 +1,6 @@
 <?php
 require("serials_api.php");
-access_ensure_project_level( plugin_config_get('format_threshold')); 
+access_ensure_project_level( plugin_config_get('format_threshold'));
 html_page_top1( plugin_lang_get( 'plugin_format_title' ) );
 html_page_top2();
 
@@ -40,7 +40,7 @@ html_page_top2();
 			<?php echo plugin_lang_get( 'format' ) ?>
 		</td>
 		<td>
-			<input type="text" size="100" name="format" required/>
+			/^<input type="text" size="100" name="format" required/>$/
 		</td>
 	</tr>
 	<tr <?php echo helper_alternate_class() ?> valign="top">
