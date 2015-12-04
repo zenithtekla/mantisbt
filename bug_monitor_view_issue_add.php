@@ -78,18 +78,13 @@
 					preventDuplicates: true, // prePopulate: pre,
 					onAdd: function (item) {
 						var myStr = jQuery(this).val();
-						// var myStr2 = jQuery(this).tokenInput("get")[0]['id']; // same, working; item.id seems to be similar, too but it may apply to only the last added item, not the whole input field's value.
+						// var myStr2 = jQuery(this).tokenInput("get")[0]['id']; // same, working
 						var myArr = myStr.split(',');
 						myArr = myArr.filter(function(val) {
 						  return monitors.indexOf(val) === -1;
 						});
 						jQuery(this).val(myArr);
-
-						if (jQuery(this).val().length===0) {
-							jQuery(this).tokenInput("remove");
-							jQuery(this).closest("div").append( "<div style='font-size:12pt;text-align: center;color: #bb0000;' class='center'><i> "+ item.username + ' members already exist and shall be ignored on submit!</i></div>');
-						}
-						else jQuery('#my_form').submit();
+	                    jQuery('#my_form').submit();
 	                }
 				}
 			);
