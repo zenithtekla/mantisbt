@@ -37,7 +37,7 @@
 
   var template = Handlebars.compile(document.getElementById('url-template').innerHTML);
   content.innerHTML += template(data);
-	
+
 	$('#assembly .typeahead').prop( "disabled", true );
 	$('#revision .typeahead').prop( "disabled", true );
 	document.getElementById('customer').style.color="Red";
@@ -52,7 +52,7 @@
     dataType: "json",
     url: "plugin.php?page=Serials/json/customer.php"
   });
-  
+
   jqDeferred.then( function(data) {
     // constructs the suggestion engine
     var engine = new Bloodhound({
@@ -95,7 +95,7 @@
   function(jqXHR, textStatus, errorThrown){
     console.log('ERROR', textStatus, errorThrown);
   });
-	
+
 	$('#sales_order .typeahead').focus();
 	$('input[name="list_count"]').val("0");
 })();
@@ -308,7 +308,7 @@ $(document).ready(function() {
 		});
 		}
 	});
-	
+
 	var scan_process = function(v){
 	  var postdata ={
 			new_scan: v,
@@ -356,7 +356,7 @@ $(document).ready(function() {
       console.log(jqXHR, textStatus, errorThrown);
     });
 	};
-  
+
   $("#scan_result").on({
     mouseenter: function(){
         $(this).css("background-color", "lightgray");
