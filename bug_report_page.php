@@ -175,6 +175,7 @@
 
 	print_recently_visited();
 ?>
+<script type="text/javascript" src="js/jquery.min.js"></script>
 <br />
 <div align="center">
 <form name="report_bug_form" method="post" <?php if ( $tpl_show_attachments ) { echo 'enctype="multipart/form-data"'; } ?> action="bug_report.php">
@@ -556,7 +557,6 @@
 			<input <?php echo helper_get_tab_index() ?> id="files" name="ufile[]" type="file" size="50" multiple class="file_input" onchange="javascript:updateList()"/>
 			<div id="selectedFiles" class="italic-small inline-block"></div>
 			<script>function toArray(o) { return [].slice.call(o) }</script>
-			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 			<script>
 				var selDiv = "";
 				var storedFiles = [];

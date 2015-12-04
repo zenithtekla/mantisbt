@@ -1,14 +1,14 @@
 <?php
-$g_hostname = 'localhost';
+$g_hostname = '0.0.0.0:3306';
 $g_db_type = 'mysql';
 $g_database_name = 'mantisbt';
-$g_db_username = 'root';
-$g_db_password = 'triet2d';
+$g_db_username = getenv('C9_USER');
+$g_db_password = '';
 
 /*************************
 	 * MantisBT Enum Strings *
 	 *************************/
-
+$g_use_javascript		= 'ON';
 $g_access_levels_enum_string		= '10:viewer, 25:reporter, 36:production, 40:updater, 48:program_manager, 55:developer, 70:manager, 90:administrator';
 
 // $g_show_avatar = ON;

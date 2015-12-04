@@ -1,17 +1,18 @@
 <!DOCTYPE html>
+<?php 	$tpl_mantis_dir = dirname( __FILE__ ) . DIRECTORY_SEPARATOR;
+		echo $tpl_mantis_dir;?>
 <html>
 <head>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-    <script type="text/javascript" src="javascript/jquery.tokeninput.js"></script>
-    <script> jQuery.noConflict();</script>
+    <!--<script type="text/javascript" src="javascript/jquery.min.js"></script>-->
+    <script type="text/javascript" src="js/jquery.tokeninput.js"></script>
 
     <link rel="stylesheet" href="css/token-input-facebook.css" type="text/css" />
 
     <script type="text/javascript">
- 	/* jQuery(document).ready(function() {
-        jQuery("#submit").click(function () {
+ 	/* $(document).ready(function() {
+        $("#submit").click(function () {
             // alert("Would submit: " + $(this).siblings("input[type=text]").val());
-            console.log(jQuery(this).siblings("input[type=text]").val());
+            console.log($(this).siblings("input[type=text]").val());
         });
     }); */
     </script>
@@ -19,8 +20,9 @@
 </head>
 <body>
 <?php
+	// $t_mantis_dir = dirname( dirname( dirname( __FILE__ ) ) ) . DIRECTORY_SEPARATOR;
 	require_once('dbi_con.php');
-	require_once('/core/helper_api.php');
+	require_once('core/helper_api.php');
 	$t_user_table = "mantis_user_table";
 
 	$result =$mysqli->query("SELECT id,username FROM $t_user_table where id>0 LIMIT 15") or die(mysqli_error());
@@ -112,8 +114,8 @@
 	          // some stuffs here
 	        } */
 
-        jQuery(document).ready(function() {
-            jQuery("#demo-input-facebook-theme").tokenInput(
+        $(document).ready(function() {
+            $("#demo-input-facebook-theme").tokenInput(
                    /* <?php echo $json_res ?> OR <?php echo json_encode($user_arr) ?> without quotes and blocks gives the same result */
                     ar
                 , {
@@ -127,10 +129,10 @@
 					animateDropdown: false,
 
 	                onAdd: function (item) {
-	                	/* console.log(" string to send: "+ jQuery(this).val() + " duplicates removed in the back-end");
-	                	var myStr = jQuery(this).val();
+	                	/* console.log(" string to send: "+ $(this).val() + " duplicates removed in the back-end");
+	                	var myStr = $(this).val();
 	                	var myArr = myStr.split(',');
-	                	myArr = jQuery.unique(myArr);
+	                	myArr = $.unique(myArr);
 	                	myStr = myArr.join(", ");
 	                	console.log(" string without duplication: "+ myStr);*/
 
@@ -144,10 +146,10 @@
 	                    // $.(siblings("input[name=monitors_names[]").val()).html($monitors_ids);
 	                },
 					onDelete: function (item) {
-						// console.log(jQuery(this).val());
+						// console.log($(this).val());
 						// if ($monitors_ids.exec()==
 						//return window.confirm( "Are you sure you want to delete?" );
-						// jQuery("#demo-input-facebook-theme").tokenInput("remove", {name: 'Engineers'});
+						// $("#demo-input-facebook-theme").tokenInput("remove", {name: 'Engineers'});
 	                }
 				}
 			);
