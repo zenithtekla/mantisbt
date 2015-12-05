@@ -3,7 +3,7 @@
     // serial_id, assembly_id, customer_id, sale_order_id, serial_number, user_id, time
     // query to insert into the db
 	require_once( 'core.php' );
-	access_ensure_project_level( plugin_config_get('search_threshold')); 
+	access_ensure_project_level( plugin_config_get('search_threshold'));
 	$g_mantis_serials_customer       = plugin_table('customer');
 	$g_mantis_serials_assembly       = plugin_table('assembly');
 	$g_mantis_serials_format         = plugin_table('format');
@@ -20,16 +20,16 @@
 				3=>$_POST['assembly_id'],
 				4=>$_POST['customer_id'],
 				);
-			$andcount = count(array_filter($cat_count));			
+			$andcount = count(array_filter($cat_count));
             global $g_mantis_serials_serial;
-			
+
 			$t_scan_input         = $_POST['scan_input'];
       $t_sales_order    		= $_POST['sales_order'];
 			$t_assembly_number    = $_POST['assembly_number'];
       $t_assembly_id      	= $_POST['assembly_id'];
       $t_customer_id    	 	= $_POST['customer_id'];
       $t_user_id 			= auth_get_current_user_id();
-			
+
 			if($t_sales_order!=""){
 				$where_search .= $g_mantis_serials_serial . ".sales_order = '$t_sales_order'";
 				$andcount = $andcount - 1;
@@ -38,37 +38,37 @@
 				}
 			}
 			if($t_scan_input!=""){
-				$where_search .= $g_mantis_serials_serial . ".serial_scan = " . '"' . $t_scan_input . '"' ;
+				$where_search .= $g_mantis_serials_serial . ".serial_scan = '$t_scan_input'";
 				$andcount = $andcount - 1;
 				if ($andcount > 0){
 					$where_search .=" AND ";
 				}
 			}
 			if($t_customer_id!=""){
-				$where_search .=$g_mantis_serials_serial . ".customer_id = " . '"' . $t_customer_id . '"' ;
+				$where_search .=$g_mantis_serials_serial . ".customer_id = '$t_customer_id'";
 				$andcount = $andcount - 1;
 				if ($andcount > 0){
 					$where_search .=" AND ";
 				}
 			}
 			if($t_assembly_number!=""){
-				$where_search .=$g_mantis_serials_assembly . ".assembly_number = " . '"' . $t_assembly_number . '"' ;
+				$where_search .=$g_mantis_serials_assembly . ".assembly_number = '$t_assembly_number'" ;
 				$andcount = $andcount - 1;
 				if ($andcount > 0){
 					$where_search .=" AND ";
 				}
 			}
 			if($t_assembly_id!=""){
-				$where_search .=$g_mantis_serials_serial . ".assembly_id = " . '"' . $t_assembly_id . '"' ;
+				$where_search .=$g_mantis_serials_serial . ".assembly_id = '$t_assembly_id '" ;
 				$andcount = $andcount - 1;
 				if ($andcount > 0){
 					$where_search .=" AND ";
 				}
 			}
-			
-            $query = "SELECT 
+
+            $query = "SELECT
 						$g_mantis_serials_customer.customer_name,
-						$g_mantis_serials_assembly.assembly_number, 
+						$g_mantis_serials_assembly.assembly_number,
 						$g_mantis_serials_assembly.revision,
 						$g_mantis_serials_serial.sales_order,
 						mantis_user_table.realname,
@@ -81,7 +81,7 @@
 						WHERE $where_search
 						ORDER BY serial_scan, date_posted
 						";
-            $result = mysql_query($query) or die(mysql_error());	
+            $result = mysql_query($query) or die(mysql_error());
             if( mysql_num_rows( $result ) > 0 ) {
 				$first_row = true;
 				echo '<table class="col-md-12 table table-bordered table-condensed table-striped">';
@@ -102,7 +102,7 @@
 					echo '</tr>' ;
 				}
 				echo '</table>';
-			}	
+			}
             else {
 				echo "Search for Sales Order " . $t_sales_order . "  returned with no results." ;
 

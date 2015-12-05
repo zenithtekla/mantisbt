@@ -1,7 +1,7 @@
 (function(){
   var content = document.getElementById('ui_data');
   var data = JSON.parse(localStorage.getItem("tpl_data"));
-  
+
   Handlebars.registerHelper('heading',function(text){
       text = Handlebars.escapeExpression(text);
      return new Handlebars.SafeString('<h2>'+text+'</h2>');
@@ -41,55 +41,15 @@ var dnm_data = {
   list_count: 0
 };
 
+// load customer
 (function(){
-  var jqDeferred = $.ajax({
-    type: "POST",
-    dataType: "json",
-    url: "plugin.php?page=Serials/json/customer.php"
-  });
+  var d = {
+    url : "plugin.php?page=Serials/json/customer.php",
+    slt : '#customer .typeahead'
+  };
+  // obj.customer_name, obj.customer_id
+  bloodhoundAjax(d);
 
-  jqDeferred.then( function(data) {
-    // constructs the suggestion engine
-    var engine = new Bloodhound({
-      datumTokenizer: function (datum) {
-        return Bloodhound.tokenizers.whitespace(datum.value);
-      },
-      queryTokenizer: Bloodhound.tokenizers.whitespace,
-      // `data` is an array of country names defined in "The Basics"
-      local: $.map(data, function(obj) {
-          return { value : obj.customer_name, eg: obj.customer_id };
-      }),
-      limit: 10
-    });
-
-    // kicks off the loading/processing of `local` and `prefetch`
-    engine.initialize();
-
-    // Instantiate the Typeahead UI
-    $('#customer .typeahead').typeahead(null, {
-        name: 'data',
-        displayKey: 'value',
-        hint: true,
-        highlight: true,
-        minLength: 1,
-        source: engine.ttAdapter(),
-        templates: {
-            empty: [
-              '<div class="empty-message">',
-                'Result not found',
-              '</div>'
-            ].join('\n'),
-            suggestion: Handlebars.compile("<div style='padding:6px'>{{value}}</div>"),
-            footer: function (data) {
-              return Handlebars.compile("<div>Searched for <strong> {{{data.query}}} </strong></div>");
-              // return '<div>Searched for <strong>' + data.query + '</strong></div>';
-            }
-        }
-    });
-  },
-  function(jqXHR, textStatus, errorThrown){
-    console.log('ERROR', textStatus, errorThrown);
-  });
   // 	$('input[name="list_count"]').val("0");
 })();
 
@@ -102,6 +62,7 @@ var dnm_data = {
   });
 })();
 
+// customer selected, load assembly
 (function(){
 $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
   ev.stopPropagation();
@@ -118,60 +79,24 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
   console.log(dnm_data);
   // $('input[name="customer_id"]').val(suggestion.eg);
 
-  var jqDeferred = $.ajax({
-    type:"POST",
-    url: "plugin.php?page=Serials/json/assembly.php",
-    data: {"customer_id": suggestion.eg},
-    dataType: 'json',
-  });
-  jqDeferred.then( function(data) {
-    // constructs the suggestion engine
-    var engine = new Bloodhound({
-      datumTokenizer: function (datum) {
-        return Bloodhound.tokenizers.whitespace(datum.value);
-      },
-      queryTokenizer: Bloodhound.tokenizers.whitespace,
-      // `data` is an array of country names defined in "The Basics"
-      local: $.map(data, function(obj) {
-          return { value : obj.assembly_number, eg: obj.customer_id };
-      }),
-      limit: 10
-    });
-
-    // kicks off the loading/processing of `local` and `prefetch`
-    engine.initialize();
-
-    // Instantiate the Typeahead UI
-    $('#assembly .typeahead').typeahead(null, {
-        name: 'data',
-        displayKey: 'value',
-        hint: true,
-        highlight: true,
-        minLength: 1,
-        source: engine.ttAdapter(),
-        templates: {
-            empty: [
-              '<div class="empty-message">',
-                'Result not found',
-              '</div>'
-            ].join('\n'),
-            suggestion: Handlebars.compile("<div style='padding:6px'>{{value}}</div>"),
-            footer: function (data) {
-              // return Handlebars.compile("<div>Searched for <strong> {{data.query}} </strong></div>");
-              return '<div>Searched for <strong>' + data.query + '</strong></div>';
-            }
-        }
-    });
+  var customer_styling = function(){
     $('#customer .typeahead').typeahead('close');
     $('#assembly .typeahead').focus();
     document.getElementById('customer').style.color="Black";
-  },
-  function(jqXHR, textStatus, errorThrown){
-    console.log(jqXHR, textStatus, errorThrown);
-  });
+  }
+
+  var d = {
+    url : "plugin.php?page=Serials/json/assembly.php",
+    data: {"customer_id": suggestion.eg},
+    callback: customer_styling,
+    slt : '#assembly .typeahead'
+  };
+  // obj.assembly_number, obj.revision
+  bloodhoundAjax(d);
 });
 })();
 
+// assembly selected, load revision
 (function(){
 $('#assembly .typeahead').bind('typeahead:select', function(ev, suggestion) {
   ev.stopPropagation();
@@ -186,60 +111,25 @@ $('#assembly .typeahead').bind('typeahead:select', function(ev, suggestion) {
   console.log(dnm_data);
   $("#log-verify").append(myData + "<br/>");
 
-  var jqDeferred = $.ajax({
-    type:"POST",
-    url: "plugin.php?page=Serials/json/revision.php",
-    data: {"assembly_number": suggestion.value, "customer_id": suggestion.eg},
-    dataType: 'json'
-  });
-  jqDeferred.then( function(data) {
-    // constructs the suggestion engine
-    var engine = new Bloodhound({
-      datumTokenizer: function (datum) {
-        return Bloodhound.tokenizers.whitespace(datum.value);
-      },
-      queryTokenizer: Bloodhound.tokenizers.whitespace,
-      // `data` is an array of country names defined in "The Basics"
-      local: $.map(data, function(obj) {
-          return { value : obj.revision, eg: obj.assembly_id };
-      }),
-      limit: 10
-    });
-
-    // kicks off the loading/processing of `local` and `prefetch`
-    engine.initialize();
-
-    // Instantiate the Typeahead UI
-    $('#revision .typeahead').typeahead(null, {
-      name: 'data',
-      displayKey: 'value',
-      hint: true,
-      highlight: true,
-      minLength: 1,
-      source: engine.ttAdapter(),
-      templates: {
-          empty: [
-            '<div class="empty-message">',
-              'Result not found',
-            '</div>'
-          ].join('\n'),
-          suggestion: Handlebars.compile("<div style='padding:6px'>{{value}}</div>"),
-          footer: function (data) {
-            // return Handlebars.compile("<div>Searched for <strong> {{data.query}} </strong></div>");
-            return '<div>Searched for <strong>' + data.query + '</strong></div>';
-          }
-      }
-    });
+  var customer_styling = function(){
     $('#assembly .typeahead').typeahead('close');
     $('#revision .typeahead').focus();
     document.getElementById('assembly').style.color="Black";
-  },
-  function(jqXHR, textStatus, errorThrown){
-    console.log(jqXHR, textStatus, errorThrown);
-  });
+  }
+
+  var d = {
+    url : "plugin.php?page=Serials/json/revision.php",
+    data: {"assembly_number": suggestion.value, "customer_id": suggestion.eg},
+    callback: customer_styling,
+    slt : '#revision .typeahead'
+  };
+  // obj.assembly_number, obj.revision
+  bloodhoundAjax(d);
+
 });
 })();
 
+// revision selected, save the format
 (function(){
 $('#revision .typeahead').bind('typeahead:select', function(ev, suggestion) {
   ev.stopPropagation();
@@ -254,6 +144,7 @@ $('#revision .typeahead').bind('typeahead:select', function(ev, suggestion) {
   console.log(' ## revision selected');
   console.log(dnm_data);
   $("#log-verify").append(myData + "<br/>");
+
   var jqDeferred = $.ajax({
     type:"POST",
     url: "plugin.php?page=Serials/json/format.php",
@@ -286,13 +177,15 @@ $(document).ready(function() {
       timeout: 250
     });
   });
- 	
- 	$("#reset").on('click', function() {
+
+ 	$("#reset").on('click', function(e) {
+ 	    e.preventDefault();
 		  location.reload();
-  }); 
-	
+  });
+
 	$("#search").on({
-		click: function(){
+		click: function(e){
+		  e.preventDefault();
 		  search_process();
 		}
 	});

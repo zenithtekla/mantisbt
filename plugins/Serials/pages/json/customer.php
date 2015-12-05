@@ -7,7 +7,7 @@ header('Content-Type: application/json');
 	$g_mantis_serials_serial         = plugin_table('serial');	
 	function list_customer (){
 		global $g_mantis_serials_customer; 
-		$query = "	SELECT customer_id, customer_name 
+		$query = "	SELECT customer_name, customer_id 
 				FROM $g_mantis_serials_customer
 				ORDER BY 
 				customer_name";
@@ -17,8 +17,8 @@ header('Content-Type: application/json');
 		$json_response = array();
 		
 		while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-			$row_array['customer_id'] = $row['customer_id'];
 			$row_array['customer_name'] = $row['customer_name'];
+			$row_array['customer_id'] = $row['customer_id'];
 						
 			//push the values in the array
 			array_push($json_response,$row_array);
