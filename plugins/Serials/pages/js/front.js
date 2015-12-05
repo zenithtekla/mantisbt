@@ -192,9 +192,9 @@ $(document).ready(function() {
 
   $("#sales_order,#customer,#assembly,#revision")
     .on('keyup', function(e){
-          e.preventDefault();
-          if (e.which == 35 || e.which == 13)
-            search_process();
+        e.preventDefault();
+        if (e.which == 35 || e.which == 13)
+          search_process();
     });
 
   $("#scan_result").on({
