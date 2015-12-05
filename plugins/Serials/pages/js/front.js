@@ -190,6 +190,13 @@ $(document).ready(function() {
 		}
 	});
 
+  $("#sales_order,#customer,#assembly,#revision")
+    .on('keyup', function(e){
+          e.preventDefault();
+          if (e.which == 35 || e.which == 13)
+            search_process();
+    });
+
   $("#scan_result").on({
     mouseenter: function(){
         $(this).css("background-color", "lightgray");
@@ -202,15 +209,17 @@ $(document).ready(function() {
     },
     keyup: function(e){
       e.preventDefault();
-  		if( $('input[name="sales_order"]').val() == "" )
-  		  document.getElementById('sales_order').style.color= "red";
-      else  {
-  			document.getElementById('sales_order').style.color="Black";
-  			$('#sales_order .typeahead').prop( "disabled", true );
-      }
-
       switch (e.which) {
+        case 35:
+          search_process();
+        break;
         case 13:
+        if( $('input[name="sales_order"]').val() == "" )
+            document.getElementById('sales_order').style.color= "red";
+        else  {
+                document.getElementById('sales_order').style.color="Black";
+                $('#sales_order .typeahead').prop( "disabled", true );
+        }
         scan_process($(this).val());
         break;
       }

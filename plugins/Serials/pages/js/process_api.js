@@ -36,8 +36,7 @@ var postdata ={
 	revision: dnm_data.revision,
 };
 
-console.log(postdata);
-// console.log(q);
+// console.log(postdata);
 
 $.ajax({
     type:'POST',
@@ -83,7 +82,6 @@ var bloodhoundAjax = function( _ ){
     var settings = {
         type:"POST"
     };
-    console.log(_.hasOwnProperty('data'));
     if (_.hasOwnProperty('data')) settings['data'] = _.data;
     settings['dataType'] = (_.hasOwnProperty('dataType')) ? _.dataType : 'json';
 

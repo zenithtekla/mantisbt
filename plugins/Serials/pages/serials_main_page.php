@@ -72,13 +72,6 @@ if ( access_has_project_level( plugin_config_get('format_threshold') ) ) {
 		  <input type="text" id="scan_result" name="scan_input" class="form-control" placeholder="{{lang_013}}" aria-describedby="sizing-addon1">
 		</div>
 	</div>{{! /row }}
-
-	<input type="hidden" name="format" id="format">
-	<input type="hidden" name="format_id" id="format_id">
-	<input type="hidden" name="format_example" id="format_example">
-	<input type="hidden" name="assembly_id" id="assembly_id">
-	<input type="hidden" name="customer_id" id="customer_id">
-	<input type="hidden" name="list_count" id="list_count">
 	<div class="no-print" id="log-verify"></div>
 	<div id="konsoli_loki">
 		<div id="virhe" class="col-md-12 alert"></div>
