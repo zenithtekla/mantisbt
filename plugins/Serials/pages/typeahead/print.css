@@ -1,6 +1,5 @@
 table, th, td {
     border: 0.1em ridge black;
-    font-family: Consolas;
     font-size: 10pt;
     text-align: center;
 }
@@ -8,13 +7,13 @@ table, th, td {
 .txt-left {
     display:table-cell;
     text-align: left;
-    width: 25%;
+    width: 10%;
 }
 
 .txt-right {
     display:table-cell;
     text-align: right;
-    width: 25%;
+    width: 10%;
 }
 
 table {
@@ -29,4 +28,14 @@ table {
     padding-right: 15px;
     padding-left: 15px;
     width: 25%;
+}
+
+.container-fluid {
+    
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+}
+.container-fluid, .txt-right, .txt-left, table, th, td { 
+    font-family: 'Liberation Mono', 'Ubuntu Mono', Consolas, Menlo, Monaco, Roboto, monospace;
 }

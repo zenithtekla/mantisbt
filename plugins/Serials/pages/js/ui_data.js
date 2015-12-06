@@ -7,6 +7,7 @@ var tpl_data = {
 	list_count: 'List Count',
 	printbtn: 'Print',
 	searchbtn: 'Search',
-	resetbtn: 'Reset'
+	resetbtn: 'Reset',
+	htmlbtn: 'HTML'
 };
 localStorage.setItem("tpl_data", JSON.stringify(tpl_data));

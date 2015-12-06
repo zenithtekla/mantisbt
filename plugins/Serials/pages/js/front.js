@@ -188,16 +188,43 @@ var print_r = function(){
   return $t_str;
 };
 
+var print_html = function(){
+  var x=window.open('','', 'height='+ (screen.height - 120) +', width='+screen.width);
+  x.document.open().write('<head><title>Full-window display</title><link rel="stylesheet" type="text/css" href="plugins/Serials/pages/typeahead/print.css"></head>'+ 
+    '<body><div class="container-fluid">'
+      + print_r() + $("#printable").html() +
+    '</div></body>');
+  // x.close();
+};
+
+var print_dialog = function(e){
+  e.preventDefault;
+  $("#printable").print({
+    deferred: $.Deferred(),
+    globalStyles : false,
+    mediaPrint : false,
+    stylesheet: "plugins/Serials/pages/typeahead/print.css",
+    timeout: 400,
+    prepend: print_r()
+  });
+};
+
 $(document).ready(function() {
-  $("#tulostaa-painike").on('click', function() {
-    $("#printable").print({
-      deferred: $.Deferred(),
-      globalStyles : false,
-      mediaPrint : false,
-      stylesheet: "plugins/Serials/pages/typeahead/print.css",
-      timeout: 400,
-      prepend: print_r()
-    });
+  $(document).on('keyup',function(f){
+    f.preventDefault;
+    if (f.which == 120) // F9
+    {
+      console.log(f.which);
+      print_dialog;
+    }
+  });
+  
+  $("#tulostaa-painike").on({
+    click: print_dialog
+  });
+  
+  $("#html-painike").on({
+    click: print_html
   });
 
  	$("#reset").on('click', function(e) {

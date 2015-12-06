@@ -33,16 +33,18 @@ html_page_top2();
 	?>
 	</div>
 	
-	<div id="top-function-wrapper" class="col-sm-2 no-print">
+	<div id="top-function-wrapper" class="col-sm-3 no-print">
 	<?php
 	if ( access_has_project_level( plugin_config_get('search_threshold') ) ) {
 		echo '<button type="button" id="search" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>{{bold searchbtn}}</button>';
 	}
 	?>
 		<button type="button" id="tulostaa-painike" class="btn btn-primary print"><span class="glyphicon glyphicon-print"></span>
-			{{{bold printbtn}}}</button>
+			{{bold printbtn}}</button>
+		<button type="button" id="html-painike" class="btn btn-primary print"><span class="glyphicon glyphicon-fullscreen"></span>
+			{{bold htmlbtn}}</button>
 		<button type="button" id="reset" class="btn btn-secondary reset" onclick="reload()"><span class="glyphicon glyphicon-refresh" ></span>
-			{{{bold resetbtn}}}</button>
+			{{bold resetbtn}}</button>
 	</div>
 	
 	<div id="info" class="col-sm-12">
