@@ -76,7 +76,7 @@ p + p {
 .typeahead,
 .tt-query,
 .tt-hint {
-  width: 396px;
+  width: 330px;
   height: 30px;
   padding: 1px 12px;
   font-size: 14px;
@@ -107,7 +107,7 @@ p + p {
 }
 
 .tt-menu {
-  width: 422px;
+  width: 330px;
   margin: 12px 0;
   padding: 8px 0;
   background-color: #fff;

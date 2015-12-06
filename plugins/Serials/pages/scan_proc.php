@@ -15,24 +15,23 @@
 {
     $t_new_scan       = $_POST['new_scan'];
 	$regex = "/^". $_POST['format'] ."$/";
-	
+
     if (is_scalar($t_new_scan)){
         if (preg_match($regex, $t_new_scan)){
             global $g_mantis_serials_serial;
-			$t_count			= $_POST['list_count'] +=1;
             $t_assembly_id      = $_POST['assembly_id'];
             $t_customer_id      = $_POST['customer_id'];
             $t_sales_order    	= $_POST['sales_order'];
             $t_user_id 			= auth_get_current_user_id();
             $t_date_time        = date('Y-m-d H:i:s');
             $query = "SELECT * FROM $g_mantis_serials_serial WHERE serial_scan='$t_new_scan' AND assembly_id='$t_assembly_id'";
-            $result = mysql_query($query) or die(mysql_error());	
+            $result = mysql_query($query) or die(mysql_error());
             if( mysql_num_rows( $result ) > 0 ) {
 				echo 'Duplication ERROR - Scan Data Shown Below! <table class="col-md-12 table table-bordered table-condensed table-striped">';
-				$where_search .= $g_mantis_serials_serial . ".serial_scan = " . '"' . $t_new_scan . '"' ;	
-				$query = "SELECT 
+				$where_search .= $g_mantis_serials_serial . ".serial_scan = " . '"' . $t_new_scan . '"' ;
+				$query = "SELECT
 							$g_mantis_serials_customer.customer_name,
-							$g_mantis_serials_assembly.assembly_number, 
+							$g_mantis_serials_assembly.assembly_number,
 							$g_mantis_serials_assembly.revision,
 							$g_mantis_serials_serial.sales_order,
 							mantis_user_table.realname,
@@ -45,7 +44,7 @@
 							WHERE $where_search
 							ORDER BY serial_scan, date_posted
 							";
-				$result = mysql_query($query) or die(mysql_error());	
+				$result = mysql_query($query) or die(mysql_error());
 				if( mysql_num_rows( $result ) > 0 ) {
 					$first_row = true;
 					while ( $row = mysql_fetch_assoc( $result )) {
@@ -66,7 +65,7 @@
 					}
 					echo '</table>';
 				}
-			}	
+			}
             else {
                 $query = sprintf("INSERT INTO $g_mantis_serials_serial " .
 						" (serial_id, assembly_id, customer_id, user_id, date_posted, serial_scan, sales_order ) " .
@@ -78,9 +77,8 @@
 								$t_new_scan,
 								$t_sales_order);
 		        $result = mysql_query($query) or die(mysql_error());
-				echo '<div class="col-md-4"><b>' . $t_count . '.</b> ' . $t_new_scan . '</div>';
+				echo $t_new_scan;
 				}
-            
         }
         else echo "ERROR 20 - Format is incorrect </br><b>Please verify with the following example : " . $_POST['format_example'] . "</b>";
     }
