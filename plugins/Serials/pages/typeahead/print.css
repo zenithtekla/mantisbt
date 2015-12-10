@@ -30,8 +30,15 @@ table {
     width: 25%;
 }
 
+.col-md-4 {
+    display:table-cell;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    width: 33.33%;
+}
+
 .container-fluid {
-    
     margin-right: auto;
     margin-left: auto;
     text-align: center;

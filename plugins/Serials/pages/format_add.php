@@ -33,5 +33,4 @@ access_ensure_project_level( plugin_config_get('format_threshold'));
 ?>
 </div>
 <?php
-		
 	html_page_bottom();

@@ -242,7 +242,7 @@ $(document).ready(function() {
   $("#sales_order,#customer,#assembly,#revision")
     .on('keyup', function(e){
         e.preventDefault();
-        if (e.which == 35 || e.which == 13)
+        if (e.which == 119) // F8
           search_process();
     });
 
@@ -259,7 +259,7 @@ $(document).ready(function() {
     keyup: function(e){
       e.preventDefault();
       switch (e.which) {
-        case 35:
+        case 119:
           search_process();
         break;
         case 13:
