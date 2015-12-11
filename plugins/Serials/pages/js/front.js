@@ -190,7 +190,7 @@ var print_r = function(){
 
 var print_html = function(){
   var x=window.open('','', 'height='+ (screen.height - 120) +', width='+screen.width);
-  x.document.open().write('<head><title>Full-window display</title><link rel="stylesheet" type="text/css" href="plugins/Serials/pages/typeahead/print.css"></head>'+ 
+  x.document.open().write('<head><title>Full-window display</title><link rel="stylesheet" type="text/css" href="plugins/Serials/pages/css/print.css"></head>'+ 
     '<body><div class="container-fluid">'
       + print_r() + $("#printable").html() +
     '</div></body>');
@@ -203,7 +203,7 @@ var print_dialog = function(e){
     deferred: $.Deferred(),
     globalStyles : false,
     mediaPrint : false,
-    stylesheet: "plugins/Serials/pages/typeahead/print.css",
+    stylesheet: "plugins/Serials/pages/css/print.css",
     timeout: 400,
     prepend: print_r()
   });

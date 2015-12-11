@@ -5,6 +5,7 @@ html_page_top1( plugin_lang_get( 'plugin_format_title' ) );
 html_page_top2();
 ?>
 <link rel="stylesheet" href="plugins/Serials/pages/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.css">
+<link rel="stylesheet" href="plugins/Serials/pages/css/mod.typeahead.css">
 
 <br>
 <p align="center">Configuration page to set up Serial Numbering format per Assembly.</p>
