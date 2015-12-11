@@ -6,8 +6,7 @@ header('Content-Type: application/json');
 	$g_mantis_serials_format         = plugin_table('format');
 	$g_mantis_serials_serial         = plugin_table('serial');	
 	$p_assembly_id = gpc_get_string ('assembly_id');
-require_once('model/fn.php');
-	
+
 function get_format ($p_assembly_id){
 	$t_assembly_id = $p_assembly_id;
 	global $g_mantis_serials_format; 
@@ -27,7 +26,8 @@ function get_format ($p_assembly_id){
 		//push the values in the array
 		array_push($json_response,$row_array);
 	}
-	$jsonString = json_encode($json_response);
+	$jsonString = json_encode(array(
+		"data" => $json_response));
 	echo $jsonString;
 }
 	echo get_format($p_assembly_id);

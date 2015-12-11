@@ -3,8 +3,9 @@ require("serials_api.php");
 access_ensure_project_level( plugin_config_get('format_threshold'));
 html_page_top1( plugin_lang_get( 'plugin_format_title' ) );
 html_page_top2();
-
 ?>
+<link rel="stylesheet" href="plugins/Serials/pages/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.css">
+
 <br>
 <p align="center">Configuration page to set up Serial Numbering format per Assembly.</p>
 </br>
@@ -16,7 +17,19 @@ html_page_top2();
 			<?php echo plugin_lang_get( 'customer_name' ) ?>
 		</td>
 		<td>
-			<input type="text" size="100" name="customer_name" required/>
+			<var id="result-container" class="result-container"></var>
+			<div class="typeahead-container">
+		        <div class="typeahead-field">
+		            <span class="typeahead-query">
+		        		<input id="field1" type="text" size="100" name="customer_name[query]" required/>
+		        	</span>
+		        	<span class="typeahead-button">
+		                <button type="submit">
+		                    <i class="typeahead-search-icon"></i>
+		                </button>
+		            </span>
+		        </div>
+		    </div>
 		</td>
 	</tr>
 	<tr <?php echo helper_alternate_class() ?> valign="top">
@@ -24,7 +37,14 @@ html_page_top2();
 			<?php echo plugin_lang_get( 'assembly_number' ) ?>
 		</td>
 		<td>
-			<input type="text" size="100" name="assembly_number" required/>
+			<span class="typeahead-query">
+			<input id="field2" type="text" size="100" name="assembly_number" required/>
+			</span>
+			<span class="typeahead-button">
+                <button type="submit">
+                    <i class="typeahead-search-icon"></i>
+                </button>
+            </span>
 		</td>
 	</tr>
 	<tr <?php echo helper_alternate_class() ?> valign="top">
@@ -32,7 +52,14 @@ html_page_top2();
 			<?php echo plugin_lang_get( 'revision' ) ?>
 		</td>
 		<td>
-			<input type="text" size="30" name="revision" required/>
+			<span class="typeahead-query">
+			<input id="field3" type="text" size="30" name="revision" required/>
+			</span>
+			<span class="typeahead-button">
+                <button type="submit">
+                    <i class="typeahead-search-icon"></i>
+                </button>
+            </span>
 		</td>
 	</tr>
 	<tr <?php echo helper_alternate_class() ?> valign="top">
@@ -40,7 +67,14 @@ html_page_top2();
 			<?php echo plugin_lang_get( 'format' ) ?>
 		</td>
 		<td>
-			/^<input type="text" size="100" name="format" required/>$/
+			<span class="typeahead-query">
+			/^<input id="field4" type="text" size="100" name="format" required/>$/i
+			</span>
+			<span class="typeahead-button">
+                <button type="submit">
+                    <i class="typeahead-search-icon"></i>
+                </button>
+            </span>
 		</td>
 	</tr>
 	<tr <?php echo helper_alternate_class() ?> valign="top">
@@ -48,7 +82,18 @@ html_page_top2();
 			<?php echo plugin_lang_get( 'format_example' ) ?>
 		</td>
 		<td>
-			<input type="text" size="100" name="format_example" required/>
+			<div class="typeahead-container">
+        		<div class="typeahead-field">
+				<span class="typeahead-query">
+				<input id="field5" type="text" size="100" name="format_example" required/>
+				</span>
+				<span class="typeahead-button">
+	                <button type="submit">
+	                    <i class="typeahead-search-icon"></i>
+	                </button>
+	            </span>
+				</div>
+    		</div>
 		</td>
 </table>
 	<div>
@@ -56,7 +101,9 @@ html_page_top2();
 	</div>
 </form>
 </div>
-
-<script type="text/javascript" src="plugins/Serials/pages/js/format_proc.js"></script>
+<script src="plugins/Serials/pages/jquery/jquery-1.11.3.min.js" type="text/javascript" ></script>
+<script src="plugins/Serials/pages/handlebars/handlebars-v4.0.4.js" type="text/javascript" ></script>
+<script src="plugins/Serials/pages/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.js" type="text/javascript" ></script>
+<script src="plugins/Serials/pages/js/format_proc.js" type="text/javascript"></script>
 <?php
 html_page_bottom1( __FILE__ );

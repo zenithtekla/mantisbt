@@ -15,16 +15,21 @@ function list_customer (){
 
 	$result = mysql_query($query) or die(mysql_error());
 	    //Create an array
-	$json_response = array();
+	$t_customer_name = [];
+	$t_customer_id = [];
 
 	while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-		$row_array['customer_name'] = $row['customer_name'];
-		$row_array['customer_id'] = $row['customer_id'];
-
-		//push the values in the array
-		array_push($json_response,$row_array);
+		// $t_customer_name[] = htmlspecialchars($row['customer_name']);
+		$t_customer_name[] = $row['customer_name'];
+		$t_customer_id[] = $row['customer_id'];
 	}
-	$jsonString = json_encode($json_response);
-	echo $jsonString;
+
+	return json_encode(
+		array("data" => array(
+					"customer_name" => $t_customer_name,
+					"customer_id" => $t_customer_id
+			)
+		)
+	);;
 }
 	echo list_customer();
