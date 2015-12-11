@@ -87,12 +87,12 @@ html_page_top2();
 </form>
 </script>
 
-<script type="text/javascript" src="plugins/Serials/pages/jquery/jquery-1.11.3.min.js"></script>
-<script src="plugins/Serials/pages/handlebars/handlebars-v4.0.4.js"></script>
-<script src="plugins/Serials/pages/typeahead/typeahead.bundle.js"></script>
-<script src="plugins/Serials/pages/bootstrap/plugins/jQuery-Plugin-Js/jQuery.print.js"></script>
-<script src="plugins/Serials/pages/js/process_api.js" type="text/javascript"></script>
-<script src="plugins/Serials/pages/js/front.js" type="text/javascript"></script>
+<script src="plugins/Serials/pages/jquery/jquery-1.11.3.min.js" type="text/javascript" ></script>
+<script src="plugins/Serials/pages/handlebars/handlebars-v4.0.4.js" type="text/javascript" ></script>
+<script src="plugins/Serials/pages/typeahead/typeahead.bundle.js" type="text/javascript" ></script>
+<script src="plugins/Serials/pages/bootstrap/plugins/jQuery-Plugin-Js/jQuery.print.js" type="text/javascript" ></script>
+<script src="plugins/Serials/pages/js/process_api.js" type="text/javascript" ></script>
+<script src="plugins/Serials/pages/js/front.js" type="text/javascript" ></script>
 <?php
 
 html_page_bottom1();

@@ -6,27 +6,28 @@ header('Content-Type: application/json');
 	$g_mantis_serials_format         = plugin_table('format');
 	$g_mantis_serials_serial         = plugin_table('serial');
 	$p_customer_id = gpc_get_string('customer_id');
-	function list_assembly ($p_customer_id){
-		global $g_mantis_serials_assembly;
-		if($p_customer_id){
-		$t_customer_id = $p_customer_id;		
-		$query = "	SELECT assembly_number, customer_id
-				FROM $g_mantis_serials_assembly
-				WHERE customer_id='$t_customer_id'";
 
-		$result = mysql_query($query) or die(mysql_error());
-		    //Create an array
-		$json_response = array();
-		
-		while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-			$row_array['assembly_number'] = $row['assembly_number'];
-			$row_array['customer_id'] = $row['customer_id'];
-						
-			//push the values in the array
-			array_push($json_response,$row_array);
-		}
-		$jsonString = json_encode($json_response);
-		echo $jsonString;
-		}
+function list_assembly ($p_customer_id){
+	global $g_mantis_serials_assembly;
+	if($p_customer_id){
+	$t_customer_id = $p_customer_id;		
+	$query = "	SELECT assembly_number, customer_id
+			FROM $g_mantis_serials_assembly
+			WHERE customer_id='$t_customer_id'";
+
+	$result = mysql_query($query) or die(mysql_error());
+	    //Create an array
+	$json_response = array();
+	
+	while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+		$row_array['assembly_number'] = $row['assembly_number'];
+		$row_array['customer_id'] = $row['customer_id'];
+					
+		//push the values in the array
+		array_push($json_response,$row_array);
 	}
-		echo list_assembly( $p_customer_id );
+	$jsonString = json_encode($json_response);
+	echo $jsonString;
+	}
+}
+	echo list_assembly( $p_customer_id );

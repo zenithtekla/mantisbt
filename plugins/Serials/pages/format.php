@@ -56,5 +56,7 @@ html_page_top2();
 	</div>
 </form>
 </div>
+
+<script type="text/javascript" src="plugins/Serials/pages/js/format_proc.js"></script>
 <?php
 html_page_bottom1( __FILE__ );
