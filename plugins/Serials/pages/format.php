@@ -11,7 +11,7 @@ html_page_top2();
 <p align="center">Configuration page to set up Serial Numbering format per Assembly.</p>
 </br>
 <div align="center">
-<form method="post" action="<?php echo $g_format_add_page ?>">
+<form method="post" action="<?php echo $g_format_add_page ?>" autocomplete='off'>
 <table class="width75" cellspacing="1">
 	<tr <?php echo helper_alternate_class() ?> valign="top">
 		<td class="left pad1 positive" colspan="20"><var id="result-container" class="result-container"></var></td>
@@ -117,7 +117,7 @@ html_page_top2();
 		</td>
 		<td>
 			<span id="f_prepend" class=" exp-decorator">/^</span>
-				<input type="text" size="100" name="format" required/>
+				<input id="field6" type="text" size="100" name="format" required/>
 			<span id="f_append" class=" exp-decorator">$/i</span>
 		</td>
 	</tr>

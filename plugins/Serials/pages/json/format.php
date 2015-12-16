@@ -16,12 +16,12 @@ function get_format ($p_assembly_id){
 
 	$result = mysql_query($query) or die(mysql_error());
 	    //Create an array
-	$json_response = array();
+	$json_response = [];
 
 	while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-		$row_array['format'] = $row['format'];
-		$row_array['format_id'] = $row['format_id'];
-		$row_array['format_example'] = $row['format_example'];
+		$row_array['nimi'] = $row['format'];
+		$row_array['id'] = $row['format_id'];
+		$row_array['sample'] = $row['format_example'];
 
 		//push the values in the array
 		array_push($json_response,$row_array);
@@ -29,7 +29,7 @@ function get_format ($p_assembly_id){
 
 	return
 	json_encode(
-		array("data" => $json_response)
+		$json_response
 	);
 }
 	echo get_format($p_assembly_id);

@@ -5,31 +5,35 @@ header('Content-Type: application/json');
 	$g_mantis_serials_assembly       = plugin_table('assembly');
 	$g_mantis_serials_format         = plugin_table('format');
 	$g_mantis_serials_serial         = plugin_table('serial');
-	$p_assembly_number = gpc_get_string('assembly_number');
-	$p_customer_id = gpc_get_string('customer_id');
+	/*$p_assembly_number = gpc_get_string('assembly_number');
+	$p_customer_id = gpc_get_string('customer_id');*/
+	$p_customer_id = $_GET["d1"];
+	$p_assembly_number = $_GET["d2"];
 
 function list_revision ($p_assembly_number, $p_customer_id){
 	global $g_mantis_serials_assembly;
 	if($p_assembly_number){
-	$t_assembly_number = $p_assembly_number;
-	$t_customer_id = $p_customer_id;
-	$query = "	SELECT revision, assembly_id
-			FROM $g_mantis_serials_assembly
-			WHERE assembly_number='$t_assembly_number' AND customer_id='$t_customer_id'";
-
-	$result = mysql_query($query) or die(mysql_error());
-	//Create an array
-	$json_response = array();
+		$t_assembly_number = $p_assembly_number;
+		$t_customer_id = $p_customer_id;
+		$query = "	SELECT revision, assembly_id
+				FROM $g_mantis_serials_assembly
+				WHERE assembly_number='$t_assembly_number' AND customer_id='$t_customer_id'";
 	
-	while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-		$row_array['revision'] = $row['revision'];
-		$row_array['assembly_id'] = $row['assembly_id'];
+		$result = mysql_query($query) or die(mysql_error());
+		//Create an array
+		$json_response = [];
 		
-		//push the values in the array
-		array_push($json_response,$row_array);
-	}
-	$jsonString = json_encode($json_response);
-	echo $jsonString;
+		while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+			$row_array['nimi'] = $row['revision'];
+			$row_array['id'] = $row['assembly_id'];
+			
+			//push the values in the array
+			array_push($json_response,$row_array);
+		}
+		return
+		json_encode(
+			$json_response
+		);
 	}
 }
 	echo list_revision( $p_assembly_number, $p_customer_id);
