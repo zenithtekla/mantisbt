@@ -56,11 +56,11 @@ var extTypeahead = function( _ ){
             }
         },
         callback: {
-/*            onReady: function(node){
-                $(_.url).focus();
-            },*/
+            onReady: function(){
+                $(_.slt).focus();
+            },
             onClickAfter: function (node, a, item, event) {
-                console.log(JSON.stringify(item));
+                console.log("§ klik: " + JSON.stringify(item));
                 setTimeout(function(){
                     $('#result-container').empty();
                 },3000);

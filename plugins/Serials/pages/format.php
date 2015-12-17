@@ -24,7 +24,7 @@ html_page_top2();
 			<div class="typeahead-container">
 		        <div class="typeahead-field">
 		            <span class="typeahead-query">
-		        		<input id="field1" type="text" size="100" name="customer_name[query]" required/>
+		        		<input id="field1" type="text" size="100" name="customer_name" required/>
 		        	</span>
 		        	<span class="typeahead-button">
 		                <button type="submit">
