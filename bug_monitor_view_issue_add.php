@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-    <script type="text/javascript" src="javascript/jquery.tokeninput.js"></script>
+    <script type="text/javascript" src="js/jquery.tokeninput.js"></script>
     <script> jQuery.noConflict();</script>
 
     <link rel="stylesheet" href="css/token-input-facebook.css" type="text/css" />

@@ -51,6 +51,7 @@ if ( access_has_bug_level( config_get( 'show_monitor_list_threshold' ), $f_bug_i
 
 	collapse_open( 'monitoring' );
 ?>
+<script type="text/javascript" src="js/jquery.min.js"></script>
 <body onload="doScroll()" onunload="window.name=document.body.scrollTop">
 <table class="width100" cellspacing="1">
 <tr>
