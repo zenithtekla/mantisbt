@@ -5,7 +5,7 @@ header('Content-Type: application/json');
 	$g_mantis_serials_assembly       = plugin_table('assembly');
 	$g_mantis_serials_format         = plugin_table('format');
 	$g_mantis_serials_serial         = plugin_table('serial');
-	$p_assembly_id = gpc_get_string ('assembly_id');
+	$p_assembly_id = gpc_get_string ('id');
 
 function get_format ($p_assembly_id){
 	$t_assembly_id = $p_assembly_id;

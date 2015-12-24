@@ -56,9 +56,11 @@ $.ajax({
                     .addClass("alert-success");
     		dnm_data.list_count += 1;
     		document.getElementById('scan_result').select();
-    		data_output =  "<b>" + dnm_data.list_count + ".</b> " + data;
+    		var data_output =  "<b>" + dnm_data.list_count + ".</b> " + data;
         $("#virhe").empty().append("<div class='text-center'>last scan: " + data_output + "</div>");
-        $("#log-wrapper")  .append( "<div class='col-md-4'>" + data_output + "</div>" )
+        data_output = "<div class='col-md-4'>" + data_output + "</div>";
+
+        $("#log-wrapper")  .append( data_output )
                             .addClass("bg-success")
                             .css({  "max-height":"300px",
                                     "overflow-y" : "auto" })

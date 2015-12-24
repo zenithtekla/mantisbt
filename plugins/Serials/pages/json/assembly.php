@@ -5,7 +5,7 @@ header('Content-Type: application/json');
 	$g_mantis_serials_assembly       = plugin_table('assembly');
 	$g_mantis_serials_format         = plugin_table('format');
 	$g_mantis_serials_serial         = plugin_table('serial');
-	$p_customer_id = $_GET["d"];
+	$p_customer_id = $_POST["id"];
 
 function list_assembly ($p_customer_id){
 	global $g_mantis_serials_assembly;

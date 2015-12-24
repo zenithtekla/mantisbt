@@ -84,11 +84,11 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
     $('#customer .typeahead').typeahead('close');
     $('#assembly .typeahead').focus();
     document.getElementById('customer').style.color="Black";
-  }
+  };
 
   var d = {
     url : "plugin.php?page=Serials/json/assembly.php",
-    data: {"customer_id": suggestion.eg},
+    data: {"id": suggestion.eg},
     callback: customer_styling,
     slt : '#assembly .typeahead'
   };
@@ -120,7 +120,7 @@ $('#assembly .typeahead').bind('typeahead:select', function(ev, suggestion) {
 
   var d = {
     url : "plugin.php?page=Serials/json/revision.php",
-    data: {"assembly_number": suggestion.value, "customer_id": suggestion.eg},
+    data: {"nimi": suggestion.value, "id": suggestion.eg},
     callback: customer_styling,
     slt : '#revision .typeahead'
   };
@@ -149,16 +149,16 @@ $('#revision .typeahead').bind('typeahead:select', function(ev, suggestion) {
   var jqDeferred = $.ajax({
     type:"POST",
     url: "plugin.php?page=Serials/json/format.php",
-    data: {"assembly_id": suggestion.eg},
+    data: {"id": suggestion.eg},
     dataType: 'json',
   });
   jqDeferred.then( function(data) {
     $.map(data, function(obj) {
-      console.log(obj.format, obj.format_id);
+      console.log(obj.nimi, obj.id);
       // $('input[name="format"]').val(obj.format);
-      dnm_data.format = obj.format;
-      dnm_data.format_id = obj.format_id;
-      dnm_data.format_example = obj.format_example;
+      dnm_data.format = obj.nimi;
+      dnm_data.format_id = obj.id;
+      dnm_data.format_example = obj.sample;
       // $('input[name="format_id"]').val(obj.format_id);
       // $('input[name="format_example"]').val(obj.format_example);
     });

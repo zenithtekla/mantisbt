@@ -48,7 +48,11 @@
         return new Promise(function(suc, err){
             extTypeahead({
                 slt: "#field2",
-                url: "/plugin.php?page=Serials/json/assembly.php&d="+o.customer_id,
+                url: {
+                    type: "POST",
+                    url : "/plugin.php?page=Serials/json/assembly.php",
+                    data: { 'id' : o.customer_id }
+                },
                 callback: function(item){
                     var hash = JSON.parse(localStorage.getItem("xhr"));
                     o.assembly = item.nimi;
@@ -71,10 +75,12 @@
             extTypeahead({
                 slt: "#field3",
                 url: {
-                    type: "GET",
-                    url: "/plugin.php?page=Serials/json/revision.php&d1="
-                    +o.customer_id+"&d2="
-                    +o.assembly
+                    type: "POST",
+                    url: "/plugin.php?page=Serials/json/revision.php",
+                    data : {
+                        nimi: o.assembly,
+                        id: o.customer_id
+                    }
                 },   
                 callback: function(item){
                     var hash = JSON.parse(localStorage.getItem("xhr"));
@@ -93,7 +99,7 @@
                     
                     ajaxPost({
                         url: "plugin.php?page=Serials/json/format.php",
-                        d: { "assembly_id" : o.assembly_id },
+                        d: { "id" : o.assembly_id },
                         callback: addformat
                     });
                     

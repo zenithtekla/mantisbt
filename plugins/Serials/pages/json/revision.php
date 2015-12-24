@@ -7,8 +7,8 @@ header('Content-Type: application/json');
 	$g_mantis_serials_serial         = plugin_table('serial');
 	/*$p_assembly_number = gpc_get_string('assembly_number');
 	$p_customer_id = gpc_get_string('customer_id');*/
-	$p_customer_id = $_GET["d1"];
-	$p_assembly_number = $_GET["d2"];
+	$p_assembly_number = $_POST["nimi"];
+	$p_customer_id = $_POST["id"];
 
 function list_revision ($p_assembly_number, $p_customer_id){
 	global $g_mantis_serials_assembly;
