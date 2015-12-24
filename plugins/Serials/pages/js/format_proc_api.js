@@ -57,6 +57,8 @@ var extTypeahead = function( _ ){
         },
         callback: {
             onReady: function(){
+                if ($(_.slt).siblings().length>0)
+                    $(_.slt).siblings(':last').remove();
                 $(_.slt).focus();
             },
             onClickAfter: function (node, a, item, event) {
@@ -65,6 +67,8 @@ var extTypeahead = function( _ ){
                     $('#result-container').empty();
                 },3000);
                 if (_.hasOwnProperty('callback')) _.callback(item);
+                $("#typeahead-" + _.slt.substr(1) + " > div > .typeahead-result").remove();
+                $("#typeahead-" + _.slt.substr(1)).find('.typeahead-hint').remove();
             },
             onResult: function (node, query, obj, objCount) {
                 var text = "";

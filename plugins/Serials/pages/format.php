@@ -20,7 +20,7 @@ html_page_top2();
 		<td class="category">
 			<?php echo plugin_lang_get( 'customer_name' ) ?>
 		</td>
-		<td>
+		<td id="typeahead-field1">
 			<div class="typeahead-container">
 		        <div class="typeahead-field">
 		            <span class="typeahead-query">
@@ -39,7 +39,7 @@ html_page_top2();
 		<td class="category">
 			<?php echo plugin_lang_get( 'assembly_number' ) ?>
 		</td>
-		<td>
+		<td id="typeahead-field2">
 			<div class="typeahead-container">
 		        <div class="typeahead-field">
 					<span class="typeahead-query">
@@ -58,7 +58,7 @@ html_page_top2();
 		<td class="category">
 			<?php echo plugin_lang_get( 'revision' ) ?>
 		</td>
-		<td>
+		<td id="typeahead-field3">
 			<div class="typeahead-container">
 		        <div class="typeahead-field">
 					<span class="typeahead-query">
@@ -77,7 +77,7 @@ html_page_top2();
 		<td class="category">
 			<?php echo plugin_lang_get( 'format_helper' ) ?>
 		</td>
-		<td>
+		<td id="typeahead-field4">
 			<div class="typeahead-container">
 		        <div class="typeahead-field">
 					<span class="typeahead-query">
@@ -96,7 +96,7 @@ html_page_top2();
 		<td class="category">
 			<?php echo plugin_lang_get( 'format_example' ) ?>
 		</td>
-		<td>
+		<td id="typeahead-field5">
 			<div class="typeahead-container">
         		<div class="typeahead-field">
 					<span class="typeahead-query">
