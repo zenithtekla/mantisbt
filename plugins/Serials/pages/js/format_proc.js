@@ -127,7 +127,7 @@
             var v = $(this).val();
             console.log(" ?oldh " + oldh.revision + " ?current " + v);
             var o ={
-                cond: oldh.revision !== v,
+                cond: oldh.revision !== v && v,
                 id: $(this).attr("id"),
                 a: [4,5,6]
             };
@@ -143,7 +143,7 @@
             console.log(" ?oldh " + oldh.assembly + " ?current " + v);
             
             var o ={
-                cond: oldh.assembly !== v,
+                cond: oldh.assembly !== v && v,
                 id: $(this).attr("id"),
                 a: [3,4,5,6]
             };
@@ -187,7 +187,8 @@
         if ( t_cond(e.which) ){
             var v = $(this).val();
             var o ={
-                cond: oldh.customer !== v && oldh.customer_name && v && $("#field2").val(),
+                // cond: oldh.customer !== v && oldh.customer_name && v && $("#field2").val(),
+                cond: oldh.customer !== v && v,
                 id: $(this).attr("id"),
                 a: [2,3,4,5,6]
             };

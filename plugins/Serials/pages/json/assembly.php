@@ -24,11 +24,11 @@ function list_assembly ($p_customer_id){
 			$row_array['id'] = $row['customer_id'];
 						
 			//push the values in the array
-			array_push($json_response,$row_array);
+			$json_response[] =$row_array;
 		}
 		return
 		json_encode(
-			$json_response
+			array_unique($json_response, SORT_REGULAR)
 		);
 	}
 }

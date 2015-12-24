@@ -24,12 +24,12 @@ function get_format ($p_assembly_id){
 		$row_array['sample'] = $row['format_example'];
 
 		//push the values in the array
-		array_push($json_response,$row_array);
+		$json_response[] =$row_array;
 	}
 
 	return
 	json_encode(
-		$json_response
+		array_unique($json_response, SORT_REGULAR)
 	);
 }
 	echo get_format($p_assembly_id);
