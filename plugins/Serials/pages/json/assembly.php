@@ -17,18 +17,19 @@ function list_assembly ($p_customer_id){
 	
 		$result = mysql_query($query) or die(mysql_error());
 		    //Create an array
-		$json_response = [];
-		
+
 		while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
 			$row_array['nimi'] = $row['assembly_number'];
 			$row_array['id'] = $row['customer_id'];
 						
 			//push the values in the array
-			$json_response[] =$row_array;
+			$arr[] =$row_array;
 		}
+		$json_response = array_values(array_map('unserialize', array_unique(array_map('serialize', $arr))));
+		
 		return
 		json_encode(
-			array_unique($json_response, SORT_REGULAR)
+			$json_response
 		);
 	}
 }

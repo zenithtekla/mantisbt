@@ -37,7 +37,7 @@
 
 "use strict";
 var extTypeahead = function( _ ){
-    console.log(_.url);
+    // console.log(_.url);
     $.typeahead({
         input: _.slt,
         minLength: 0,
