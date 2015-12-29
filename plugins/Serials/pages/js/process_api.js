@@ -58,7 +58,10 @@ $.ajax({
     		document.getElementById('scan_result').select();
     		var data_output =  "<b>" + dnm_data.list_count + ".</b> " + data;
         $("#virhe").empty().append("<div class='text-center'>last scan: " + data_output + "</div>");
-        data_output = "<div class='col-md-4'>" + data_output + "</div>";
+
+        if (dnm_data.list_count % 3 === 0)
+            data_output = "<div class='col-xs-4'>" + data_output + "</div><div class='clearfix'></div>";
+        else data_output = "<div class='col-xs-4'>" + data_output + "</div>";
 
         $("#log-wrapper")  .append( data_output )
                             .addClass("bg-success")
@@ -89,7 +92,7 @@ var bloodhoundAjax = function( _ ){
 
     var jqDeferred = $.ajax( $.extend( settings, {url: _.url} ) );
     // { url: _.url,  settings });
-    
+
     jqDeferred.then( function(data) {
     // constructs the suggestion engine
     var engine = new Bloodhound({
@@ -104,10 +107,10 @@ var bloodhoundAjax = function( _ ){
       }),
       limit: 10
     });
-    
+
     // kicks off the loading/processing of `local` and `prefetch`
     engine.initialize();
-    
+
     // Instantiate the Typeahead UI
     $(_.slt).typeahead(null, {
         name: 'data',
@@ -134,4 +137,43 @@ var bloodhoundAjax = function( _ ){
     function(jqXHR, textStatus, errorThrown){
     console.log(jqXHR, textStatus, errorThrown);
     });
+};
+
+var print_r = function(){
+  var $t_str = "<div class='txt-left'>SerialScan v1.1</div><div class='txt-right'>Extract on " + dnm_data.time + "</div><div class='col-xs-12'>";
+  var o = ['sales_order','customer','assembly','revision'];
+  for (var i in o){
+    var k = o[i];
+    if (dnm_data.hasOwnProperty(k)){
+      if (dnm_data[k].length)
+        $t_str +=  "<div class='col-xs-3'>" + k + ": " + dnm_data[k] + "</div>";
+    } else {
+      var v = $('input[name="'+k+'"]').val();
+      $t_str += "<div class='col-xs-3'>" + k + ": " + v + "</div>";
+    }
+  }
+  $t_str += "</div><hr><br/>";
+  $("#log-verify").empty().html($t_str);
+  return $t_str;
+};
+
+var print_html = function(){
+  var x=window.open('','', 'height='+ (screen.height - 120) +', width='+screen.width);
+  x.document.open().write('<head><title>Full-window display</title><link rel="stylesheet" type="text/css" href="plugins/Serials/pages/css/print.css"></head>'+
+    '<body><div class="container-fluid">'
+      + print_r() + $("#printable").html() +
+    '</div></body>');
+  // x.close();
+};
+
+var print_dialog = function(e){
+  e.preventDefault;
+  $("#printable").print({
+    deferred: $.Deferred(),
+    globalStyles : false,
+    mediaPrint : false,
+    stylesheet: "plugins/Serials/pages/css/print.css",
+    timeout: 400,
+    prepend: print_r()
+  });
 };

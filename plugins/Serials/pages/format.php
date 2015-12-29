@@ -116,9 +116,9 @@ html_page_top2();
 			<?php echo plugin_lang_get( 'format' ) ?>
 		</td>
 		<td>
-			<span id="f_prepend" class=" exp-decorator">/^</span>
+			<span id="f_prepend" class=" exp-decorator">/</span>
 				<input id="field6" type="text" size="100" name="format" required/>
-			<span id="f_append" class=" exp-decorator">$/i</span>
+			<span id="f_append" class=" exp-decorator">/i</span>
 		</td>
 	</tr>
 </table>

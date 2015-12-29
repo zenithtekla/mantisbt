@@ -69,7 +69,7 @@ html_page_top2();
 		</div>
 	</div>
 	<div id="printable">
-	<div id="log-wrapper" class="col-offset-1 col-md-12 right-scroll "></div>
+	<div id="log-wrapper" class="col-offset-1 col-xs-12 right-scroll "></div>
 	</div>
 
 	<div class="row no-print">
