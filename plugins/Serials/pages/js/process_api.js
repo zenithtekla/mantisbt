@@ -57,8 +57,11 @@ $.ajax({
     		dnm_data.list_count += 1;
     		document.getElementById('scan_result').select();
     		var data_output =  "<b>" + dnm_data.list_count + ".</b> " + data;
-        $("#virhe").empty().append("<div class='text-center'>last scan: " + data_output + "</div>");
-        data_output = "<div class='col-md-4'>" + data_output + "</div>";
+        $("#virhe").empty().append("<div class='custom_spacer'>last scan: " + data_output + "</div>");
+        
+        if (dnm_data.list_count % 3 === 0)
+            data_output = "<div class='col-xs-4'>" + data_output + "</div><div class='clearfix'></div>";
+        else data_output = "<div class='col-xs-4'>" + data_output + "</div>";
 
         $("#log-wrapper")  .append( data_output )
                             .addClass("bg-success")
