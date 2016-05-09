@@ -2,7 +2,7 @@
 	$g_mantis_serials_customer       = plugin_table('customer');
 	$g_mantis_serials_assembly       = plugin_table('assembly');
 	$g_mantis_serials_format         = plugin_table('format');
-	$g_mantis_serials_serial         = plugin_table('serial');	
+	$g_mantis_serials_serial         = plugin_table('serial');
 	#----------------------------------
 	# serials page definitions
 
@@ -20,7 +20,7 @@
 	function customer_name_unique( $p_customer_name ) {
 		global $g_mantis_serials_customer;
 		$query = "SELECT customer_id
-					FROM $g_mantis_serials_customer 
+					FROM $g_mantis_serials_customer
 					WHERE customer_name = '$p_customer_name'";
 		$result = mysql_query( $query ) or die(mysql_error());
 		if( mysql_num_rows( $result ) > 0 ) {
@@ -30,7 +30,7 @@
 			return 'true';
 		}
 	}
-	
+
 	function assembly_revision_unique ( $p_assembly, $p_revision, $new_customer) {
 		global $g_mantis_serials_assembly;
 		$query = "SELECT assembly_id
@@ -44,10 +44,10 @@
 			return 'true';
 		}
 	}
-	
+
 	function add_customer( $p_customer_name, $new_customer){
 		global $g_mantis_serials_customer;
-		if ( $new_customer == 'true' ){		
+		if ( $new_customer == 'true' ){
 			$query = "INSERT INTO $g_mantis_serials_customer
 					( customer_id, customer_name )
 					VALUES
@@ -58,9 +58,8 @@
 		} else {
 			return $new_customer;
 		}
-			
 	}
-	
+
 	function add_assembly ( $p_assembly_number, $p_revision , $m_customer_name, $new_customer, $new_assembly ){
 		$p_customer_id = add_customer ( $m_customer_name, $new_customer );
 		global $g_mantis_serials_assembly;
@@ -85,12 +84,12 @@
 					INTO $g_mantis_serials_format
 					( format_id, assembly_id, format, format_example )
 					VALUES
-					( null, '$p_assembly_id', '$p_format', '$p_format_example' )";			
-	    return db_query_bound( $query );	
+					( null, '$p_assembly_id', '$p_format', '$p_format_example' )";
+	    	return db_query_bound( $query );
 		} else {
 			$query = "UPDATE $g_mantis_serials_format
 					SET format='$p_format', format_example='$p_format_example'
 					WHERE assembly_id='$p_assembly_id'";
-		return db_query_bound( $query );
+			return db_query_bound( $query );
 		}
 	}
