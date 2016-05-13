@@ -3,13 +3,14 @@
     // serial_id, assembly_id, customer_id, sale_order_id, serial_number, user_id, time
     // query to insert into the db
 	require_once( 'core.php' );
-	$g_mantis_serials_customer       = plugin_table('customer');
-	$g_mantis_serials_assembly       = plugin_table('assembly');
-	$g_mantis_serials_format         = plugin_table('format');
-	$g_mantis_serials_serial         = plugin_table('serial');
+	
+	$g_mantis_customer       		= db_get_table( 'mantis_customer_table' );
+	$g_mantis_assembly       		= db_get_table( 'mantis_assembly_table' );
+	$g_mantis_serials_format         = strtolower(plugin_table('format'));
+	$g_mantis_serials_serial         = strtolower(plugin_table('serial'));
     if(isset($_POST['new_scan']))
 		if($_POST['assembly_id']=="" or $_POST['customer_id'] == "" or $_POST['sales_order']=="" or $_POST['revision']=="" or $_POST['new_scan'==""]){
-			echo "ERROR - Please complete the selection field in RED TEXT";
+			echo "ERROR - Please complete the selection field in RED TEXT<br>";
 		}
 			else
 {
@@ -29,17 +30,17 @@
             if( mysql_num_rows( $result ) > 0 ) {
 				echo 'Duplication ERROR - Scan Data Shown Below! <table class="col-md-12 table table-bordered table-condensed table-striped">';
 				$where_search .= $g_mantis_serials_serial . ".serial_scan = " . '"' . $t_new_scan . '"' ;
-				$query = "SELECT
-							$g_mantis_serials_customer.customer_name,
-							$g_mantis_serials_assembly.assembly_number,
-							$g_mantis_serials_assembly.revision,
+				$query = "SELECT 
+							$g_mantis_customer.name,
+							$g_mantis_assembly.number, 
+							$g_mantis_assembly.revision,
 							$g_mantis_serials_serial.sales_order,
 							mantis_user_table.realname,
 							$g_mantis_serials_serial.date_posted,
 							$g_mantis_serials_serial.serial_scan
 							FROM $g_mantis_serials_serial
-							INNER JOIN $g_mantis_serials_assembly ON $g_mantis_serials_serial.assembly_id = $g_mantis_serials_assembly.assembly_id
-							INNER JOIN $g_mantis_serials_customer ON $g_mantis_serials_serial.customer_id = $g_mantis_serials_customer.customer_id
+							INNER JOIN $g_mantis_assembly ON $g_mantis_serials_serial.assembly_id = $g_mantis_assembly.id
+							INNER JOIN $g_mantis_customer ON $g_mantis_serials_serial.customer_id = $g_mantis_customer.id
 							INNER JOIN mantis_user_table ON mantis_user_table.id = $g_mantis_serials_serial.user_id
 							WHERE $where_search
 							ORDER BY serial_scan, date_posted
@@ -78,7 +79,7 @@
 								$t_sales_order);
 		        $result = mysql_query($query) or die(mysql_error());
 				echo $t_new_scan;
-				}
+			}
         }
         else echo "ERROR 20 - Format is incorrect </br><b>Please verify with the following example : " . $_POST['format_example'] . "</b>";
     }

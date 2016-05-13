@@ -82,12 +82,32 @@ var extTypeahead = function( _ ){
     });
 };
 
+var input_key_cond = (function(){
+        return function(x){
+        return range_cond(x,47,91) || range_cond(x,95,106);
+        };
+    })();
+
+var range_cond = (function(){
+    return function(x,min,max){
+    return (min < x && x < max);
+    };
+})();
+
+var timer_delay = (function(){
+    var timer = 0;
+    return function(callback, ms){
+        clearTimeout (timer);
+        timer = setTimeout(callback, ms);
+    };
+})();
+
 var ajaxPost = function( _ ){
     var jqDeferred = $.ajax({
         type:"POST",
         url: _.url,
-        data: _.d,
-        dataType: 'json',
+        data: _.data,
+        dataType: 'json'
     });
 
     jqDeferred.then( function(data) {
@@ -97,3 +117,62 @@ var ajaxPost = function( _ ){
         console.log(jqXHR, textStatus, errorThrown);
     });
 };
+
+/*// url, data, suggest = "<div style='padding:6px'>{{value}}</div>", callback
+// Bloodhound AJAX joins the course!
+var bloodhoundAjax = function( _ ){
+    if(!_.hasOwnProperty('suggest')) _['suggest'] = "<div style='padding:6px'>{{value}}</div>";
+    var settings = {
+        type:"POST"
+    };
+    if (_.hasOwnProperty('data')) settings['data'] = _.data;
+    settings['dataType'] = (_.hasOwnProperty('dataType')) ? _.dataType : 'json';
+
+    var jqDeferred = $.ajax( $.extend( settings, {url: _.url} ) );
+    // { url: _.url,  settings });
+
+    jqDeferred.then( function(data) {
+    // constructs the suggestion engine
+    var engine = new Bloodhound({
+      datumTokenizer: function (datum) {
+        return Bloodhound.tokenizers.whitespace(datum.value);
+      },
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      // `data` is an array of country names defined in "The Basics"
+      local: $.map(data, function(oj) {
+          oj.i = p_idx;
+          return { value : oj.i(0), eg: oj.i(1) };
+      }),
+      limit: 10
+    });
+
+    // kicks off the loading/processing of `local` and `prefetch`
+    engine.initialize();
+
+    // Instantiate the Typeahead UI
+    $(_.slt).typeahead(null, {
+        name: 'data',
+        displayKey: 'value',
+        hint: true,
+        highlight: true,
+        minLength: 1,
+        source: engine.ttAdapter(),
+        templates: {
+            empty: [
+              '<div class="empty-message">',
+                'Result not found',
+              '</div>'
+            ].join('\n'),
+            suggestion: Handlebars.compile(_.suggest),
+            footer: function (data) {
+              // return Handlebars.compile("<div>Searched for <strong> {{data.query}} </strong></div>");
+              return '<div>Searched for <strong>' + data.query + '</strong></div>';
+            }
+        }
+    });
+    if (_.hasOwnProperty('callback')) _.callback();
+    },
+    function(jqXHR, textStatus, errorThrown){
+    console.log(jqXHR, textStatus, errorThrown);
+    });
+};*/

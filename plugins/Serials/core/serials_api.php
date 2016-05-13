@@ -1,14 +1,14 @@
 <?php
-	$g_mantis_serials_customer       = plugin_table('customer');
-	$g_mantis_serials_assembly       = plugin_table('assembly');
-	$g_mantis_serials_format         = plugin_table('format');
-	$g_mantis_serials_serial         = plugin_table('serial');
+	$g_mantis_customer       			= db_get_table('mantis_customer_table');
+	$g_mantis_assembly       			= db_get_table('mantis_assembly_table');
+	$g_mantis_serials_format         	= strtolower(plugin_table('format'));
+	$g_mantis_serials_serial         	= strtolower(plugin_table('serial'));
 	#----------------------------------
 	# serials page definitions
 
 	$g_serials_menu_page                = plugin_page( 'serials_menu_page.php' );
 	$g_format_add_page					= plugin_page( 'format_add.php' );
-	$g_format_page                 		= plugin_page( 'format.php' );
+	$g_format_page                 		= plugin_page( 'format_view.php' );
 	$g_config_page                 		= plugin_page( 'config.php' );
 	$g_config_edit_page                 = plugin_page( 'config_edit.php' );
 		#----------------------------------
@@ -18,42 +18,54 @@
 	###########################################################################
 
 	function customer_name_unique( $p_customer_name ) {
-		global $g_mantis_serials_customer;
-		$query = "SELECT customer_id
-					FROM $g_mantis_serials_customer
-					WHERE customer_name = '$p_customer_name'";
+		global $g_mantis_customer;
+		$query = "SELECT id
+					FROM $g_mantis_customer
+					WHERE name = '$p_customer_name'";
 		$result = mysql_query( $query ) or die(mysql_error());
 		if( mysql_num_rows( $result ) > 0 ) {
 			$row = mysql_fetch_array($result);
-			return $row["customer_id"];
+			return $row["id"];
 		} else {
 			return 'true';
 		}
 	}
 
 	function assembly_revision_unique ( $p_assembly, $p_revision, $new_customer) {
-		global $g_mantis_serials_assembly;
-		$query = "SELECT assembly_id
-					FROM $g_mantis_serials_assembly
-					WHERE assembly_number = '$p_assembly' AND revision = '$p_revision' AND customer_id ='$new_customer'";
+		global $g_mantis_assembly;
+		$query = "SELECT id
+					FROM $g_mantis_assembly
+					WHERE number = '$p_assembly' AND revision = '$p_revision' AND customer_id ='$new_customer'";
 		$result = mysql_query( $query ) or die(mysql_error());
 		if( mysql_num_rows( $result ) > 0 ) {
 			$row = mysql_fetch_array($result);
-			return $row["assembly_id"];
+			return $row["id"];
 		} else {
 			return 'true';
 		}
 	}
-
+	function format_is_new( $p_assembly_id ){
+		global $g_mantis_serials_format;
+		$query = " SELECT format_id
+				FROM $g_mantis_serials_format 
+				WHERE assembly_id='$p_assembly_id'";
+		$result = mysql_query( $query ) or die(mysql_error());
+		if( mysql_num_rows( $result ) > 0 ) {
+			$row = mysql_fetch_array($result);
+			return $row["format_id"];
+		} else {
+			return 'true';
+		}
+	}
 	function add_customer( $p_customer_name, $new_customer){
-		global $g_mantis_serials_customer;
+		global $g_mantis_customer;
 		if ( $new_customer == 'true' ){
-			$query = "INSERT INTO $g_mantis_serials_customer
-					( customer_id, customer_name )
+			$query = "INSERT INTO $g_mantis_customer
+					( id, name )
 					VALUES
 					( null, '$p_customer_name')";
 			db_query_bound( $query );
-			$t_customer_id = db_insert_id ( $g_mantis_serials_customer );
+			$t_customer_id = db_insert_id ( $g_mantis_customer );
 			return $t_customer_id;
 		} else {
 			return $new_customer;
@@ -62,24 +74,24 @@
 
 	function add_assembly ( $p_assembly_number, $p_revision , $m_customer_name, $new_customer, $new_assembly ){
 		$p_customer_id = add_customer ( $m_customer_name, $new_customer );
-		global $g_mantis_serials_assembly;
+		global $g_mantis_assembly;
 		if ( $new_assembly == 'true' ){
 			$query = "INSERT
-					INTO $g_mantis_serials_assembly
-					( assembly_id, customer_id, assembly_number, revision )
+					INTO $g_mantis_assembly
+					( id, customer_id, number, revision )
 					VALUES
 					( null, '$p_customer_id', '$p_assembly_number', '$p_revision' )";
 			db_query_bound( $query );
-			$t_assembly_id = db_insert_id ( $g_mantis_serials_assembly );
+			$t_assembly_id = db_insert_id ( $g_mantis_assembly );
 			return $t_assembly_id;
 		} else {
 			return $new_assembly;
 		}
 	}
-	function add_format( $p_customer_name, $p_assembly_number, $p_revision, $p_format, $p_format_example, $new_customer, $new_assembly ){
+	function add_format( $p_customer_name, $p_assembly_number, $p_revision, $p_format, $p_format_example, $new_customer, $new_assembly, $new_format ){
 		$p_assembly_id = add_assembly ( $p_assembly_number, $p_revision, $p_customer_name, $new_customer, $new_assembly );
 		global $g_mantis_serials_format;
-		if ( $new_assembly == 'true' ){
+		if ( $new_assembly == 'true' || $new_format == 'true' ){
 			$query = "INSERT
 					INTO $g_mantis_serials_format
 					( format_id, assembly_id, format, format_example )

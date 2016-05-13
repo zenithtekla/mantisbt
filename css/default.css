@@ -58,6 +58,7 @@ span.dependency_upgrade		{ color: orange; }
 
 table				{ }
 table.hide			{ width: 100%; border: solid 0px #ffffff; }
+table.display		{ width: 100%; border: solid 0px #ffffff; }
 table.width100		{ width: 100%; border: solid 1px #000000; }
 table.width90		{ width: 90%;  border: solid 1px #000000; }
 table.width75		{ width: 75%;  border: solid 1px #000000; }

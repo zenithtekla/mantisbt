@@ -1,11 +1,6 @@
 (function () {
     "use strict";
-    var dnm_data = {
-        time: $('.login-info-middle :first-child').text(),
-        list_count: 0
-    };
 
-    var xhr = {};
     var old;
     var oldh = {};
 
@@ -13,9 +8,10 @@
         return new Promise(function(suc, err){
             extTypeahead({
                 slt: "#field1",
-                url: "/plugin.php?page=Serials/json/customer.php",
+                url: "/plugin.php?page=Serials/model/json/customer.php",
                 callback: function(item){
                     var hash = {};
+                    /*global localStorage*/
                     if (localStorage.getItem("xhr")) {
                         old = localStorage.getItem("xhr");
                         oldh = JSON.parse(localStorage.getItem("xhr"));
@@ -27,10 +23,8 @@
                     hash.group = item.group;
 
                     localStorage.setItem("xhr", JSON.stringify(hash));
-                    console.log(" # post-assign@fn1 $ print xhr ");
-                    console.log(localStorage.getItem("xhr"));
-                    console.log(" # post-assign@fn1 $ print old ");
-                    console.log(old);
+                    console.log(" # fn1 $ xhr ", localStorage.getItem("xhr"));
+                    console.log(" # fn1 $ old ", old);
                     setTimeout(function(){
                         suc(hash);
                     },10);
@@ -39,15 +33,13 @@
         });
     };
 
-    /*dnm_data.customer_name = xhr.nimi;
-    dnm_data.customer_id = xhr.id;*/
     var fn2 = function (o){
         return new Promise(function(suc, err){
             extTypeahead({
                 slt: "#field2",
                 url: {
                     type: "POST",
-                    url : "/plugin.php?page=Serials/json/assembly.php",
+                    url : "/plugin.php?page=Serials/model/json/assembly.php",
                     data: { 'id' : o.customer_id }
                 },
                 callback: function(item){
@@ -56,8 +48,7 @@
                     hash.assembly = item.nimi;
                     // console.log(dnm_data);
                     localStorage.setItem("xhr", JSON.stringify(hash));
-                    console.log(" # post-async@fn2 $ ");
-                    console.log(localStorage.getItem("xhr"));
+                    console.log(" # fn2 $ xhr", localStorage.getItem("xhr"));
                     $("#field3").val('');
                     setTimeout(function(){
                         suc(o);
@@ -74,7 +65,7 @@
                 slt: "#field3",
                 url: {
                     type: "POST",
-                    url: "/plugin.php?page=Serials/json/revision.php",
+                    url: "/plugin.php?page=Serials/model/json/revision.php",
                     data : {
                         nimi: o.assembly,
                         id: o.customer_id
@@ -91,14 +82,12 @@
                     };
 
                     localStorage.setItem("xhr", JSON.stringify(hash));
-                    console.log(" # post-async@fn3 $ print O and xhr ");
-                    console.log(JSON.stringify(o));
-                    console.log(localStorage.getItem("xhr"));
+                    console.log(" # fn3 $ print O ", JSON.stringify(o));
 
                     /* global ajaxPost */
                     ajaxPost({
-                        url: "plugin.php?page=Serials/json/format.php",
-                        d: { "id" : o.assembly_id },
+                        url: "plugin.php?page=Serials/model/json/format.php",
+                        data: { "id" : o.assembly_id },
                         callback: addformat
                     });
 
@@ -106,7 +95,6 @@
                         suc(o);
                     },10);
                     // $("#field4").focus();
-                    // console.log(dnm_data);
                 }
             });
         });
@@ -124,13 +112,15 @@
         ;
     };
     exec();
+    // set focus to sales_order field
+    $('#field7').focus();
 
     $("#field3").on('keyup', function(e){
         e.preventDefault();
         var v = $(this).val();
         console.log(" ?oldh " + oldh.revision + " ?current " + v);
 
-        if ( t_cond(e.which) ){
+        if ( input_key_cond(e.which) ){
             var o ={
                 cond: oldh.revision !== v && v && $("#field2").val() === oldh.assembly,
                 id: $(this).attr("id"),
@@ -145,8 +135,8 @@
         var v = $(this).val();
         console.log(" ?oldh " + oldh.assembly + " ?current " + v);
         // define 'o' prior to call rinse(o.a) here;
-        
-        if ( t_cond(e.which) ){
+        /*global input_key_cond*/
+        if ( input_key_cond(e.which) ){
             // $("#typeahead-field3 > div > .typeahead-result").remove();
             var o ={
                 // cond: oldh.assembly !== v && v && $("#field1").val()===oldh.customer,
@@ -164,7 +154,7 @@
         var v = $(this).val();
 
         // if ( (47 < e.which && e.which < 91) || ( 95 < e.which && e.which < 106) ){
-        if ( t_cond(e.which) ){
+        if ( input_key_cond(e.which) ){
             var o ={
                 // cond: oldh.customer !== v && oldh.customer_name && v && $("#field2").val(),
                 cond: oldh.customer !== v && v,
@@ -208,7 +198,7 @@
         }
     };
     })();
-    
+
     var rinse = (function(){
         return function(a){
             for (var i of a) {
@@ -218,36 +208,19 @@
             }
         };
     })();
-    
+
     var addformat = function(data){
         $.map(data, function(obj) {
-            /*console.log(obj.format, obj.format_id);
-            dnm_data.format = obj.format;
-            dnm_data.format_id = obj.format_id;
-            dnm_data.format_example = obj.format_example;*/
+            console.log("=> rendering format ", obj);
             $("#field5").val(obj.sample);
             $("#field6").val(obj.nimi);
-            // console.log(" # check if old is accessible inside ajax of fn3 " + old);
+            var hash = JSON.parse(localStorage.getItem("xhr"));
+            hash.format = obj.nimi;
+            hash.format_id = obj.id;
+            hash.format_example = obj.sample;
+            localStorage.setItem("xhr", JSON.stringify(hash));
+            console.log(localStorage.getItem("xhr"));
         });
     };
-
-    var t_cond = (function(){
-        return function(x){
-        return range(x,47,91) || range(x,95,106);
-        };
-    })();
-
-    var range = (function(){
-        return function(x,min,max){
-        return (min < x && x < max);
-        };
-    })();
-
-    var delay = (function(){
-        var timer = 0;
-        return function(callback, ms){
-            clearTimeout (timer);
-            timer = setTimeout(callback, ms);
-        };
-    })();
 })();
+

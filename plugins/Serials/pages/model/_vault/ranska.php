@@ -79,6 +79,6 @@
 <script src="plugins/Serials/pages/jquery/jquery-1.11.3.min.js" type="text/javascript" ></script>
 <script src="plugins/Serials/pages/handlebars/handlebars-v4.0.4.js" type="text/javascript" ></script>
 <script src="plugins/Serials/pages/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.js" type="text/javascript" ></script>
-<script src="plugins/Serials/pages/js/ranska.js" type="text/javascript"></script>
+<script src="ranska.js" type="text/javascript"></script>
 </body>
 </html>

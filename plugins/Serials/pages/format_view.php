@@ -1,5 +1,5 @@
 <?php
-require("serials_api.php");
+require_once("plugins/Serials/core/serials_api.php");
 access_ensure_project_level( plugin_config_get('format_threshold'));
 html_page_top1( plugin_lang_get( 'plugin_format_title' ) );
 html_page_top2();
@@ -116,9 +116,13 @@ html_page_top2();
 			<?php echo plugin_lang_get( 'format' ) ?>
 		</td>
 		<td>
-			<span id="f_prepend" class=" exp-decorator">/</span>
-				<input id="field6" type="text" size="100" name="format" required/>
-			<span id="f_append" class=" exp-decorator">/i</span>
+			<div class="typeahead-container">
+				<div class="typeahead-field">
+					<span id="f_prepend" class=" exp-decorator">/</span>
+						<input id="field6" type="text" size="100" name="format" required/>
+					<span id="f_append" class=" exp-decorator">/i</span>
+				</div>
+			</div>
 		</td>
 	</tr>
 </table>

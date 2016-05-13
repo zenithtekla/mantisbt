@@ -491,7 +491,7 @@ function html_login_info() {
 	$t_now = date( config_get( 'complete_date_format' ) );
 	$t_realname = current_user_get_field( 'realname' );
 
-	echo '<table class="hide">';
+	echo '<table class="display" id="login-info">';
 	echo '<tr>';
 	echo '<td class="login-info-left">';
 	if( current_user_is_anonymous() ) {

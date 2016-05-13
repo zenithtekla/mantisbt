@@ -4,7 +4,7 @@ class SerialsPlugin extends MantisPlugin {
         $this->name 		= 'Serials';    # Proper name of plugin
         $this->description 	= 'Serial number entry form for list generation and verification.';    # Short description of the plugin
         $this->page 		= 'config';           # Default plugin page
-        $this->version 		= '1.0';
+        $this->version 		= '1.2';
 		    $this->requires    = array('MantisCore' => '1.2.0');
         $this->author 		= 'Phuc Tran & Khin Tram';         # Author/team name
         $this->contact 		= 'PhucTran@eminc.com / Ktram@eminc.com';        # Author/team e-mail address
@@ -15,7 +15,7 @@ class SerialsPlugin extends MantisPlugin {
     return array(
 		'format_text' => ON,
 		'search_text' => ON,
-		'search_threshold' => 55,
+		'search_threshold' => 10,
 		'serials_view_threshold' => 10,
 		'format_threshold'       => 55,
 		'manage_threshold'	=>ADMINISTRATOR
@@ -38,14 +38,14 @@ class SerialsPlugin extends MantisPlugin {
   function schema() {
     return array(
       array( 'CreateTableSQL', array( plugin_table( 'customer' ), "
-        customer_id				I		NOTNULL UNSIGNED ZEROFILL AUTOINCREMENT PRIMARY,
-        customer_name		C(250)	DEFAULT \" '' \"
+        id				I		NOTNULL UNSIGNED ZEROFILL AUTOINCREMENT PRIMARY,
+        name		C(250)	DEFAULT \" '' \"
         " )
       ),
 	  array( 'CreateTableSQL', array( plugin_table( 'assembly' ), "
-        assembly_id				I		NOTNULL UNSIGNED ZEROFILL AUTOINCREMENT PRIMARY,
+        id				I		NOTNULL UNSIGNED ZEROFILL AUTOINCREMENT PRIMARY,
 		    customer_id		I		NOTNULL UNSIGNED ZEROFILL ,
-        assembly_number		C(250)	DEFAULT \" '' \",
+        number		C(250)	DEFAULT \" '' \",
         revision		C(10)	DEFAULT \" '' \"
         " )
       ),

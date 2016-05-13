@@ -28,7 +28,7 @@ $.typeahead({
             url: [{
                 type: "POST",
                 url: "/plugin.php?page=Serials/json/ranska_data.php",
- 
+
                 data: {
                     q: "{{query}}"
                 },
@@ -75,10 +75,10 @@ $.typeahead({
     },
     callback: {
         onClick: function (node, a, item, event) {
- 
+
             // You can do a simple window.location of the item.href
             alert(JSON.stringify(item));
- 
+
         },
         onSendRequest: function (node, query) {
             console.log('request is sent, perhaps add a loading animation?')

@@ -1080,7 +1080,7 @@
 	 * @link http://php.net/timezones List of Supported Timezones
 	 * @global string $g_default_timezone
 	 */
-	$g_default_timezone = '';
+	$g_default_timezone = 'America/Los_Angeles';
 
 	/**************************
 	 * MantisBT News Settings *
@@ -1382,7 +1382,7 @@
 	 * this is useful when there are hundreds of reporters
 	 * @global int $g_reporter_summary_limit
 	 */
-	$g_reporter_summary_limit	= 10;
+	$g_reporter_summary_limit	= 20;
 
 	/**
 	 * summary date displays
@@ -2983,6 +2983,8 @@
 	$g_db_table['mantis_project_hierarchy_table']		= '%db_table_prefix%_project_hierarchy%db_table_suffix%';
 	$g_db_table['mantis_config_table']					= '%db_table_prefix%_config%db_table_suffix%';
 	$g_db_table['mantis_email_table']					= '%db_table_prefix%_email%db_table_suffix%';
+	$g_db_table['mantis_customer_table']				= '%db_table_prefix%_customer%db_table_suffix%';
+	$g_db_table['mantis_assembly_table']				= '%db_table_prefix%_assembly%db_table_suffix%';
 
 	/*************************
 	 * MantisBT Enum Strings *
