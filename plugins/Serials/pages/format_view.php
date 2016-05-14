@@ -4,7 +4,7 @@ access_ensure_project_level( plugin_config_get('format_threshold'));
 html_page_top1( plugin_lang_get( 'plugin_format_title' ) );
 html_page_top2();
 ?>
-<link rel="stylesheet" href="plugins/Serials/pages/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.css">
+<link rel="stylesheet" href="plugins/UTILS_plugin/bower_components/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.css">
 <link rel="stylesheet" href="plugins/Serials/pages/css/custom.css">
 
 <br>
@@ -131,9 +131,9 @@ html_page_top2();
 	</div>
 </form>
 </div>
-<script src="plugins/Serials/pages/jquery/jquery-1.11.3.min.js" type="text/javascript" ></script>
-<script src="plugins/Serials/pages/handlebars/handlebars-v4.0.4.js" type="text/javascript" ></script>
-<script src="plugins/Serials/pages/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.js" type="text/javascript" ></script>
+<script src="plugins/UTILS_plugin/bower_components/jquery/jquery-1.11.3.min.js" type="text/javascript" ></script>
+<script src="plugins/UTILS_plugin/bower_components/handlebars/handlebars-v4.0.4.js" type="text/javascript" ></script>
+<script src="plugins/UTILS_plugin/bower_components/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.js" type="text/javascript" ></script>
 <script src="plugins/Serials/pages/js/format_proc_api.js" type="text/javascript"></script>
 <script src="plugins/Serials/pages/js/format_proc.js" type="text/javascript"></script>
 <?php

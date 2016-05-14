@@ -13,8 +13,8 @@ html_page_top2();
 	}
 </script>
 
-<link rel="stylesheet" type="text/css" href="plugins/Serials/pages/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.css">
-<link rel="stylesheet" media="all" href="plugins/Serials/pages/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="plugins/UTILS_plugin/bower_components/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.css">
+<link rel="stylesheet" media="all" href="plugins/UTILS_plugin/bower_components/bootstrap/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="css/default.css">
 <script src="plugins/Serials/pages/js/view_model/ui_data.js" type="text/javascript"></script>
 <section id="ui_data"></section>
@@ -111,10 +111,10 @@ html_page_top2();
 </div>
 </form>
 </script>
-<script src="plugins/Serials/pages/jquery/jquery-1.11.3.min.js" type="text/javascript" ></script>
-<script src="plugins/Serials/pages/handlebars/handlebars-v4.0.4.js" type="text/javascript" ></script>
-<script src="plugins/Serials/pages/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.js" type="text/javascript" ></script>	
-<script src="plugins/Serials/pages/bootstrap/plugins/jQuery-Plugin-Js/jQuery.print.js" type="text/javascript" ></script>
+<script src="plugins/UTILS_plugin/bower_components/jquery/jquery-1.11.3.min.js" type="text/javascript" ></script>
+<script src="plugins/UTILS_plugin/bower_components/handlebars/handlebars-v4.0.4.js" type="text/javascript" ></script>
+<script src="plugins/UTILS_plugin/bower_components/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.js" type="text/javascript" ></script>	
+<script src="plugins/UTILS_plugin/bower_components/jQuery-Plugin-Js/jQuery.print.js" type="text/javascript" ></script>
 <script src="plugins/Serials/pages/js/view_controller/ui_view_load.js" type="text/javascript" ></script>
 <script src="plugins/Serials/pages/js/format_proc_api.js" type="text/javascript"></script>
 <script src="plugins/Serials/pages/js/format_proc.js" type="text/javascript" ></script>

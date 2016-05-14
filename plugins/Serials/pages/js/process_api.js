@@ -8,7 +8,7 @@ var search_process = function(){
   };
 
 	ajaxPost({
-      url: "plugin.php?page=Serials/partials/userAuth.php",
+      url: "plugin.php?page=Serials/model/json/userAuth.php",
       data: "",
       callback: addUserData
   });
