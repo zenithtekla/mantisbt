@@ -10,7 +10,7 @@
 	$g_mantis_serials_serial         = strtolower(plugin_table('serial'));
     if(isset($_POST['new_scan']))
 		if($_POST['assembly_id']=="" or $_POST['customer_id'] == "" or $_POST['sales_order']=="" or $_POST['revision']=="" or $_POST['new_scan'==""]){
-			echo "ERROR - Please complete the selection field in RED TEXT<br>";
+			echo "ERROR - Please complete the required field in RED TEXT<br>";
 		}
 			else
 {

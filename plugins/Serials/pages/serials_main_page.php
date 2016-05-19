@@ -12,11 +12,25 @@ html_page_top2();
 		window.onunload=function(){null};
 	}
 </script>
-
-<link rel="stylesheet" type="text/css" href="plugins/UTILS_plugin/bower_components/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.css">
+<script src="plugins/UTILS_plugin/bower_components/mantis_extended_kernel/client/js/buildscript.js" type="text/javascript"></script>
+<script>
+	/*global ENV_MODE, UTILS_BOWER_URL, MANTIS_EXTENDED_KERNEL, PLUGIN_URL_SERIALS*/
+	/*global loadScript */
+	loadScript({
+		path: UTILS_BOWER_URL+"/jquery-typeahead-2.1.3/dist/",
+		ref: "jquery.typeahead.min.css"
+	}, {
+		path: UTILS_BOWER_URL+"/bootstrap/css/",
+		ref: "bootstrap.css"
+	}, {
+		path: PLUGIN_URL_SERIALS+"/js/view_model/",
+		ref: "ui_data.js"
+	});
+</script>
+<!--<link rel="stylesheet" type="text/css" href="plugins/UTILS_plugin/bower_components/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.css">
 <link rel="stylesheet" media="all" href="plugins/UTILS_plugin/bower_components/bootstrap/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="css/default.css">
-<script src="plugins/Serials/pages/js/view_model/ui_data.js" type="text/javascript"></script>
+<script src="plugins/Serials/pages/js/view_model/ui_data.js" type="text/javascript"></script>-->
 <section id="ui_data"></section>
 <script type="text/template" id="ui-template">
 <form >
@@ -34,7 +48,7 @@ html_page_top2();
 		echo "<span id='time'>". $t_now ."</span>";*/
 	?>
 	</div>
-	
+
 	<div id="top-function-wrapper" class="col-sm-4 no-print">
 		<button type="button" id="search" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> {{bold searchbtn}}</button>
 		<button type="button" id="tulostaa-painike" class="btn btn-primary print"><span class="glyphicon glyphicon-print"></span>
@@ -86,7 +100,7 @@ html_page_top2();
 			</div>
 		</div>
 	</div>
-	
+
 	<div id="printable">
 		<div id="log-wrapper" class="col-offset-1 col-xs-12 right-scroll"></div>
 	</div>
@@ -97,31 +111,64 @@ html_page_top2();
 		  <input type="text" id="scan_result" name="scan_input" class="form-control" placeholder="{{lang_013}}" aria-describedby="sizing-addon1">
 		</div>
 	</div>{{! /row }}
-	
+
 	<div class="hidden no-print" id="log-verify"></div>
-	
+
 	<div id="konsoli_loki">
 		<div id="virhe" class="col-md-12 alert"></div>
 		<div id="virhe_kuvaus" class="alert"></div>
 	</div>
-	
-	<div class="row" style="padding-left:20px ; padding-right:20px ;padding-top:20px">	
+
+	<div class="row" style="padding-left:20px ; padding-right:20px ;padding-top:20px">
 		<div id="search-wrapper" class="col-md-12 right-scroll " style="border-radius: 4px; border: 1px solid transparent"></div>
 	</div>
 </div>
 </form>
 </script>
-<script src="plugins/UTILS_plugin/bower_components/jquery/jquery-1.11.3.min.js" type="text/javascript" ></script>
+
+<script>
+	/*global loadScript */
+	loadScript({
+		path: UTILS_BOWER_URL+"/jquery/",
+		ref: "jquery-1.11.3.min.js",
+		// async: true
+	},{
+		path: UTILS_BOWER_URL+"/handlebars/",
+		ref: "handlebars-v4.0.4.js"
+	},{
+		path: UTILS_BOWER_URL+"/jquery-typeahead-2.1.3/dist/",
+		ref: "jquery.typeahead.min.js"
+	},{
+		path: UTILS_BOWER_URL+"/jQuery-Plugin-Js/",
+		ref: "jQuery.print.js"
+	},{
+		path: PLUGIN_URL_SERIALS+"/js/view_controller/",
+		ref: "ui_view_load.js"
+	},{
+		path: MANTIS_EXTENDED_KERNEL+"/client/js/",
+		ref: "ajax_typeahead_api.js"
+	},{
+		path: PLUGIN_URL_SERIALS+"/js/",
+		ref: ["format_proc.js", "process_api.js", "front.js"]
+	},{
+		path: MANTIS_EXTENDED_KERNEL + "/client/css/",
+		ref: ["default.css"]
+		// type: "media" || type: "all"
+	});
+</script>
+<!--<script src= "plugins/UTILS_plugin/bower_components/jquery/jquery-1.11.3.min.js" type="text/javascript" ></script>
 <script src="plugins/UTILS_plugin/bower_components/handlebars/handlebars-v4.0.4.js" type="text/javascript" ></script>
-<script src="plugins/UTILS_plugin/bower_components/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.js" type="text/javascript" ></script>	
+<script src="plugins/UTILS_plugin/bower_components/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.js" type="text/javascript" ></script>
 <script src="plugins/UTILS_plugin/bower_components/jQuery-Plugin-Js/jQuery.print.js" type="text/javascript" ></script>
 <script src="plugins/Serials/pages/js/view_controller/ui_view_load.js" type="text/javascript" ></script>
-<script src="plugins/Serials/pages/js/format_proc_api.js" type="text/javascript"></script>
+<script src="plugins/UTILS_plugin/bower_components/mantis_extended_kernel/client/js/ajax_typeahead_api.js" type="text/javascript"></script>
 <script src="plugins/Serials/pages/js/format_proc.js" type="text/javascript" ></script>
 <script src="plugins/Serials/pages/js/process_api.js" type="text/javascript" ></script>
-<script src="plugins/Serials/pages/js/front.js" type="text/javascript" ></script>
+<script src="plugins/Serials/pages/js/front.js" type="text/javascript" ></script>-->
 
 <?php
 
 html_page_bottom1( __FILE__ );
+echo "<div id='lang_get'>". lang_get( 'plugin_url' ) . "</div>";
+// echo lang_get( 'word_separator' );
 ?>

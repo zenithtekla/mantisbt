@@ -1,6 +1,6 @@
 var search_process = function(){
   /*global localStorage*/
-	var addUserData = function(data){
+	/*var addUserData = function(data){
     dnm_data.user_id        = data.id;
     dnm_data.user_password  = data.password;
     dnm_data.user_email     = data.email;
@@ -9,16 +9,15 @@ var search_process = function(){
 
 	ajaxPost({
       url: "plugin.php?page=Serials/model/json/userAuth.php",
-      data: "",
       callback: addUserData
-  });
+  });*/
 
   var hash = JSON.parse(localStorage.getItem("xhr"));
   /*global dnm_data*/
   if (hash){
-    dnm_data.customer_id      = hash.customer_id;
-    dnm_data.assembly_id      = hash.assembly_id;
-    dnm_data.assembly_number  = hash.assembly;
+      dnm_data.customer_id      = hash.customer_id;
+      dnm_data.assembly_id      = hash.assembly_id;
+      dnm_data.assembly_number  = hash.assembly;
   }
 
   dnm_data.sales_order  = $('input[name="sales_order"]').val();
@@ -30,11 +29,11 @@ var search_process = function(){
 	var postdata ={
 		sales_order:        dnm_data.sales_order,
 		scan_input:         dnm_data.scan_input,
-		customer_id:        dnm_data.customer_id,
-		assembly_id:        dnm_data.assembly_id,
-		assembly_number:    dnm_data.assembly_number,
+		customer_id:        ($("#field1").val()) ? dnm_data.customer_id : "",
+		assembly_id:        ($("#field2").val()) ? dnm_data.assembly_id : "",
+		assembly_number:    ($("#field2").val()) ? dnm_data.assembly_number : ""
 	};
-	console.log(dnm_data);
+	console.log(postdata);
 
 	$.ajax({
 		type:'POST',
@@ -43,27 +42,24 @@ var search_process = function(){
 		//contentType: "application/json",
 		// dataType: 'json'
 	}).done(function(data){
-		$("#search-wrapper") .empty()
-        .append( data + "<br/>")
-        .addClass("bg-success")
-        .css({  "max-height":"300px", "overflow-y" : "auto" })
-        .animate({"scrollTop": $("#search-wrapper")[0].scrollHeight}, "slow");
+    data = JSON.parse(data);
+    $("#log-wrapper").empty();
+    $("#search-wrapper") .empty();
 
-	});
-
-	$.ajax({
-		type:'POST',
-		url: '/plugin.php?page=Serials/controllers/search-list.php',
-		data: postdata,
-		//contentType: "application/json",
-		// dataType: 'json'
-	}).done(function(data){
-		$("#log-wrapper").empty()
-        .append( data + "<br/>")
+    if (data.serials)
+	  $("#log-wrapper")
+        .append( data.serials + "<br/>")
         .addClass("bg-success")
         .css({  "max-height":"300px", "overflow-y" : "auto" })
 		    .animate({"scrollTop": $("#log-wrapper")[0].scrollHeight}, "slow");
     //console.log($("#log-wrapper").html());
+    if (data.all)
+		$("#search-wrapper")
+        .append( data.all + "<br/>")
+        .addClass("bg-success")
+        .css({  "max-height":"300px", "overflow-y" : "auto" })
+        .animate({"scrollTop": $("#search-wrapper")[0].scrollHeight}, "slow");
+
 	});
 };
 
@@ -84,7 +80,7 @@ var postdata ={
 	sales_order:       dnm_data.sales_order,
 	format:            dnm_data.format,
 	format_example:    dnm_data.format_example,
-	revision:          dnm_data.revision,
+	revision:          dnm_data.revision
 };
 
 console.log(postdata);
@@ -158,7 +154,7 @@ var print_bot = function(){
 
 var print_html = function(){
   var x=window.open('','', 'height='+ (screen.height - 120) +', width='+screen.width);
-  x.document.open().write('<head><title>Full-window display</title><link rel="stylesheet" type="text/css" href="plugins/Serials/pages/css/print.css"></head>'+
+  x.document.open().write('<head><title>Full-window display</title><link rel="stylesheet" type="text/css" href="plugins/UTILS_plugin/bower_components/mantis_extended_kernel/client/css/print.css"></head>'+
     '<body><div class="container-fluid">'
       + print_top() + $("#printable").html() +
     '</div></body>');
@@ -171,7 +167,7 @@ var print_dialog = function(e){
     deferred: $.Deferred(),
     globalStyles : false,
     mediaPrint : false,
-    stylesheet: "plugins/Serials/pages/css/print.css",
+    stylesheet: "plugins/UTILS_plugin/bower_components/mantis_extended_kernel/client/css/print.css",
     timeout: 400,
     prepend: print_top()
   });

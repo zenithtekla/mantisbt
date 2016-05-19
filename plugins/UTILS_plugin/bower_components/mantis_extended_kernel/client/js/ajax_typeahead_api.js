@@ -106,7 +106,7 @@ var ajaxPost = function( _ ){
     var jqDeferred = $.ajax({
         type:"POST",
         url: _.url,
-        data: _.data,
+        data: _.data || "",
         dataType: 'json'
     });
 

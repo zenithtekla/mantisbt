@@ -111,7 +111,10 @@
             })
         ;
     };
-    exec();
+    
+    // initialization, comment out to save page loading time.
+    // exec();
+    
     // set focus to sales_order field
     $('#field7').focus();
 

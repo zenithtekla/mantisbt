@@ -40,8 +40,7 @@ $(document).ready(function() {
     // e.preventDefault();
     if (e.which == 118) // F7
     {
-      console.log($(this));
-      console.log("f7 pressed");
+      console.log($(this).attr("id"), " F7 key pressed");
       search_process();
     }
   });

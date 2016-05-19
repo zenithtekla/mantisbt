@@ -4,8 +4,20 @@ access_ensure_project_level( plugin_config_get('format_threshold'));
 html_page_top1( plugin_lang_get( 'plugin_format_title' ) );
 html_page_top2();
 ?>
-<link rel="stylesheet" href="plugins/UTILS_plugin/bower_components/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.css">
-<link rel="stylesheet" href="plugins/Serials/pages/css/custom.css">
+<script src="plugins/UTILS_plugin/bower_components/mantis_extended_kernel/client/js/buildscript.js" type="text/javascript"></script>
+<script>
+	/*global ENV_MODE, UTILS_BOWER_URL, MANTIS_EXTENDED_KERNEL, PLUGIN_URL_SERIALS*/
+	/*global loadScript */
+	loadScript({
+		path: UTILS_BOWER_URL+"/jquery-typeahead-2.1.3/dist/",
+		ref: "jquery.typeahead.min.css"
+	}, {
+		path: MANTIS_EXTENDED_KERNEL +"/client/css/",
+		ref: "custom.css"
+	});
+</script>
+<!--<link rel="stylesheet" href="plugins/UTILS_plugin/bower_components/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.css">
+<link rel="stylesheet" href="plugins/UTILS_plugin/bower_components/mantis_extended_kernel/client/css/custom.css">-->
 
 <br>
 <p align="center">Configuration page to set up Serial Numbering format per Assembly.</p>
@@ -45,11 +57,11 @@ html_page_top2();
 					<span class="typeahead-query">
 					<input id="field2" type="text" size="100" name="assembly_number" required/>
 					</span>
-					<span class="typeahead-button">
+					<!--<span class="typeahead-button">
 		                <button type="submit">
 		                    <i class="typeahead-search-icon"></i>
 		                </button>
-		            </span>
+		            </span>-->
 		        </div>
 		    </div>
 		</td>
@@ -64,11 +76,11 @@ html_page_top2();
 					<span class="typeahead-query">
 					<input id="field3" type="text" size="30" name="revision" required/>
 					</span>
-					<span class="typeahead-button">
+					<!--<span class="typeahead-button">
 		                <button type="submit">
 		                    <i class="typeahead-search-icon"></i>
 		                </button>
-		            </span>
+		            </span>-->
 				</div>
 		    </div>
 		</td>
@@ -83,11 +95,11 @@ html_page_top2();
 					<span class="typeahead-query">
 						<input id="field4" type="text" size="100" name="format_helper"/>
 					</span>
-					<span class="typeahead-button">
+					<!--<span class="typeahead-button">
 		                <button type="submit">
 		                    <i class="typeahead-search-icon"></i>
 		                </button>
-		            </span>
+		            </span>-->
 				</div>
 		    </div>
 		</td>
@@ -102,11 +114,11 @@ html_page_top2();
 					<span class="typeahead-query">
 					<input id="field5" type="text" size="100" name="format_example" required/>
 					</span>
-					<span class="typeahead-button">
+					<!--<span class="typeahead-button">
 		                <button type="submit">
 		                    <i class="typeahead-search-icon"></i>
 		                </button>
-		            </span>
+		            </span>-->
 				</div>
     		</div>
 		</td>
@@ -131,10 +143,30 @@ html_page_top2();
 	</div>
 </form>
 </div>
-<script src="plugins/UTILS_plugin/bower_components/jquery/jquery-1.11.3.min.js" type="text/javascript" ></script>
+
+<script>
+	/*global loadScript */
+	loadScript({
+		path: UTILS_BOWER_URL+"/jquery/",
+		ref: "jquery-1.11.3.min.js"
+	},{
+		path: UTILS_BOWER_URL+"/handlebars/",
+		ref: "handlebars-v4.0.4.js"
+	},{
+		path: UTILS_BOWER_URL+"/jquery-typeahead-2.1.3/dist/",
+		ref: "jquery.typeahead.min.js"
+	},{
+		path: MANTIS_EXTENDED_KERNEL+"/client/js/",
+		ref: "ajax_typeahead_api.js"
+	},{
+		path: PLUGIN_URL_SERIALS+"/js/",
+		ref: "format_proc.js"
+	});
+</script>
+<!--<script src="plugins/UTILS_plugin/bower_components/jquery/jquery-1.11.3.min.js" type="text/javascript" ></script>
 <script src="plugins/UTILS_plugin/bower_components/handlebars/handlebars-v4.0.4.js" type="text/javascript" ></script>
 <script src="plugins/UTILS_plugin/bower_components/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.js" type="text/javascript" ></script>
-<script src="plugins/Serials/pages/js/format_proc_api.js" type="text/javascript"></script>
-<script src="plugins/Serials/pages/js/format_proc.js" type="text/javascript"></script>
+<script src="plugins/UTILS_plugin/bower_components/mantis_extended_kernel/client/js/ajax_typeahead_api.js" type="text/javascript"></script>
+<script src="plugins/Serials/pages/js/format_proc.js" type="text/javascript"></script>-->
 <?php
 html_page_bottom1( __FILE__ );
