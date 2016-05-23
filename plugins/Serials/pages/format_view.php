@@ -16,9 +16,6 @@ html_page_top2();
 		ref: "custom.css"
 	});
 </script>
-<!--<link rel="stylesheet" href="plugins/UTILS_plugin/bower_components/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.css">
-<link rel="stylesheet" href="plugins/UTILS_plugin/bower_components/mantis_extended_kernel/client/css/custom.css">-->
-
 <br>
 <p align="center">Configuration page to set up Serial Numbering format per Assembly.</p>
 </br>
@@ -163,10 +160,5 @@ html_page_top2();
 		ref: "format_proc.js"
 	});
 </script>
-<!--<script src="plugins/UTILS_plugin/bower_components/jquery/jquery-1.11.3.min.js" type="text/javascript" ></script>
-<script src="plugins/UTILS_plugin/bower_components/handlebars/handlebars-v4.0.4.js" type="text/javascript" ></script>
-<script src="plugins/UTILS_plugin/bower_components/jquery-typeahead-2.1.3/dist/jquery.typeahead.min.js" type="text/javascript" ></script>
-<script src="plugins/UTILS_plugin/bower_components/mantis_extended_kernel/client/js/ajax_typeahead_api.js" type="text/javascript"></script>
-<script src="plugins/Serials/pages/js/format_proc.js" type="text/javascript"></script>-->
 <?php
 html_page_bottom1( __FILE__ );
