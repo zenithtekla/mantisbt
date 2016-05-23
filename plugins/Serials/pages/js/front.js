@@ -35,6 +35,13 @@ $(document).ready(function() {
 		}
 	});
 
+	$("#cofc").on({
+		click: function(e){
+		  e.preventDefault();
+		  cofc();
+		}
+	});
+
   $("#field1,#field2,#field3,#field7")
   .on('keyup', function(e){
     // e.preventDefault();

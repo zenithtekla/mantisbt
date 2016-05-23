@@ -26,6 +26,8 @@ class SerialsPlugin extends MantisPlugin {
     plugin_event_hook( 'EVENT_MENU_MAIN', 'mainpage' );
   }
 
+  // EVENT_LAYOUT_RESOURCES
+
   function formatpage() {
     return array( '<a href="'. plugin_page( 'format.php' ) . '">' . plugin_lang_get( 'format_title' ) . '</a>' );
   }

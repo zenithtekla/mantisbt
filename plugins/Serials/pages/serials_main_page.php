@@ -53,7 +53,7 @@ html_page_top2();
 		<button type="button" id="search" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> {{bold searchbtn}}</button>
 		<button type="button" id="tulostaa-painike" class="btn btn-primary print"><span class="glyphicon glyphicon-print"></span>
 			{{bold printbtn}}</button>
-		<button type="button" id="cofc" class="btn btn-primary" onclick="cofc()"><span class="glyphicon glyphicon-list-alt"></span>
+		<button type="button" id="cofc" class="btn btn-primary"><span class="glyphicon glyphicon-list-alt"></span>
 			{{bold cofcbtn}}</button>
 	</div>
 

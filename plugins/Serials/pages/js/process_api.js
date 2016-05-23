@@ -35,6 +35,7 @@ var search_process = function(){
 	};
 	console.log(postdata);
 
+  /* global $*/
 	$.ajax({
 		type:'POST',
 		url: 'plugin.php?page=Serials/controllers/search.php',
@@ -171,4 +172,58 @@ var print_dialog = function(e){
     timeout: 400,
     prepend: print_top()
   });
+};
+
+var cofc = function(){
+  var cofcpage = window.open ("","ASF0509-1 Rev 03 02/24/16");
+	var now = new Date();
+	var today = now.toLocaleDateString();
+  var cofcContent= `<html>
+    <head>
+    ASF0509-1 Rev 03 02/24/16
+      <style>
+        input[type="text"]{font-family:arial;font-size:12;padding:5px;font-weight:bold;width:100%;display:table-cell;margin:0px 10px;}
+        input[type="checkbox"]{transform:scale(1.5);font-family:arial;font-size:12;padding:5px;font-weight:bold;}
+        div{float:left;}
+        div[class="box"]{float:left;display:table;width:100%;}
+        p{display:table-cell;width:1px;white-space: nowrap;}
+      </style>
+    </head>
+    <div style="width:670px;font-family:arial;font-size:12px;">
+      <img src="http://www.eminc.com/skin/skin1/images/en/framework/top_banner.jpg" width="670">
+      <p1 style="margin-left:15px;font-size:12;font-weight:bold;width:670px;">3519 W. WARNER AVE., SANTA ANA, CA 92704</p1>
+      <hr>
+      <h2 style="text-align:center;">CERTIFICATE OF COMPLIANCE</h2>
+      <div style="width:425px;margin:0px 15px;font-weight:bold;">
+          <div class="box"><p>Assembly Number: </p><input type="text" value=""+ $('input[name="assembly"]').val()+""/></div>
+          <div class="box"><p>Customer Name: </p><input type="text" value=""+ $('input[name="customer"]').val()+""/></div>
+          <div class="box"><p>Customer P.O. Number: </p><input type="text" /></div>
+          <div class="box"><p>Sales Order Number: </p><input type="text" value=""+ $('input[name="sales_order"]').val()+""/></div>
+          <div class="box"><p>Quantity Shipped: </p><input type="text" /></div>
+          <div class="box"><p>Date of Shipment: </p><input type="text" value="`+ today +`"/></div>
+      </div>
+      <div style="width:185px;float:left;font-weight:bold;margin-right:15px;">
+         <div class="box"><p>Rev: </p><input type="text" value="" + $('input[name="revision"]').val() +""/></div>
+         <div style="height:54px;width:193px;"> </div>
+         <div class="box"><p>Lot Date Code: </p><input type="text" /></div>
+         <div class="box"><p>Order Quantity: </p><input type="text" /></div>
+      </div>
+      <div style="width:670px;margin-left:15px">
+         <div style="width:640px;font-weight:bold;"><br><br>This is to certify that the above shipping quantity against the referenced Purchase Order is in compliance with the contract requirements, specifications, and drawings. Please Check the Box to meet the customer's (Test or 2RoHS)</div>
+         <div style="width:75px;font-weight:bold;"><br><input type="checkbox"> TEST</div>
+         <div style="width:565px"><br>This is to certify that the printed wiring assemblies listed below have been tested conforming to specifications requirements. Test reports are on file and will be made available for further examination to any authorized representative upon written request.</div>
+         <div style="width:75px;font-weight:bold;"><br><input type="checkbox"> 2RoHS</div>
+         <div style="width:565px;"><br>This is to declare that our Surface Mount Technology and Through factory at Express Manufacturing Inc. is capable of manufacturing products meeting requirements of Restriction on Hazardous Substance 2RoHS.<br><br>"EMI certifies the following assemblies were manufactured in compliance with the EU Directive 2015/863/EU, Restriction of Use of Hazardous Substances 2RoHS Published June 4,2015. EMI certifies that all materials they provide and use in assembling this product meet the requirements of the directive."</div>
+         <div style="width:640px"><br><textarea style="width:640px;height:220px;padding:5px;font-size:12px;font-family:arial"></textarea></div>
+         <div style="width:640px;"><br></div>
+         <div><h4 style="text-align:center;width:670px">Quality Assurance Representative</h4></div>
+         <div style="width:270px;display:table;"><p>Name: </p><input style="width:225px;" value="" + $('input[name="real_name"]').val() +""/></div>
+         <div style="width:100px;display:table;"><p>ID: </p><input style="width:75px;"></div>
+         <div style="width:270px;display:table;"><p>Signature: </p><input style="width:210px;"></div>
+      </div>
+      <div><br>
+      <hr style="width:670px;float:left">
+    </div>`;
+  cofcpage.document.write(cofcContent);
+  cofcpage.document.close();
 };

@@ -53,3 +53,12 @@ table {
     height: 1px;
     font-size: 4pt;
 }
+
+@page { size 8.5in 11in; margin: 15cm }
+@page :left {
+  @bottom-left {
+    content: counter(page);
+  }
+}
+One requir
+div.page, div.printable { page-break-before: always }
