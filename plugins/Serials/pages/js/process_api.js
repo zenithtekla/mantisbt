@@ -44,6 +44,7 @@ var search_process = function(){
 		// dataType: 'json'
 	}).done(function(data){
     data = JSON.parse(data);
+    console.log(data);
     $("#log-wrapper").empty();
     $("#search-wrapper") .empty();
 

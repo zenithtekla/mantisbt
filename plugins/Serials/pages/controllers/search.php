@@ -36,7 +36,7 @@ else {
     $t_user_id 			  = auth_get_current_user_id();
 
 	if($t_sales_order){
-		$where_search .= "mantis_plugin_serials_serial_table.sales_order = " . "'" . $t_sales_order . "'";
+		$where_search .= "st.sales_order = " . "'" . $t_sales_order . "'";
 		$search_msg .=" Sales Order " . $t_sales_order ;
 		$andcount = $andcount - 1;
 		if ($andcount > 0){
@@ -45,7 +45,7 @@ else {
 		}
 	}
 	if($t_scan_input){
-		$where_search .= "mantis_plugin_serials_serial_table.serial_scan = " . "'" . $t_scan_input . "'";
+		$where_search .= "st.serial_scan = " . "'" . $t_scan_input . "'";
 		$search_msg .=" Serial Number " . $t_scan_input ;
 		$andcount = $andcount - 1;
 		if ($andcount > 0){
@@ -54,14 +54,14 @@ else {
 		}
 	}
 	if($t_customer_id){
-		$where_search .="mantis_plugin_serials_serial_table.customer_id = " . "'" . $t_customer_id . "'";
+		$where_search .="st.customer_id = " . "'" . $t_customer_id . "'";
 		$andcount = $andcount - 1;
 		if ($andcount > 0){
 			$where_search .=" AND ";
 		}
 	}
 	if($t_assembly_number){
-		$where_search .="mantis_assembly_table.number = " . "'" . $t_assembly_number . "'";
+		$where_search .="at.number = " . "'" . $t_assembly_number . "'";
 		$search_msg .=" Assembly Number " . $t_assembly_number ;
 		$andcount = $andcount - 1;
 		if ($andcount > 0){
@@ -70,21 +70,21 @@ else {
 		}
 	}
 	if($t_assembly_id){
-		$where_search .="mantis_plugin_serials_serial_table.assembly_id = " . "'" . $t_assembly_id . "'";
+		$where_search .="st.assembly_id = " . "'" . $t_assembly_id . "'";
 		$andcount = $andcount - 1;
 		if ($andcount > 0){
 			$where_search .=" AND ";
 		}
 	}
     $query_for_serials = "SELECT
-		mantis_plugin_serials_serial_table.serial_scan
-		FROM $g_mantis_serials_serial
-		INNER JOIN $g_mantis_assembly
-			ON mantis_plugin_serials_serial_table.assembly_id = mantis_assembly_table.id
-		INNER JOIN $g_mantis_customer
-			ON mantis_plugin_serials_serial_table.customer_id = mantis_customer_table.id
-		INNER JOIN mantis_user_table
-			ON mantis_user_table.id = mantis_plugin_serials_serial_table.user_id
+		st.serial_scan
+		FROM $g_mantis_serials_serial st
+		INNER JOIN $g_mantis_assembly at
+			ON st.assembly_id = at.id
+		INNER JOIN $g_mantis_customer ct
+			ON st.customer_id = ct.id
+		INNER JOIN mantis_user_table ut
+			ON ut.id = st.user_id
 		WHERE $where_search
 		ORDER BY serial_scan
 	";
@@ -107,20 +107,20 @@ else {
 	}
 
 	$query = "SELECT
-		mantis_customer_table.name,
-		mantis_assembly_table.number,
-		mantis_assembly_table.revision,
-		mantis_user_table.realname,
-		mantis_plugin_serials_serial_table.date_posted,
-		mantis_plugin_serials_serial_table.serial_scan,
-		mantis_plugin_serials_serial_table.sales_order
-		FROM $g_mantis_serials_serial
-		INNER JOIN $g_mantis_assembly
-			ON mantis_plugin_serials_serial_table.assembly_id = mantis_assembly_table.id
-		INNER JOIN $g_mantis_customer
-			ON mantis_plugin_serials_serial_table.customer_id = mantis_customer_table.id
-		INNER JOIN mantis_user_table
-			ON mantis_user_table.id = mantis_plugin_serials_serial_table.user_id
+		ct.name,
+		at.number,
+		at.revision,
+		ut.realname,
+		st.date_posted,
+		st.serial_scan,
+		st.sales_order
+		FROM $g_mantis_serials_serial st
+		INNER JOIN $g_mantis_assembly at
+			ON st.assembly_id = at.id
+		INNER JOIN $g_mantis_customer ct
+			ON st.customer_id = ct.id
+		INNER JOIN mantis_user_table ut
+			ON ut.id = st.user_id
 		WHERE $where_search
 		ORDER BY serial_scan, date_posted
 	";

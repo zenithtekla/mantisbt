@@ -60,5 +60,5 @@ table {
     content: counter(page);
   }
 }
-One requir
+
 div.page, div.printable { page-break-before: always }

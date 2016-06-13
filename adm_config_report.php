@@ -174,7 +174,7 @@
 	$query = "SELECT DISTINCT user_id
 		FROM $t_config_table
 		WHERE user_id <> " . db_param() ;
-	$t_result = db_query_bound( $query, array( ALL_USERS ) );
+	$t_result = db_query_bound( $query, array( ALL_USERS ) )
 	if( $t_filter_user_value != META_FILTER_NONE && $t_filter_user_value != ALL_USERS ) {
 		# Make sure the filter value exists in the list
 		$t_users_list[$t_filter_user_value] = user_get_name( $t_filter_user_value );
