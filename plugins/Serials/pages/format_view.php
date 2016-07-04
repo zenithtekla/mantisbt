@@ -1,5 +1,5 @@
 <?php
-require_once("plugins/Serials/core/serials_api.php");
+require_once("plugins/Serials/core/serials_api_.php");
 access_ensure_project_level( plugin_config_get('format_threshold'));
 html_page_top1( plugin_lang_get( 'plugin_format_title' ) );
 html_page_top2();

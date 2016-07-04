@@ -1,5 +1,5 @@
 <?php
-require_once( "plugins/Serials/core/serials_api.php" );
+require_once( "plugins/Serials/core/serials_api_.php" );
 require_once( 'current_user_api.php' );
 access_ensure_global_level( plugin_config_get( 'serials_view_threshold' ) );
 html_page_top1();
