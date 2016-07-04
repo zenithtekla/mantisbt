@@ -1,5 +1,5 @@
 <?php
-require_once( "plugins/Serials/core/serials_api.php" );
+require_once( "plugins/Serials/core/format_check_api.php" );
 access_ensure_project_level( plugin_config_get('format_threshold'));
 access_ensure_project_level( DEVELOPER );
 

@@ -7,7 +7,7 @@
 	# serials page definitions
 
 	$g_serials_menu_page                = plugin_page( 'serials_menu_page.php' );
-	$g_format_add_page					= plugin_page( 'format_add_.php' );
+	$g_format_add_page					= plugin_page( 'format_add.php' );
 	$g_format_page                 		= plugin_page( 'format_view.php' );
 	$g_config_page                 		= plugin_page( 'config.php' );
 	$g_config_edit_page                 = plugin_page( 'config_edit.php' );

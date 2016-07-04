@@ -38,7 +38,7 @@ var search_process = function(){
   /* global $*/
 	$.ajax({
 		type:'POST',
-		url: 'plugin.php?page=Serials/controllers/refactored_search.php',
+		url: 'plugin.php?page=Serials/controllers/search.php',
 		data: postdata,
 		//contentType: "application/json",
 		// dataType: 'json'
