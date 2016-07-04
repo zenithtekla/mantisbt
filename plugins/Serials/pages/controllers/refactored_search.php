@@ -3,6 +3,7 @@
 // serial_id, assembly_id, customer_id, sale_order_id, serial_number, user_id, time
 // query to insert into the db
 require_once( 'core.php' );
+require_once( 'helper_util.php' );
 access_ensure_project_level( plugin_config_get('search_threshold'));
 $g_mantis_customer       			= db_get_table( 'mantis_customer_table' );
 $g_mantis_assembly       			= db_get_table( 'mantis_assembly_table' );
@@ -21,16 +22,17 @@ $o_post['user_id']			= auth_get_current_user_id();
 $query_for_serials = "
 	SELECT
 		st.serial_scan
-	FROM $g_mantis_serials_serial st
-	INNER JOIN $g_mantis_assembly at
+	FROM %s st
+	INNER JOIN %s at
 		ON st.assembly_id = at.id
-	INNER JOIN $g_mantis_customer ct
+	INNER JOIN %s ct
 		ON st.customer_id = ct.id
 	INNER JOIN mantis_user_table ut
 		ON ut.id = st.user_id
-	WHERE $t_where
+	WHERE %s
 	ORDER BY st.serial_scan
 ";
+
 $query = "
 	SELECT
 		ct.name,
@@ -40,14 +42,14 @@ $query = "
 		st.date_posted,
 		st.serial_scan,
 		st.sales_order
-	FROM $g_mantis_serials_serial st
-	INNER JOIN $g_mantis_assembly at
+	FROM %s st
+	INNER JOIN %s at
 		ON st.assembly_id = at.id
-	INNER JOIN $g_mantis_customer ct
+	INNER JOIN %s ct
 		ON st.customer_id = ct.id
 	INNER JOIN mantis_user_table ut
 		ON ut.id = st.user_id
-	WHERE $t_where
+	WHERE %s
 	ORDER BY st.serial_scan, st.date_posted
 ";
 
@@ -97,67 +99,31 @@ function search ($o_post){
 }
 
 $response = search($o_post);
-$t_where = $response['where'];
-$search_msg = 'Searching for ' . $response['search_msg'];
+
 if ($response['error']){
 	$json_response['serials'] = $response['error'];
 } else {
+	$t_where = $response['where'];
+	$search_msg = 'Searching for ' . $response['search_msg'];
 	
-	$result = mysql_query($query_for_serials) or die(mysql_error());
-	if( mysql_num_rows( $result ) > 0 ) {
-		$first_row = true;
-		$json_response["serials"] .= '<table class="col-md-12"><div>';
-		while ( $row = mysql_fetch_assoc( $result )) {
-			if ($first_row) {
-				$first_row = false;
-				$count = 0;
-			}
-			foreach($row as $field) {
-				$count++;
-				$json_response["serials"] .= '<div class="col-md-3">' . $count . '. ' . htmlspecialchars($field) . '</div>';
-			}
-		}
-	}
-	
-	$result = mysql_query($query) or die(mysql_error());
-	if( mysql_num_rows( $result ) > 0 ) {
-		$first_row = true;
-		$json_response["all"] .= '
-			<style>
-				tr:nth-child(odd){ background-color: white;}
-				td { nowrap; padding: 1px 3px;}
-			</style>
-			<table class="col-md-12"><div>';
-	
-		while ( $row = mysql_fetch_assoc( $result )) {
-			if ($first_row) {
-				$first_row = false;
-				$count = 0;
-				// Output header row from keys.
-				$json_response["all"] .=
-				'<tr >';
-					foreach($row as $key => $field) {
-						$json_response["all"] .= '<th class="text-center text-uppercase">' . htmlspecialchars($key) . '</th>';
-					}
-					$json_response["all"] .= '<th class="text-center text-uppercase">Count</th>
-				</tr>';
-			}
-			$json_response["all"] .= '<tr >';
-				foreach($row as $field) {
-					$json_response["all"] .= '<td class="text-center">' . htmlspecialchars($field) . '</td>';
-				}
-				$count++;
-				$json_response["all"] .= '<td class="text-center">' . $count . '</td>
-			</tr>' ;
-		}
-			$json_response["all"] .= '</table></div>';
-	}
-	else {
-		$json_response["all"] .= $search_msg . " returned with no result." ;
-	}
+	$response = HelperUTIL::mantis_db_query(
+				$query_for_serials, 
+					$g_mantis_serials_serial,
+					$g_mantis_assembly,
+					$g_mantis_customer,
+					$t_where
+	);
+	$json_response["serials"] = $response['response'];
+	$response =  HelperUTIL::mantis_db_query(
+				$query, 
+					$g_mantis_serials_serial,
+					$g_mantis_assembly,
+					$g_mantis_customer,
+					$t_where
+	);
+	$json_response["all"] = $response['response'];
 }
 
 echo json_encode($json_response, JSON_PRETTY_PRINT);
 
 // echo json_encode($qr, JSON_FORCE_OBJECT);
-// echo json_encode($qr, JSON_PRETTY_PRINT);

@@ -16,7 +16,7 @@ function print_p ($a){
 	echo '</pre>';
 }
 
-class HelperUTILS{
+class HelperUTIL {
 	const CFG_FILE = 'cfg/manextis_conf.ini';
 	protected static $id;
 	public static function input_string_valid($str){
@@ -347,7 +347,7 @@ class HelperUTILS{
     			$response['response'] = self::mantis_db_query_update($query_string);
     			break;
     		case ($query_word ==='DELETE'):
-    			$response['type'] = gettype($query_string);
+    			$response['response'] = gettype($query_string);
     			break;
     		case ($query_word ==='TRUNCATE'):
     			$response['response'] = db_query_bound($query_string);

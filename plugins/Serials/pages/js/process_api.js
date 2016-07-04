@@ -48,20 +48,54 @@ var search_process = function(){
     $("#log-wrapper").empty();
     $("#search-wrapper") .empty();
 
-    if (data.serials)
-	  $("#log-wrapper")
-        .append( data.serials + "<br/>")
+    if (data.serials){
+      // this is where template becomes useful. Angular directive is easier.
+      // prep the output
+      var output1 = '';
+    	if( data.serials.count > 0 ) {
+    		output1 += '<table class="col-md-12">';
+    		data.serials.response.map(function(d,idx){
+          output1 += '<div class="col-md-3">' + String(idx+1) + '. ' + d.serial_scan + '</div>';
+    		});
+    		output1 +=  '<div>';
+    	}
+
+	    $("#log-wrapper")
+        .append( output1 + "<br/>")
         .addClass("bg-success")
         .css({  "max-height":"300px", "overflow-y" : "auto" })
 		    .animate({"scrollTop": $("#log-wrapper")[0].scrollHeight}, "slow");
     //console.log($("#log-wrapper").html());
-    if (data.all)
-		$("#search-wrapper")
-        .append( data.all + "<br/>")
-        .addClass("bg-success")
-        .css({  "max-height":"300px", "overflow-y" : "auto" })
-        .animate({"scrollTop": $("#search-wrapper")[0].scrollHeight}, "slow");
+    }
+    if (data.all){
+      var output2 = ` <style>
+			                  tr:nth-child(odd){ background-color: white;}
+			                  td { nowrap; padding: 1px 3px;}
+		                  </style>
+		                  <table class="col-md-12">
+		                  <tr>`;
+		  if (data.all.count > 0){
+  		  data.all.response.map(function(d, idx){
+  		    if (idx < 1){
+  		      for(var i in d){
+  		        output2 += '<th class="text-center text-uppercase">' + i + '</th>';
+  		      }
+  		      output2 += '<th class="text-center text-uppercase">Count</th></tr>';
+  		    }
 
+  		    output2 += '<tr>';
+  		    for(var j in d){
+  		      output2 += '<td class="text-center">' + d[j] + '</td>';
+  		    }
+  		    output2 += '<td class="text-center">' + idx+ '</td></tr>' ;
+  		  });
+		  }
+  		$("#search-wrapper")
+          .append( output2 + "<br/>")
+          .addClass("bg-success")
+          .css({  "max-height":"300px", "overflow-y" : "auto" })
+          .animate({"scrollTop": $("#search-wrapper")[0].scrollHeight}, "slow");
+    }
 	});
 };
 
