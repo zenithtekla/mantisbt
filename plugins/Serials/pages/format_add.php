@@ -15,22 +15,16 @@ access_ensure_project_level( DEVELOPER );
 	* If none of them exist => .then 'INSERT'
 	* Else function UpdateCb().
 	*/
-	$c_name_exist = is_c_name_exist ( $f_customer_name );
-	$a_number_exist = is_assembly_revision_exist ( $f_assembly_number, $f_revision ,$c_name_exist );
-	$f_exist = is_format_exist ( $a_number_exist );
-
 	$result = add_format (
 					$f_customer_name,
 					$f_assembly_number,
 					$f_revision,
 					$f_format,
-					$f_format_example,
-					$c_name_exist,
-					$a_number_exist,
-					$f_exist );
+					$f_format_example
+				);
 
 	$form_msg = (!($c_name_exist && $a_number_exist && $f_exist))
-					? plugin_lang_get( 'new_format' ) : plugin_lang_get( 'update_format' );
+					? plugin_lang_get( 'update_format' ) : plugin_lang_get( 'new_format' );
 ?>
 <div align="center">
 <?php

@@ -1,4 +1,7 @@
 <?php
+	require_once( 'core.php' );
+	require_once( 'helper_util.php' );
+
 	$g_mantis_customer       			= db_get_table('mantis_customer_table');
 	$g_mantis_assembly       			= db_get_table('mantis_assembly_table');
 	$g_mantis_serials_format         	= strtolower(plugin_table('format'));
@@ -25,42 +28,42 @@
 					WHERE name = '$p_customer_name'";
 		$result = mysql_query( $query ) or die(mysql_error());
 		if( mysql_num_rows( $result ) < 1 ) return 0;
-		
+
 		$row = mysql_fetch_array($result);
 		return $row["id"];
 	}
-	
+
 	// int function, return int
-	function is_assembly_revision_exist ( $p_assembly, $p_revision, $p_name_exist) {
+	function is_assembly_revision_exist ( $p_assembly, $p_revision, $p_c_name_exist) {
 		global $g_mantis_assembly;
 		$query = "SELECT id
 					FROM $g_mantis_assembly
-					WHERE number = '$p_assembly' AND revision = '$p_revision' AND customer_id ='$p_name_exist'";
+					WHERE number = '$p_assembly' AND revision = '$p_revision' AND customer_id ='$p_c_name_exist'";
 		$result = mysql_query( $query ) or die(mysql_error());
 		if( mysql_num_rows( $result ) < 1 ) return 0;
-		
+
 		$row = mysql_fetch_array($result);
 		return $row["id"];
 	}
-	
+
 	// int function, return int
 	function is_format_exist( $p_assembly_id ){
 		global $g_mantis_serials_format;
 		$query = " SELECT format_id
-				FROM $g_mantis_serials_format 
+				FROM $g_mantis_serials_format
 				WHERE assembly_id='$p_assembly_id'";
 		$result = mysql_query( $query ) or die(mysql_error());
 		if( mysql_num_rows( $result ) < 1 ) return 0;
-		
+
 		$row = mysql_fetch_array($result);
 		return $row["format_id"];
 	}
-	
+
 	// int function, return int
-	function add_customer( $p_customer_name, $p_name_exist){
+	function add_customer( $p_customer_name, $p_c_name_exist){
 		global $g_mantis_customer;
-		if ($p_name_exist) return $p_name_exist;
-		
+		if ($p_c_name_exist) return $p_c_name_exist;
+
 		$query = "INSERT INTO $g_mantis_customer
 				( id, name )
 				VALUES
@@ -69,13 +72,19 @@
 		$t_customer_id = db_insert_id ( $g_mantis_customer );
 		return $t_customer_id;
 	}
-	
+
 	// int function, return int
-	function add_assembly ( $p_assembly_number, $p_revision , $m_customer_name, $p_name_exist, $p_number_exist ){
-		$p_customer_id = add_customer ( $m_customer_name, $p_name_exist );
+	function add_assembly (
+		$p_assembly_number,
+		$p_revision,
+		$p_customer_name,
+		$p_c_name_exist,
+		$p_a_number_exist
+	){
+		$p_customer_id = add_customer ( $p_customer_name, $p_c_name_exist );
 		global $g_mantis_assembly;
-		if ($p_number_exist) return $p_number_exist;
-		
+		if ($p_a_number_exist) return $p_a_number_exist;
+
 		$query = "INSERT
 				INTO $g_mantis_assembly
 				( id, customer_id, number, revision )
@@ -85,28 +94,29 @@
 		$t_assembly_id = db_insert_id ( $g_mantis_assembly );
 		return $t_assembly_id;
 	}
-	
-	function add_format( 
-		$p_customer_name, 
-		$p_assembly_number, 
-		$p_revision, 
-		$p_format, 
-		$p_format_example, 
-		$p_name_exist, 
-		$p_number_exist, 
-		$p_exist 
+
+	function add_format(
+		$p_customer_name,
+		$p_assembly_number,
+		$p_revision,
+		$p_format,
+		$p_format_example
 	){
+		$p_c_name_exist = is_c_name_exist ( $p_customer_name );
+		$p_a_number_exist = is_assembly_revision_exist ( $p_assembly_number, $p_revision ,$p_c_name_exist );
+		$p_format_exist = is_format_exist ( $p_a_number_exist );
+
 		// invoke assembly insertion to determine if it is a new assembly (assembly_id) or not.
 		// p_assembly_id = id || 0;
-		$p_assembly_id = add_assembly ( 
-							$p_assembly_number, 
-							$p_revision, 
-							$p_customer_name, 
-							$p_name_exist, 
-							$p_number_exist );
-		
+		$p_assembly_id = add_assembly (
+							$p_assembly_number,
+							$p_revision,
+							$p_customer_name,
+							$p_c_name_exist,
+							$p_a_number_exist );
+
 		global $g_mantis_serials_format;
-		if ( !($p_number_exist && $p_exist) ){
+		if ( !($p_a_number_exist && $p_format_exist) ){
 			$query = "INSERT
 					INTO $g_mantis_serials_format
 					( format_id, assembly_id, format, format_example )
