@@ -206,6 +206,7 @@ function columns_get_all( $p_project_id = null ) {
 	# add plugin columns
 	$t_columns = array_merge( $t_columns, array_keys( columns_get_plugin_columns() ) );
 
+	if(is_array(columns_get_custom_fields($p_project_id)))
 	$t_columns = array_merge($t_columns, columns_get_custom_fields($p_project_id));
 
 	return $t_columns;

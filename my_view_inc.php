@@ -386,13 +386,14 @@ echo "($v_start - $v_end / $t_bug_count)";
 	$t_custom_fields_found = false;
 	$t_related_custom_field_ids = custom_field_get_linked_ids( $t_bug->project_id );
 	$g_show_only_custom_fields = config_get( 'show_only_custom_fields' );
+	if($t_related_custom_field_ids)
 	$t_columns = helper_get_columns_to_view( COLUMNS_TARGET_HOME_VIEW_PAGE, /* $p_viewable_only */ false, $t_current_user_id );
 	// $t_cond = in_array($t_def_custom,$t_columns)===TRUE;
-
+	$t_custom_fields_found = true;
 	$t_config_table = db_get_table( 'mantis_config_table' );
 	$b_helper_user_exists = helper_user_exists ($t_current_user_id, $t_config_table);
 
-	if ($b_helper_user_exists){
+	if ($b_helper_user_exists && $t_columns){
 		foreach( $t_columns as $t_column_name) {
 			foreach( $t_related_custom_field_ids as $key => $t_id ) {
 				if ( !custom_field_has_read_access( $t_id, $t_bug->id ) ) {
@@ -407,6 +408,7 @@ echo "($v_start - $v_end / $t_bug_count)";
 			}
 		}
 	} else {
+		if($t_related_custom_field_ids)
 		foreach( $g_show_only_custom_fields as $t_display_id){
 			foreach( $t_related_custom_field_ids as $key => $t_id ) {
 				if ( !custom_field_has_read_access( $t_id, $t_bug->id ) ) {
